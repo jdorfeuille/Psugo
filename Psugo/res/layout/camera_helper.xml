@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="14dp"
+        android:text="@string/camera_Title"
+        android:textSize="18sp" />
+
+    <Spinner
+        android:id="@+id/emplacementList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textView1"
+        android:entries="@array/emplacement_pics_array"
+        android:prompt="@string/emplacement_prompt" />
+
+    <Button
+        android:id="@+id/actionTakePics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/emplacementList"
+        android:layout_marginTop="29dp"
+        android:drawableLeft="@drawable/camera"
+        android:text="@string/photoInst" />
+
+    <Button
+        android:id="@+id/actionAddPics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/actionFinishPics"
+        android:layout_alignBottom="@+id/actionFinishPics"
+        android:layout_alignRight="@+id/textView1"
+        android:drawableLeft="@drawable/camera_add" />
+
+    <Button
+        android:id="@+id/actionFinishPics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="32dp"
+        android:layout_toRightOf="@+id/actionAddPics"
+        android:drawableLeft="@drawable/navigation_back" />
+
+</RelativeLayout>

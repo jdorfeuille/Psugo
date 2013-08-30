@@ -1,0 +1,200 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scroller"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true" >
+
+    <!-- android:layout_height="fill_parent" -->
+
+    <RelativeLayout
+        android:id="@+id/mainRelative"
+        android:layout_width="wrap_content"
+        android:layout_height="874dp"
+        android:contentDescription="@string/imagePreview"
+        tools:context=".PsugoMainActivity" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_world"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <!-- check if this is the right type for CIN -->
+        <!-- check if this is the right type for CIN -->
+
+        <EditText
+            android:id="@+id/dept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/nomEcole"
+            android:layout_below="@+id/nomEcole"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="@string/departement" />
+
+        <EditText
+            android:id="@+id/arrondissement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/adrEcole"
+            android:layout_below="@+id/dept"
+            android:ems="10"
+            android:hint="@string/arrondissement" />
+
+        <AutoCompleteTextView
+            android:id="@+id/nomEcole"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:completionThreshold="1"
+			android:dropDownHeight="200dp"
+            android:layout_alignLeft="@+id/textView1"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="17dp"
+            android:ems="10"
+            android:hint="@string/nomEcole"
+            android:inputType="textAutoComplete" >
+
+            <requestFocus />
+        </AutoCompleteTextView>
+
+        <!-- android:text="@string/actionSchoolPic" />  the previous works as we see the camera icon -->
+
+        <Button
+            android:id="@+id/actionAddDirects"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="@string/actionAddDirecteurs" />
+
+        <Button
+            android:id="@+id/actionAddClasses"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/actionAddDirects"
+            android:text="@string/actionAddClasses" />
+
+        <Button
+            android:id="@+id/Ok"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/actionAddClasses"
+            android:text="@string/Ok" />
+
+        <Button
+            android:id="@+id/actionUploadData"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/Ok"
+            android:text="@string/actionUploadData" />
+
+        <Button
+            android:id="@+id/actionDone"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/actionUploadData"
+            android:text="@string/actionDone" />
+
+        <EditText
+            android:id="@+id/instCommune"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/arrondissement"
+            android:ems="10"
+            android:hint="@string/commune"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/sectCommunale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/instCommune"
+            android:ems="10"
+            android:hint="@string/sectCommunale"
+            android:inputType="text|textCapWords" />
+
+        <EditText
+            android:id="@+id/adrEcole"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/sectCommunale"
+            android:ems="10"
+            android:hint="@string/adresse"
+            android:inputType="text|textCapWords" />
+
+        <EditText
+            android:id="@+id/adrDetaillee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/adrEcole"
+            android:ems="10"
+            android:hint="@string/adresseDet" />
+
+        <EditText
+            android:id="@+id/phoneEcole"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/adrDetaillee"
+            android:ems="10"
+            android:hint="@string/phone"
+            android:inputType="phone" />
+
+        <Spinner
+            android:id="@+id/ecoleTrouveeList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView2"
+            android:entries="@array/ecole_trouvee_array"
+            android:prompt="@string/ecoleTrouvee"
+            android:textSize="14pt" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/phoneEcole"
+            android:layout_marginTop="28dp"
+            android:text="@string/ecoleTrouvee" />
+
+        <Button
+            android:id="@+id/actionSchoolPic"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/ecoleTrouveeList"
+            android:layout_marginTop="30dp"
+            android:drawableLeft="@drawable/camera"
+            android:text="@string/actionSchoolPic" />
+
+        <ImageView
+            android:id="@+id/imgPrev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/actionSchoolPic"
+            android:layout_marginTop="39dp"
+            android:layout_toLeftOf="@+id/actionAddClasses"
+            android:contentDescription="@string/imagePreview"
+            android:src="@drawable/device_access_camera" />
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Psugo</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Information Institution</string>
+    <string name="camera_Title">Prendre des photos</string>
+    <string name="nomEcole">Nom Institution</string>
+    <string name="adresse">Adresse </string>
+    <string name="adresseDet">Adresse Detaillee </string>
+    <string name="sectCommunale">Section Communale</string>
+    <string name="commune">Commune</string>
+    <string name="departement">Departement</string>
+    <string name="arrondissement">Arrondissement</string>
+    <string name="ecoleTrouvee">Ecole Trouvee(O/N)</string>
+    <string name="phone">Telephone</string>
+    <string name="email">Email</string>
+    <string name="cin">CIN</string>
+    <string name="actionSchoolPic">Photos Institutions</string>
+    <string name="actionUploadData">Xfer</string>
+    <string name="actionDone">Terminer</string>
+    <string name="actionAddDirecteurs">Directeurs</string>
+    <string name="actionAddClasses">Classes</string>
+    <string name="actionAddProf">Professeurs</string>
+    <string name="gpsCoordEcole">Coordonnees Gps Ecole</string>
+    <string name="directTitle">Directeurs</string>
+    <string name="nomPersonne">Nom et Prenom </string>
+    <string name="typeDirecteur">Type Directeur</string>
+    <string name="typeAdministratif">Administratif</string>
+    <string name="typePedagogique">Pedagogique</string>
+    <string name="genreHomme">Homme</string>
+    <string name="genreFemme">Femme</string>
+    <string name="genre">Genre</string>
+    <string name="anneeDebutPsugo">Annee Debut Psugo</string>
+    <string name="anneeFinPsugo">Annee Fin Psugo</string>
+    <string name="nbrNivScolWithPsugo">Nombre de Niveaux avec Eleves Psugo</string>
+    <string name="nbrClassRoomWithPsugo">Nombre de Salles de Classes avec Eleves Psugo</string>
+    <string name="nbrEnseignantWithPsugo">Nombre Enseignants dans Psugo</string>
+    <string name="nbrElevesWithPsugo">Nombre Eleves Beneficiaires du Psugo</string>
+    <string name="desc">Image Ecole</string>
+    <string name="infosPsugo">Informations PSUGO</string>
+    <string name="categorie_prompt">Selectionner le Type de photo</string>
+    <string name="emplacement_prompt">Emplacement</string>
+    <string name="type_directeur_prompt">Type Directeur</string>
+    <string name="genre_prompt">Genre</string>
+    <string name="num_photo">numero photo</string>
+    <string name="classeTitle">Classe</string>
+    <string name="profTitle">Professeur</string>
+    <string name="nomClasse">Nom Classe</string>
+     <string name="nomProfClasse">Nom Professeur</string>
+    <string name="nbrEleve">Nombre d\'Eleves</string>
+    <!--  photo Classe et Photo Prof ???-->
+    <string name="photoClasse">Photo Classe</string>
+    <string name="photoInst">Photo Institution</string>
+    <string name="photoProf">Photo Prof</string>
+    <string name="photoDir">Photo Directeur</string>
+    <string name="imagePreview">Visionner Photo</string>
+   
+
+    <string-array name="emplacement_pics_array">
+        <item>Devant</item>
+        <item>Cours</item>
+        <item>Autre 1</item>
+        <item>Autre 2</item>
+        <item>Autre 3</item>
+    </string-array>
+    <string-array name="genre_humain_array">
+        <item>Homme</item>
+        <item>Femme</item>
+    </string-array>
+    <string-array name="type_directeur_array">
+        <item>Administratif</item>
+        <item>Pedagogique</item>
+    </string-array>
+    <string-array name="ecole_trouvee_array">
+        <item>Oui</item>
+        <item>Non</item>
+    </string-array>
+
+    <string name="Ok">Sauvegarde</string>
+
+</resources>
