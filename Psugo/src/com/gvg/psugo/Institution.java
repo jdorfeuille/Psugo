@@ -2,6 +2,7 @@ package com.gvg.psugo;
 
 //Web Service tool
 import java.util.Hashtable;
+import java.util.Vector;
 
 
 import org.ksoap2.serialization.KvmSerializable;
@@ -9,7 +10,6 @@ import org.ksoap2.serialization.PropertyInfo;
 
 
 public class Institution implements KvmSerializable {
-	private static final long serialVersionUID = -1166006770093411055L;
 	public int id;
 	public String nomInstitution;
 	public String departement;
@@ -21,7 +21,7 @@ public class Institution implements KvmSerializable {
 	public String telephone;
 	public String cin;
 	public String instTrouvee;
-	public Photo photo[];
+	public PhotoCollection photo;
 
 	public Institution() {
 		super();
@@ -41,7 +41,12 @@ public class Institution implements KvmSerializable {
 		this.adresseDetail = adresseDetail;
 		this.telephone = telephone;
 		this.cin = cin;
-		this.photo = photo;
+		
+		PhotoCollection v = new PhotoCollection();
+		for (int i = 0; i< photo.length;i++)
+			v.add(photo[i]);
+		this.photo = v;
+		
 	}
 
 	public Institution(int id, String nomInstitution, String departement, String arrondissement, String commune,
@@ -144,7 +149,7 @@ public class Institution implements KvmSerializable {
 	            info.name = "instTrouvee";
 	            break;
 	        case 11:
-	            info.type = PropertyInfo.STRING_CLASS;
+	            info.type = PropertyInfo.OBJECT_CLASS; 
 	            info.name = "photo";
 	            break;
 	        default:break;
@@ -190,7 +195,7 @@ public class Institution implements KvmSerializable {
 	        	this.instTrouvee =  value.toString();
 	            break;
 	        case 11:
-	            this.photo =  (Photo[])value;
+	        	this.photo = (PhotoCollection) value;
 	            break;
 	        default:break;
 	        }

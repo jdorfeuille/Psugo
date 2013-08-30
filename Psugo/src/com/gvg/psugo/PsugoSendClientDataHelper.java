@@ -93,14 +93,14 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 				+ myInstitution.telephone);
 		System.out.println("MyInstitution.instTrouvee = "
 				+ myInstitution.instTrouvee);
-		int nPhotos = myInstitution.photo.length;
+		int nPhotos = myInstitution.photo.size();
 		System.out.println("MyInstitution nombre de photos " + nPhotos);
-		for (int i = 0; i < nPhotos; i++) {
-			if (myInstitution.photo[i] != null) {
-				debugPhoto(myInstitution.photo[i]);
-			}
-			else System.out.println("myInstitution.photo[i]:"+i+" is null");
-		}
+		//for (int i = 0; i < nPhotos; i++) {
+		//	if (myInstitution.photo[i] != null) {
+		//		debugPhoto(myInstitution.photo[i]);
+		//	}
+		//	else System.out.println("myInstitution.photo[i]:"+i+" is null");
+	//	}
 		System.out.println("Done Debug Institution");
 	}
     
@@ -108,13 +108,14 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
     
     
     
-	public String envoyerInstitution() throws Exception {
+	public int envoyerInstitution() throws Exception {
 
 		// SoapObject login_resp = this.LoginRequest();
 		final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
 		final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerInstitution";
 		final String METHOD_NAME = "EnvoyerInstitution";
 		final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+		int ret = 0;
 		Photo dumPhoto = new Photo();
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
@@ -124,17 +125,17 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 		Institution[] myDbInst = psudb.selectInstitution();
 		int instSize = myDbInst.length;
 		for (int i = 0; i < instSize; i++) {
-			if ( myDbInst[i].photo != null  && myDbInst[i].photo.length > 0) {
-				System.out.println("Debug EnvoyerInstitution" + myDbInst[i].photo.length);
+			if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0) {
+				System.out.println("Debug EnvoyerInstitution" + myDbInst[i].photo.size());
 			}
 			// ne pas transmettre si pas de photos... ou bien si l'utilisateur n'a pas mis a jour
-			if ( myDbInst[i].photo != null  && myDbInst[i].photo.length > 0 && myDbInst[i].photo[0] != null){
+			if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0 && (!myDbInst[i].photo.isEmpty() )){
 				//*********PATCH********* TO FIX
 				myDbInst[i].instTrouvee = "";
 				//**********END PATCH
 				debugInstitution("envoyerInstitution", myDbInst[i]);
 				// trying to fix the Serialization issue
-				SoapObject photos = new SoapObject(NAME_SPACE_URN, "Photo");
+				//SoapObject photos = new SoapObject(NAME_SPACE_URN, "Photo");
 				SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
 				envelope.setOutputSoapObject(request);
 				envelope.encodingStyle = SoapEnvelope.ENC;
@@ -152,14 +153,18 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 				request.addProperty(pi);
 				envelope.addMapping(NAME_SPACE_URN, "Institution",
 						myDbInst[i].getClass());
-				envelope.addMapping(NAME_SPACE_URN, "Photo",
-						myDbInst[i].photo.getClass());
+				//envelope.addMapping(NAME_SPACE_URN, "Photo",
+				//		myDbInst[i].photo.getClass());
 				transport.call(SOAP_ACTION_URN, envelope, headerList);
 				SoapObject result = (SoapObject) envelope.getResponse();
+				ret = Integer.parseInt( envelope.getResponse().toString());
+				if (ret != 1 )
+					break;
+				
 			}
 		}
 		psudb.close();
-		return "00";
+		return ret;
 
 	}
 
@@ -172,7 +177,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 		try {
 			retCode = Integer.parseInt(this.LoginRequest());
 			if (retCode == 1) {
-				retCode = Integer.parseInt(this.envoyerInstitution());
+				retCode = this.envoyerInstitution();
 				System.out.println("Just sent institution with Return Code:" + retCode);
 			}
 

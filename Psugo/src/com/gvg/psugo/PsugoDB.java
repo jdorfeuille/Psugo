@@ -1,6 +1,8 @@
 package com.gvg.psugo;
 
 
+import java.util.Vector;
+
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.SQLException;
@@ -135,7 +137,7 @@ public class PsugoDB {
 				
 				Photo[] photo = new Photo[count2];
 				i2=0;
-				inst[i].photo = photo;
+				//inst[i].photo = photo;
 				if (count2 > 0) {
 					c2.moveToFirst();
 					do {
@@ -151,9 +153,16 @@ public class PsugoDB {
 							);
 						i2++;
 					} while (c2.moveToNext());
+					
 				}
 				c2.close();
+				// transferts du tableau de photo dans PhotoCollection
+				PhotoCollection v =  new PhotoCollection();
+				for (int idx = 0; idx < photo.length;idx++)
+					v.add(photo[idx]);
+				inst[i].photo = v;
 				
+				//
 				i++;
 			} while (c.moveToNext());
 			c.close();
