@@ -15,6 +15,7 @@ public class PhotoCollection extends Vector<Photo> implements KvmSerializable {
 
 	public PhotoCollection() {
 		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	@Override

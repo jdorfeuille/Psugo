@@ -8,10 +8,6 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 
 public class Photo implements KvmSerializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	//public byte[] photo;
 	public String photo;
 	public String longitude;
@@ -73,19 +69,19 @@ public class Photo implements KvmSerializable {
             info.type = PropertyInfo.STRING_CLASS;
             info.name = "photo";
             break;
-        case 2:
+        case 1:
             info.type = PropertyInfo.STRING_CLASS;
             info.name = "longitude";
             break;
-        case 3:
+        case 2:
             info.type = PropertyInfo.STRING_CLASS;
             info.name = "latitude";
             break;
-        case 4:
+        case 3:
             info.type = PropertyInfo.STRING_CLASS;
             info.name = "datePhoto";
             break;
-        case 5:
+        case 4:
             info.type = PropertyInfo.STRING_CLASS;
             info.name = "typePhoto";
             break;
@@ -99,19 +95,19 @@ public class Photo implements KvmSerializable {
 		// TODO Auto-generated method stub
 		switch(index)
         {
-        case 1:
+        case 0:
             this.photo =  String.valueOf(value);	           
             break;
-        case 2:
+        case 1:
         	this.longitude =  String.valueOf(value);
             break;
-        case 3:
+        case 2:
         	this.latitude =  String.valueOf(value);
             break;
-        case 4:
+        case 3:
         	this.datePhoto =  String.valueOf(value);
             break;
-        case 5:
+        case 4:
         	this.typePhoto =  String.valueOf(value);
             break;
     

@@ -135,7 +135,7 @@ public class PsugoDB {
 				if (c2.getCount() > 0)
 					count2 = c2.getCount();
 				
-				Photo[] photo = new Photo[count2];
+				Photo[] tPhoto = new Photo[count2];
 				i2=0;
 				//inst[i].photo = photo;
 				if (count2 > 0) {
@@ -144,7 +144,7 @@ public class PsugoDB {
 						int jj = c2.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INST_PHOTO);
 						System.out.println("jj dans PSugoDB =" + jj);
 						
-						photo[i2] = new Photo(
+						tPhoto[i2] = new Photo(
 								c2.getString(c2.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INST_PHOTO)),
 								c2.getString(c2.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INST_LONG)),
 								c2.getString(c2.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INST_LATITUDE)),
@@ -158,8 +158,8 @@ public class PsugoDB {
 				c2.close();
 				// transferts du tableau de photo dans PhotoCollection
 				PhotoCollection v =  new PhotoCollection();
-				for (int idx = 0; idx < photo.length;idx++)
-					v.add(photo[idx]);
+				for (int idx = 0; idx < tPhoto.length;idx++)
+					v.add(tPhoto[idx]);
 				inst[i].photo = v;
 				
 				//
@@ -172,7 +172,7 @@ public class PsugoDB {
 
 	// delete (if exist) and insert directeur of type X.
 	public void  insertDirecteur(int instId, String nom, String genre, String type, String email, 
-			String telephone, String cin, byte[] photo, String longitude, String latitude, String datePhoto){
+			String telephone, String cin, String photo, String longitude, String latitude, String datePhoto){
 		
 		deleteDirecteur(instId, type);
 		
@@ -193,7 +193,7 @@ public class PsugoDB {
 		p = db.compileStatement(query);
 
 		p.bindLong(1, dirId);
-		p.bindBlob(2, photo);
+		p.bindString(2, photo);
 		p.bindString(3, longitude);
 		p.bindString(4, latitude);
 		p.bindString(5, datePhoto);
@@ -273,7 +273,7 @@ public class PsugoDB {
 		return directeur;
 	}
 	
-	// delete (if exist) and insert classe of name X.
+// delete (if exist) and insert classe of name X.
 	public void  insertClasse(int instId, String nomClasse, int nombreEleve, Photo photoClasse, String professeur, Photo photoProf){
 		
 		deleteClasse(instId, nomClasse);

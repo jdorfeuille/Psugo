@@ -1,8 +1,15 @@
 package com.gvg.psugo;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import org.kobjects.base64.Base64;
 
 import android.app.Activity;
 import android.content.Context;
@@ -14,11 +21,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.MediaStore.Images.Media;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,6 +39,7 @@ import android.widget.Toast;
 public class Directeur_Activity extends Activity implements OnClickListener, 
 		LocationListener {
 
+	private static final int TAKE_PHOTO_DIRECT_CODE = 50;
 	// Composantes d'Interface graphique
 	Button actionDirectPics;
 	Button actionAddDirect;
@@ -47,12 +57,14 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 
 	//
 	int idDir;
+	int instId;
 	int ctlLocation = 0;
 	double schoolLatitude;
 	double schoolLongitude;
 	LocationManager locationManager;
 	Location location;
 	String provider;
+	String typeDirSelected, genreDirSelected;
 
 	//
 	CharSequence text;
@@ -67,6 +79,7 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			idDir = extras.getInt("idDir");
+			instId = extras.getInt("instId");
 			idDir = idDir + 1; // incrementing cnt call to self if need be
 		}
 		// nomEcole.getText().toString(); to get the string value...
@@ -82,9 +95,46 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 
 		// Spinners
 		typeDirecteurList = (Spinner) findViewById(R.id.typeDirecteurList);
-		typeDirecteurList.setOnItemSelectedListener(new MyOnItemSelectedListener());
+		typeDirecteurList.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+
+						String item = arg0.getItemAtPosition(arg2).toString();
+						typeDirSelected = item;
+
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+				});
+		
+		
 		genreDirecteurList = (Spinner) findViewById(R.id.genreDirList);
-		genreDirecteurList.setOnItemSelectedListener(new MyOnItemSelectedListener());
+		genreDirecteurList
+				.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+					@Override
+					public void onItemSelected(AdapterView<?> arg0, View arg1,
+							int arg2, long arg3) {
+
+						String item = arg0.getItemAtPosition(arg2).toString();
+						genreDirSelected = item;
+
+					}
+
+					@Override
+					public void onNothingSelected(AdapterView<?> arg0) {
+						// TODO Auto-generated method stub
+
+					}
+
+				});
 		
 		// String.valueOf(spinner1.getSelectedItem()) to get the values 
 
@@ -130,6 +180,54 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
 	}
+	
+	private Photo createPhotoObject(byte[] byteArray){
+		Photo aPhoto = new Photo();
+		aPhoto.latitude = "";
+		aPhoto.longitude = "";
+		if (location != null) {
+			aPhoto.longitude = String.valueOf(location.getLongitude());
+			aPhoto.latitude = String.valueOf(location.getLatitude());
+		}
+		aPhoto.typePhoto = "";
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
+		Date date = new Date();
+		aPhoto.datePhoto = df.format(date);
+		aPhoto.photo = Base64.encode(byteArray);
+		//aPhoto.photo = Base64.encodeBase64String(byteArray); //encode the data 
+		return aPhoto;
+	}
+
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// Bitmap datifoto = null;
+		System.out.println("onActivityResult - PsugoCameraHelper");
+		if (resultCode == RESULT_OK) {
+			System.out.println("inside if resultCode == RESULT_OK");
+			if (requestCode == TAKE_PHOTO_DIRECT_CODE) {
+				Bitmap bmp = (Bitmap) data.getExtras().get("data");
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] byteArray = stream.toByteArray();
+				Photo myPhoto = createPhotoObject(byteArray); 
+				PsugoDB psudb = new PsugoDB(getBaseContext());
+				psudb.open();
+				/*
+				public void  insertDirecteur(int instId, String nom, String genre, String type, String email, 
+						String telephone, String cin, byte[] photo, String longitude, String latitude, String datePhoto){
+					*/
+				psudb.insertDirecteur(instId, nomDirecteur.getText().toString(),
+						genreDirSelected, typeDirSelected,emailDirecteur.getText().toString(),
+						phoneDirecteur.getText().toString(),cinDirecteur.getText().toString(),
+						myPhoto.photo, myPhoto.longitude, myPhoto.latitude, myPhoto.datePhoto);
+
+				psudb.close();
+				// mImageView.setImageBitmap(mImageBitmap);
+			}
+		}
+		System.out.println("done onActivityResult - PsugoCameraHelper");
+
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -152,6 +250,7 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 			Intent i = new Intent(this, Directeur_Activity.class);
 			Bundle b = new Bundle();
 			b.putInt("idDir", idDir);
+			b.putInt("instId", instId);
 			i.putExtras(b);
 			startActivity(i);
 			finish();
@@ -159,6 +258,8 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 		case R.id.actionDirectPics:
 
 			// onLocationChanged(location);
+			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intent, TAKE_PHOTO_DIRECT_CODE);
 			String locationDisplay = "Latitude:" + schoolLatitude
 					+ "   Longitude:" + schoolLongitude;
 			Toast.makeText(getBaseContext(), locationDisplay,

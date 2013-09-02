@@ -1,11 +1,15 @@
 package com.gvg.psugo;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+
+import org.kobjects.base64.Base64;
 
 import android.app.Activity;
 import android.content.Context;
@@ -36,7 +40,8 @@ import android.widget.Toast;
 public class Classe_Activity extends Activity implements OnClickListener, 
 		LocationListener {
 	
-	private static final int TAKE_PHOTO_CODE = 1;
+	private static final int TAKE_PHOTO_CLASSE_CODE = 50;
+	private static final int TAKE_PHOTO_PROF_CODE = 60;
 
 	// Composantes d'Interface graphique
 	Button actionClassePics;
@@ -56,12 +61,14 @@ public class Classe_Activity extends Activity implements OnClickListener,
 
 	//
 	int idClasse;
+	int instId;
 	int ctlLocation = 0;
 	double schoolLatitude;
 	double schoolLongitude;
 	LocationManager locationManager;
 	Location location;
 	String provider;
+	Photo photoProf, photoClasse;
 
 	//
 	CharSequence text;
@@ -76,11 +83,14 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			idClasse = extras.getInt("idClasse");
+			instId = extras.getInt("instId");
 			idClasse = idClasse + 1; // incrementing cnt call to self if need be
 		}
 		// nomEcole.getText().toString(); to get the string value...
 		// to get the int value
 		// Integer.parseInt(myEditText.getText().toString())).
+		
+		
 		nomClasse = (EditText) findViewById(R.id.nomClasse);
 		nomProfClasse = (EditText) findViewById(R.id.nomProfClasse);
 		nbrEleve = (EditText) findViewById(R.id.nbrEleve);
@@ -151,7 +161,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 	 /*
      *  Start Camera to Take Picture 
      */
-	
+	/*
 	
     private void takePhoto(String entite){
     	  final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -161,7 +171,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
     	}
 
 
-
+*/
 	private File getPicFile(Context context, String entite){
     	  //it will return /sdcard/image.tmp
     	  final File path = new File( Environment.getExternalStorageDirectory(), context.getPackageName() );
@@ -175,14 +185,68 @@ public class Classe_Activity extends Activity implements OnClickListener,
     	}
 
 
+	private Photo createPhotoObject(byte[] byteArray){
+		Photo aPhoto = new Photo();
+		aPhoto.latitude = "";
+		aPhoto.longitude = "";
+		if (location != null) {
+			aPhoto.longitude = String.valueOf(location.getLongitude());
+			aPhoto.latitude = String.valueOf(location.getLatitude());
+		}
+		aPhoto.typePhoto = "";
+		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
+		Date date = new Date();
+		aPhoto.datePhoto = df.format(date);
+		aPhoto.photo = Base64.encode(byteArray);
+		//aPhoto.photo = Base64.encodeBase64String(byteArray); //encode the data 
+		return aPhoto;
+	}
+
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// Bitmap datifoto = null;
+		System.out.println("onActivityResult - PsugoCameraHelper");
+		if (resultCode == RESULT_OK) {
+			System.out.println("inside if resultCode == RESULT_OK");
+			if (requestCode == TAKE_PHOTO_CLASSE_CODE) {
+				Bitmap bmp = (Bitmap) data.getExtras().get("data");
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] byteArray = stream.toByteArray();
+				photoClasse = createPhotoObject(byteArray); 
+				// mImageView.setImageBitmap(mImageBitmap);
+			}
+			if (requestCode == TAKE_PHOTO_PROF_CODE) {
+				Bitmap bmp = (Bitmap) data.getExtras().get("data");
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] byteArray = stream.toByteArray();
+				photoProf = createPhotoObject(byteArray); 
+
+			}
+		}
+		System.out.println("done onActivityResult - PsugoCameraHelper");
+
+	}
+	public void saveScreen() {
+		PsugoDB psudb = new PsugoDB(getBaseContext());
+		psudb.open();
+		psudb.insertClasse(instId, nomClasse.getText().toString(), 
+				Integer.parseInt(nbrEleve.getText().toString()), 
+				photoClasse, nomProfClasse.getText().toString(), photoProf);
+		psudb.close();
+		
+	}
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		// dummy method for now to test the buttons and display all values
-
+		Intent intent;
 		// CharSequence text;
 		switch (v.getId()) {
 		case R.id.actionFinishClasse:
+			this.saveScreen();
 			text = "'Done' clicked!";
 			// save Daa
 			showMessage(text);
@@ -192,12 +256,16 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		case R.id.actionAddClasse:
 			text = "Activating the same intent to add another Classe";
 			// takePhoto();
+			// save the current class
+			this.saveScreen();
 			showMessage(text);
 			nomClasse.setText("");
 			nomProfClasse.setText("");
 			nbrEleve.setText("");
 			emailProf.setText("");
 			phoneProf.setText("");
+			photoProf = null;
+			this.photoClasse = null;
 
 			Intent i = new Intent(this, Classe_Activity.class);
 			Bundle b = new Bundle();
@@ -209,20 +277,19 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		case R.id.photoClasse:
 
 			// onLocationChanged(location);
+			intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intent, TAKE_PHOTO_CLASSE_CODE);
+			// onLocationChanged(location);
 			String locationDisplay = "Latitude:" + schoolLatitude
 					+ "   Longitude:" + schoolLongitude;
 			Toast.makeText(getBaseContext(), locationDisplay,
 					Toast.LENGTH_SHORT).show();
-			takePhoto("Classe");
+
 			break;
 
 		case R.id.actionProfPics:
-
-			// onLocationChanged(location);
-			//String locationDisplay = "Latitude:" + schoolLatitude
-			//		+ "   Longitude:" + schoolLongitude;
-			//Toast.makeText(getBaseContext(), locationDisplay,
-			//		Toast.LENGTH_SHORT).show();
+			intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			startActivityForResult(intent, TAKE_PHOTO_PROF_CODE);
 			break;
 		default:
 			// text = "Dunno what was pushed!";

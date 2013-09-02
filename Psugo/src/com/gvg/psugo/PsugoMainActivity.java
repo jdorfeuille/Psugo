@@ -532,11 +532,11 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			// text = "'upload data ' clicked! need method to upload data";
 			// just for today we will test the WS here
 			Context c = this.getBaseContext();
+			//PsugoSendDataParm pdp = new 
 			try {
 				PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
 				AsyncTask<Context, String, String> servCall_send = psch.execute(c);
 				String resp = servCall_send.get();
-
 				
 			} catch (Exception e) {
 				System.out.println("Exception ... JW...failed UPLOAD service call");
@@ -551,6 +551,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			b = null;
 			b = new Bundle();
 			b.putInt("idDir", ADD_DIRECTEURS);
+			b.putInt("instId", instId);
 			request.putExtras(b);
 			startActivityForResult(request, ADD_DIRECTEURS);
 			break;
