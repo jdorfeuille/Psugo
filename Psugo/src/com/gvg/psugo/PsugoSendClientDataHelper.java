@@ -137,7 +137,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 			// ne pas transmettre si pas de photos... ou bien si l'utilisateur n'a pas mis a jour
 			if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0 && (!myDbInst[i].photo.isEmpty() )){
 				//*********PATCH********* TO FIX
-				myDbInst[i].instTrouvee = "Oui";
+				//myDbInst[i].instTrouvee = "Oui";
 				//**********END PATCH
 				debugInstitution("envoyerInstitution", myDbInst[i]);
 				instSentList.add(myDbInst[i].id);
@@ -173,7 +173,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 						}
 						else break;
 				}
-				else break;
+				else break; // if Institution is in error
 				
 			}
 		}
@@ -253,6 +253,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 	
 	public int envoyerClasses(int theInstId) throws Exception {
 
+		System.out.println("---envoyerClasses ---envoyerClasses");
 		// SoapObject login_resp = this.LoginRequest();
 		final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
 		final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerClasse";

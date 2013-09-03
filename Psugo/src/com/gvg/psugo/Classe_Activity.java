@@ -231,6 +231,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 	public void saveScreen() {
 		PsugoDB psudb = new PsugoDB(getBaseContext());
 		psudb.open();
+		System.out.println("instID from SaveScreen classe ==> "+ instId);
 		psudb.insertClasse(instId, nomClasse.getText().toString(), 
 				Integer.parseInt(nbrEleve.getText().toString()), 
 				photoClasse, nomProfClasse.getText().toString(), photoProf);

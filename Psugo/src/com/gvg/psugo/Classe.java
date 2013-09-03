@@ -6,7 +6,7 @@ import org.ksoap2.serialization.KvmSerializable;
 import org.ksoap2.serialization.PropertyInfo;
 
 public class Classe  implements KvmSerializable {
-	public int instituionId;
+	public int institutionId;
 	public String nomClasse;
 	public int nombreEleve;
 	public Photo photoClasse;
@@ -26,7 +26,7 @@ public class Classe  implements KvmSerializable {
 
 	public Classe(int instituionId, String nomClasse, int nombreEleve, Photo photoClasse, String professeur, Photo photoProfesseur)
 	{
-		this.instituionId = instituionId;
+		this.institutionId = instituionId;
 		this.nomClasse = nomClasse;
 		this.nombreEleve = nombreEleve;
 		this.photoClasse = photoClasse;
@@ -40,7 +40,7 @@ public class Classe  implements KvmSerializable {
 		switch(arg0)
         {
         case 0:
-            return this.instituionId;
+            return this.institutionId;
         case 1:
             return this.nomClasse;
         case 2:
@@ -121,7 +121,7 @@ public class Classe  implements KvmSerializable {
 		 switch(index)
 	        {
 	        case 0:
-	            this.instituionId = Integer.parseInt(value.toString());
+	            this.institutionId = Integer.parseInt(value.toString());
 	            break;
 	        case 1:
 	            this.nomClasse =  value.toString();	           

@@ -403,14 +403,14 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			String schoolName = tempData.instArray[i].nomInstitution;
 			idx = getIdxString(schoolName, instArrayDB);
 			if (idx > -1) {
-				if (tempInst.telephone == null )
-					tempInst.telephone = "";
-				if (tempInst.instTrouvee == null )
-					tempInst.instTrouvee = "";
-				psudb.updateInstitution(tempInst.id, tempInst.nomInstitution,
-						tempInst.commune, tempInst.sectionRurale,
-						tempInst.adresse, tempInst.adresseDetail,
-						tempInst.telephone, tempInst.instTrouvee);
+//				if (tempInst.telephone == null )
+//					tempInst.telephone = "";
+//				if (tempInst.instTrouvee == null )
+//					tempInst.instTrouvee = "";
+//				psudb.updateInstitution(tempInst.id, tempInst.nomInstitution,
+//						tempInst.commune, tempInst.sectionRurale,
+//						tempInst.adresse, tempInst.adresseDetail,
+//						tempInst.telephone, tempInst.instTrouvee);
 			} else {
 				// Insert Institution
 				psudb.insertInstitution(tempInst.id, tempInst.nomInstitution,tempInst.departement,
@@ -562,6 +562,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			b = null;
 			b = new Bundle();
 			b.putInt("idClasse", ADD_CLASSES);
+			b.putInt("instId", instId);
 			requestClasse.putExtras(b);
 			startActivityForResult(requestClasse, ADD_CLASSES);
 			break;

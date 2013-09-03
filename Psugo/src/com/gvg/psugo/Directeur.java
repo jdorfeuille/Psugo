@@ -7,7 +7,7 @@ import org.ksoap2.serialization.PropertyInfo;
 
 public class Directeur implements KvmSerializable{
 	
-	public int instituionId;
+	public int institutionId;
 	public String nom;
 	public String genre;
 	public String typeDirection;
@@ -16,8 +16,8 @@ public class Directeur implements KvmSerializable{
 	public String cin;
 	public Photo photo;
 	
-	public Directeur(int instituionId, String typeDirection, String nom, String genre, String email, String telephone, String cin, Photo photo){
-		this.instituionId = instituionId;
+	public Directeur(int institutionId, String typeDirection, String nom, String genre, String email, String telephone, String cin, Photo photo){
+		this.institutionId = institutionId;
 		this.nom = nom;
 		this.genre = genre;
 		this.typeDirection = typeDirection;
@@ -26,8 +26,8 @@ public class Directeur implements KvmSerializable{
 		this.cin = cin;
 		this.photo = photo;
 	}
-	public Directeur(int instituionId, String typeDirection, String nom, String genre, String email, String telephone, String cin){
-		this.instituionId = instituionId;
+	public Directeur(int institutionId, String typeDirection, String nom, String genre, String email, String telephone, String cin){
+		this.institutionId = institutionId;
 		this.nom = nom;
 		this.genre = genre;
 		this.typeDirection = typeDirection;
@@ -42,7 +42,7 @@ public class Directeur implements KvmSerializable{
 		switch(arg0)
         {
         case 0:
-            return this.instituionId;
+            return this.institutionId;
         case 1:
             return this.nom;
         case 2:
@@ -72,7 +72,7 @@ public class Directeur implements KvmSerializable{
 	        {
 	        case 0:
 	            info.type = PropertyInfo.INTEGER_CLASS;
-	            info.name = "instituionId";
+	            info.name = "institutionId";
 	            break;
 	        case 1:
 	            info.type = PropertyInfo.STRING_CLASS;
@@ -112,7 +112,7 @@ public class Directeur implements KvmSerializable{
 		 switch(index)
 	        {
 	        case 0:
-	            this.instituionId = Integer.parseInt(value.toString());
+	            this.institutionId = Integer.parseInt(value.toString());
 	            break;
 	        case 1:
 	            this.nom =  value.toString();	           
