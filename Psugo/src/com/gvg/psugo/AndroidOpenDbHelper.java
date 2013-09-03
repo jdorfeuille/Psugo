@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "psugo_lite_db2";
-	public static final int DB_VERSION = 16;
+	public static final int DB_VERSION = 17;
 
 	// Table DDL
 	
@@ -88,6 +88,12 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_PR_LONG = "pr_longitude_column";
 	public static final String COLUMN_NAME_PR_LATITUDE = "pr_latitude_column";
 	public static final String COLUMN_NAME_PR_PHOTO_DATE = "pr_photo_date_column";
+	
+	//COMMUNE SECTION RURALE
+	public static final String TABLE_NAME_COMSECTR = "comsectr_table";
+	public static final String COLUMN_NAME_CS_ID = "cs_id_column";           
+	public static final String COLUMN_NAME_CS_COMMUNE = "cs_commune_column";
+	public static final String COLUMN_NAME_CS_SECTION_RURALE = "cs_section_rurale_column";
 	
 	
 
@@ -200,6 +206,20 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 
 		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
 		db.execSQL(sqlQueryToCreateProfPHTable);
+		
+		//
+		//COMMUNE SECTION RURALE
+		String sqlQueryToCreateComsectRTable = "create table if not exists " + TABLE_NAME_COMSECTR + " ( " 
+				+ COLUMN_NAME_CS_ID + " integer primary key autoincrement, "
+				+ COLUMN_NAME_CS_COMMUNE + " text not null, "
+				+ COLUMN_NAME_CS_SECTION_RURALE + " text not null );";
+
+
+		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
+		db.execSQL(sqlQueryToCreateComsectRTable);
+		
+		
+		
 	}
 
 	// onUpgrade method is use when we need to upgrade the database in to a new version
@@ -219,6 +239,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CLASSE_PH);
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PROF);
 		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PROF_PH);
+		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_COMSECTR);
 		    onCreate(db);
 		}		
 	}

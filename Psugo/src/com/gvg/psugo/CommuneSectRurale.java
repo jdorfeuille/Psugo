@@ -9,6 +9,12 @@ public class CommuneSectRurale {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	public CommuneSectRurale(String commune, String sectionRurale) {
+		super();
+		this.commune = commune;
+		this.sectionRurale = sectionRurale;
+	}
 	
 	
 

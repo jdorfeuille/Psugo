@@ -354,6 +354,19 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		}
 		return idx;
 	}
+	
+
+	public void saveNewComsectr(CommuneSectRurale[] theCsrs) {
+		PsugoDB psudb = new PsugoDB(getBaseContext());
+		psudb.open();
+		psudb.delete_ALL_ComsectR();
+		for (int i=0;i<theCsrs.length;i++) {
+			CommuneSectRurale csr = theCsrs[i];
+			psudb.insertComsectR(csr.commune, csr.sectionRurale);
+		}
+		psudb.close();
+		
+	}
     
     private TempData getRequiredUIData() {
     	
@@ -363,10 +376,16 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 
 			AsyncTask<String, String, TempData> servCall_Login = psch.execute(new String[] { "Login" });
 			resp = servCall_Login.get();
+			saveNewComsectr(resp.csrArray);
 			
 		} catch (Exception e) {
 			System.out.println("Erreur Fatale pas de donnees pour l'application ... ");
-			e.printStackTrace();
+			//e.printStackTrace();
+			PsugoDB psudb = new PsugoDB(getBaseContext());
+			psudb.open();
+			resp = new TempData();
+			resp.instArray = psudb.selectInstitution();
+			resp.csrArray = psudb.selectComsectR();
 
 		}
     	return resp;

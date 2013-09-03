@@ -194,7 +194,9 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 				SoapEnvelope.VER11);
 		envelope.dotNet = false;
 		int ret = 0;
-	
+	    String typeDirTemp = theDir.typeDirection.substring(0, 1);
+	    theDir.typeDirection = typeDirTemp;
+	    System.out.println("typeDirection = " +  theDir.typeDirection); // To DELETE
 		SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
 		envelope.setOutputSoapObject(request);
 		envelope.encodingStyle = SoapEnvelope.ENC;

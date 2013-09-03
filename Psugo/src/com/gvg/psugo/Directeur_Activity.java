@@ -102,8 +102,8 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 							int arg2, long arg3) {
 
 						String item = arg0.getItemAtPosition(arg2).toString();
-						typeDirSelected = item;
-
+						typeDirSelected = item; 
+						
 					}
 
 					@Override

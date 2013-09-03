@@ -173,6 +173,7 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
 			//SystemClock.sleep(1000);
 		    	tData.instArray = this.ListerInstitutionRequest();
 		    	tData.csrArray = this.ListerSectionRuraleRequest();
+		    	// save section rurale...
 		    }
 		    // here we have issue we need to get data from DB
 			
