@@ -31,6 +31,8 @@
         </activity>
         <activity android:name="com.gvg.psugo.Directeur_Activity" >
         </activity>
+        <activity android:name="com.gvg.psugo.Psugo_Login_Activity" >
+        </activity>
         <activity android:name="com.gvg.psugo.Classe_Activity" >
         </activity>
         <activity android:name="com.gvg.psugo.PsugoCameraHelper" >

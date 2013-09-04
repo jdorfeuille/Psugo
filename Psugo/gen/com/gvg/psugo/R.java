@@ -42,6 +42,8 @@ public final class R {
     }
     public static final class id {
         public static final int Ok=0x7f090009;
+        public static final int TextView01=0x7f090030;
+        public static final int TextView02=0x7f090032;
         public static final int actionAddClasse=0x7f09001b;
         public static final int actionAddClasses=0x7f090008;
         public static final int actionAddDir=0x7f090029;
@@ -56,10 +58,12 @@ public final class R {
         public static final int actionSchoolPic=0x7f090012;
         public static final int actionTakePics=0x7f090015;
         public static final int actionUploadData=0x7f09000a;
-        public static final int action_settings=0x7f090030;
+        public static final int action_settings=0x7f090036;
         public static final int adrDetaillee=0x7f09000e;
         public static final int adrEcole=0x7f090006;
         public static final int arrondissement=0x7f090005;
+        public static final int btnCancel=0x7f090034;
+        public static final int btnLogin=0x7f090035;
         public static final int cinDir=0x7f09002a;
         public static final int cinProf=0x7f090021;
         public static final int dept=0x7f090003;
@@ -89,6 +93,8 @@ public final class R {
         public static final int textView2=0x7f090011;
         public static final int textView3=0x7f09001f;
         public static final int textView4=0x7f09002f;
+        public static final int txtPwd=0x7f090033;
+        public static final int txtUname=0x7f090031;
         public static final int typeDirecteurList=0x7f09002e;
     }
     public static final class layout {
@@ -96,6 +102,7 @@ public final class R {
         public static final int camera_helper=0x7f030001;
         public static final int classe_activity_layout=0x7f030002;
         public static final int directeur_activity_layout=0x7f030003;
+        public static final int psugo_login_activity=0x7f030004;
     }
     public static final class menu {
         public static final int psugo_main=0x7f080000;

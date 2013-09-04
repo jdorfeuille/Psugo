@@ -101,8 +101,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	private static final int ADD_DIRECTEURS = 10;
 	private static final int ADD_PICS = 100;
 	private static final int ADD_CLASSES = 200;
-	private static final int ADD_PROFS = 300;
-	
+	private static final int PSUGO_LOGIN = 999;
 	
 	// Location Control "Make sure to get the location only once for this instance
 	// we need to make sure we test this
@@ -131,6 +130,15 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
+        
+        
+		Intent request =new Intent(this, Psugo_Login_Activity.class);
+		Bundle b = null;
+		b = new Bundle();
+		startActivityForResult(request, PSUGO_LOGIN);
+		
+		
+		
         setContentView(R.layout.activity_psugo_main);
         
         // get Data that will populate the UI fields
@@ -138,12 +146,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         tempData = this.getRequiredUIData();
         listNomImst = getListNomInst();
         processListInst();
-        
-        // nomEcole.getText().toString(); to get the string value... 
-        // to get the int value Integer.parseInt(myEditText.getText().toString())).
-        //nomEcole = (EditText)findViewById(R.id.nomEcole);
-        //Spinner   nomEcole = (Spinner  )findViewById(R.id.nomEcole);
-        
+             
         nomEcole = (AutoCompleteTextView )findViewById(R.id.nomEcole);
         //nomEcole.setThreshold(0);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -152,9 +155,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         //android.R.layout.simple_dropdown_item_1line
         nomEcole.setAdapter(adapter);
-        //nomEcole.showDropDown();
-        //nomEcole.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
-        
         nomEcole.setOnClickListener(new OnClickListener() {
             
             public void onClick(View v) {
@@ -493,6 +493,12 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
           case ADD_DIRECTEURS:
         	  if(resultCode == RESULT_OK){
         		CharSequence text = "Returned from Adding Directeurs";
+      			showMessage(text);
+      		}
+        	  break;
+          case PSUGO_LOGIN:
+        	  if(resultCode == RESULT_OK){
+        		CharSequence text = "Returned from LOGIN";
       			showMessage(text);
       		}
         	  break;
