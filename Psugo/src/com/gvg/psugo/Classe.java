@@ -24,15 +24,21 @@ public class Classe  implements KvmSerializable {
 	}
 
 
-	public Classe(int instituionId, String nomClasse, int nombreEleve, Photo photoClasse, String professeur, Photo photoProfesseur)
-	{
-		this.institutionId = instituionId;
-		this.nomClasse = nomClasse;
-		this.nombreEleve = nombreEleve;
-		this.photoClasse = photoClasse;
-		this.nomProfesseur = professeur;
-		this.photoProfesseur = photoProfesseur;
-	}
+	public Classe(int instituionId, String nomClasse, int nombreEleve, Photo photoClasse, String professeur, 
+			   String emailProf, String phoneProf, String cinProf, String genreProf, Photo photoProfesseur)
+			 {
+			  this.institutionId = instituionId;
+			  this.nomClasse = nomClasse;
+			  this.nombreEleve = nombreEleve;
+			  this.photoClasse = photoClasse;
+			  this.nomProfesseur = professeur;
+			  this.emailProf = emailProf;
+			  this.phoneProf = phoneProf ;
+			  this.cinProf = cinProf;
+			  this.genreProf = genreProf;
+			  this.photoProfesseur = photoProfesseur;
+			 
+			 }
 	
 	@Override
 	public Object getProperty(int arg0) {
@@ -74,7 +80,7 @@ public class Classe  implements KvmSerializable {
 	        {
 	        case 0:
 	            info.type = PropertyInfo.INTEGER_CLASS;
-	            info.name = "instituionId";
+	            info.name = "institutionId";
 	            break;
 	        case 1:
 	            info.type = PropertyInfo.STRING_CLASS;
@@ -107,9 +113,10 @@ public class Classe  implements KvmSerializable {
 	        case 8:
 	            info.type = PropertyInfo.STRING_CLASS;
 	            info.name = "genreProf";
+	            break;
 	        case 9:
 	            info.type = PropertyInfo.OBJECT_CLASS; 
-	            info.name = "photo";
+	            info.name = "photoProfesseur";
 	            break;
 	        default:break;
 	        }

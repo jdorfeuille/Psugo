@@ -74,9 +74,6 @@ public class PsugoDB {
 
 	public void deleteInstitution(int id) {
 
-		// A completer ...
-		// Idealement cette fonction devrait aussi effacer toutes les tables
-		// avec cette institution
 		deleteInstitutionPhoto(id);
 		deleteDirecteur(id);
 
@@ -338,7 +335,8 @@ public class PsugoDB {
 
 	// delete (if exist) and insert classe of name X.
 	public void insertClasse(int instId, String nomClasse, int nombreEleve,
-			Photo photoClasse, String professeur, Photo photoProf) {
+			Photo photoClasse, String professeur, String emailProf, String phoneProf, 
+			String cinProf, String genreProf, Photo photoProf) {
 
 		deleteClasse(instId, nomClasse);
 
@@ -365,13 +363,20 @@ public class PsugoDB {
 		p.executeInsert();
 
 		query = "INSERT INTO " + AndroidOpenDbHelper.TABLE_NAME_PROF
-				+ " VALUES (?, ?, ?, ?)";
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		p = db.compileStatement(query);
 
 		p.bindNull(1);
 		p.bindLong(2, instId);
 		p.bindLong(3, classeId);
 		p.bindString(4, professeur);
+		p.bindString(5, emailProf);
+		p.bindString(6, phoneProf);
+		p.bindString(7, cinProf);
+		p.bindString(8, genreProf);
+		
+		
+		
 		long profId = p.executeInsert();
 
 		query = "INSERT INTO " + AndroidOpenDbHelper.TABLE_NAME_PROF_PH
@@ -454,6 +459,11 @@ public class PsugoDB {
 			Photo photoClasse = null;
 			Photo photoProfesseur = null;
 			String professeur = null;
+			String emailProf = null;
+			String phoneProf = null;
+			String cinProf = null;
+			String genreProf = null;
+			
 			int professeurId = 0;
 			do {
 
@@ -491,6 +501,18 @@ public class PsugoDB {
 					professeurId = c2
 							.getInt(c2
 									.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_PR_ID));
+					emailProf = c2
+							.getString(c2
+									.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_PR_EMAIL));
+					phoneProf = c2
+							.getString(c2
+									.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_PR_PHONE));
+					cinProf = c2
+							.getString(c2
+									.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_PR_CIN));
+					genreProf = c2
+							.getString(c2
+									.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_PR_GENRE));
 
 				}
 				c2.close();
@@ -522,7 +544,8 @@ public class PsugoDB {
 								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_CL_NAME)),
 						c.getInt(c
 								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_CL_INST_ID)),
-						photoClasse, professeur, photoProfesseur);
+						photoClasse, professeur, emailProf, phoneProf, cinProf, genreProf, photoProfesseur);
+				i=i+1;
 			} while (c.moveToNext());
 		}
 		c.close();
@@ -555,8 +578,6 @@ public class PsugoDB {
 	}
 
 	public void insertComsectR(String commune, String sectionR) {
-
-		// deleteInstitutionPhoto(instId, type);
 
 		String query = "INSERT INTO " + AndroidOpenDbHelper.TABLE_NAME_COMSECTR
 				+ " VALUES (?, ?, ?)";

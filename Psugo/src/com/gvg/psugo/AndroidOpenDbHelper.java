@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "psugo_lite_db2";
-	public static final int DB_VERSION = 17;
+	public static final int DB_VERSION = 18;
 
 	// Table DDL
 	
@@ -79,7 +79,12 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_PR_INST_ID = "pr_inst_id_column";
 	public static final String COLUMN_NAME_PR_CL_ID = "pr_cl_id_column";
 	public static final String COLUMN_NAME_PR_NAME = "pr_name_column";
-		
+	public static final String COLUMN_NAME_PR_EMAIL = "pr_email_column";
+	public static final String COLUMN_NAME_PR_PHONE = "pr_phone_column";
+	public static final String COLUMN_NAME_PR_CIN = "pr_cin_column";
+	public static final String COLUMN_NAME_PR_GENRE = "pr_genre_column";
+
+	
 	//PROFESSEUR_PH
 	public static final String TABLE_NAME_PROF_PH = "pr_photo_table";
 	public static final String  COLUMN_NAME_PR_ID_PH = "pr_id_ph_column"; 
@@ -190,7 +195,11 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 				+ COLUMN_NAME_PR_ID + " integer primary key autoincrement, "
 				+ COLUMN_NAME_PR_INST_ID + " integer not null, "
 				+ COLUMN_NAME_PR_CL_ID + " integert not null, "
-				+ COLUMN_NAME_PR_NAME + " text not null);";
+				+ COLUMN_NAME_PR_NAME + " text not null, "
+				+ COLUMN_NAME_PR_EMAIL + " text not null, "
+				+ COLUMN_NAME_PR_PHONE + " text not null, "
+				+ COLUMN_NAME_PR_CIN + " text not null, "
+				+ COLUMN_NAME_PR_GENRE + " text not null);";
 
 		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
 		db.execSQL(sqlQueryToCreateProfTable);

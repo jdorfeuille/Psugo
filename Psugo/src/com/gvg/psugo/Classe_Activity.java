@@ -28,6 +28,8 @@ import android.provider.MediaStore.Images.Media;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,6 +53,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 	
 	//Spinners
 	Spinner genreProfList;
+	String genreProf;
 	
 	// Text Fields that needs to be save
 	EditText nomClasse;
@@ -58,6 +61,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 	EditText nbrEleve;
 	EditText emailProf;
 	EditText phoneProf;
+	EditText cinProf;
 
 	//
 	int idClasse;
@@ -96,6 +100,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		nbrEleve = (EditText) findViewById(R.id.nbrEleve);
 		emailProf = (EditText) findViewById(R.id.emailProf);
 		phoneProf = (EditText) findViewById(R.id.phoneProf);
+		cinProf = (EditText) findViewById(R.id.cinProf);
 
 		// Pictures
 		// imageView = (ImageView) findViewById(R.id.camera_image);;
@@ -109,7 +114,24 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 		// Apply the adapter to the spinner
 		genreProfList.setAdapter(adapter);
-		genreProfList.setOnItemSelectedListener(new MyOnItemSelectedListener());
+		genreProfList.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+
+				String item = arg0.getItemAtPosition(arg2).toString();
+				genreProf = item;
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
 		
 		// String.valueOf(spinner1.getSelectedItem()) to get the values 
 
@@ -234,7 +256,12 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		System.out.println("instID from SaveScreen classe ==> "+ instId);
 		psudb.insertClasse(instId, nomClasse.getText().toString(), 
 				Integer.parseInt(nbrEleve.getText().toString()), 
-				photoClasse, nomProfClasse.getText().toString(), photoProf);
+				photoClasse, nomProfClasse.getText().toString(),
+				emailProf.getText().toString(),
+				phoneProf.getText().toString(),
+				cinProf.getText().toString(),
+				genreProf,
+				photoProf);
 		psudb.close();
 		
 	}
@@ -271,6 +298,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 			Intent i = new Intent(this, Classe_Activity.class);
 			Bundle b = new Bundle();
 			b.putInt("idClasse", idClasse);
+			b.putInt("instId", instId);
 			i.putExtras(b);
 			startActivity(i);
 			finish();
