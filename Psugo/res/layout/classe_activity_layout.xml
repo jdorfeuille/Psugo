@@ -68,7 +68,10 @@
             android:layout_below="@+id/textView1"
             android:ems="10"
             android:hint="@string/nomClasse"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName" >
+            <requestFocus />
+        </EditText>
+           
 
         <TextView
             android:id="@+id/textView2"
@@ -89,18 +92,6 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText
-            android:id="@+id/cinProf"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:ems="10"
-            android:hint="@string/cin" >
-
-            <requestFocus />
-        </EditText>
-
-        <EditText
             android:id="@+id/nomProfClasse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -109,6 +100,25 @@
             android:ems="10"
             android:hint="@string/nomProfClasse"
             android:inputType="textPersonName" />
+
+        <Button
+            android:id="@+id/actionProfPics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/phoneProf"
+            android:drawableLeft="@drawable/camera"
+            android:text="@string/photoProf" />
+
+        <EditText
+            android:id="@+id/phoneProf"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/emailProf"
+            android:ems="10"
+            android:hint="@string/phone"
+            android:inputType="phone" />
 
         <EditText
             android:id="@+id/emailProf"
@@ -121,31 +131,22 @@
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/phoneProf"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/emailProf"
-            android:ems="10"
-            android:hint="@string/phone"
-            android:inputType="phone" />
-
-        <Button
-            android:id="@+id/actionProfPics"
+            android:id="@+id/cinProf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/phoneProf"
-            android:drawableLeft="@drawable/camera"
-            android:text="@string/photoProf" />
+            android:layout_below="@+id/photoClasse"
+            android:layout_marginTop="220dp"
+            android:ems="10"
+            android:hint="@string/cin" />
 
         <Spinner
             android:id="@+id/genreProfList"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
-            android:layout_above="@+id/cinProf"
+            android:layout_alignBottom="@+id/cinProf"
             android:layout_alignParentLeft="true"
-            android:layout_alignRight="@+id/actionFinishClasse"
+            android:layout_marginBottom="50dp"
             android:entries="@array/genre_humain_array"
             android:prompt="@string/genre_prompt"
             android:textSize="14pt" />

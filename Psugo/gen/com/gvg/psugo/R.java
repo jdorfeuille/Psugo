@@ -54,7 +54,7 @@ public final class R {
         public static final int actionFinishClasse=0x7f090019;
         public static final int actionFinishDirect=0x7f090028;
         public static final int actionFinishPics=0x7f090017;
-        public static final int actionProfPics=0x7f090024;
+        public static final int actionProfPics=0x7f090021;
         public static final int actionSchoolPic=0x7f090012;
         public static final int actionTakePics=0x7f090015;
         public static final int actionUploadData=0x7f09000a;
@@ -65,11 +65,11 @@ public final class R {
         public static final int btnCancel=0x7f090034;
         public static final int btnLogin=0x7f090035;
         public static final int cinDir=0x7f09002a;
-        public static final int cinProf=0x7f090021;
+        public static final int cinProf=0x7f090024;
         public static final int dept=0x7f090003;
         public static final int ecoleTrouveeList=0x7f090010;
         public static final int emailDir=0x7f09002c;
-        public static final int emailProf=0x7f090022;
+        public static final int emailProf=0x7f090023;
         public static final int emplacementList=0x7f090014;
         public static final int genreDirList=0x7f09002d;
         public static final int genreProfList=0x7f090020;
@@ -83,7 +83,7 @@ public final class R {
         public static final int nomProfClasse=0x7f09001e;
         public static final int phoneDir=0x7f09002b;
         public static final int phoneEcole=0x7f09000f;
-        public static final int phoneProf=0x7f090023;
+        public static final int phoneProf=0x7f090022;
         public static final int photoClasse=0x7f09001c;
         public static final int scroller=0x7f090000;
         public static final int scroller_classe=0x7f090018;
