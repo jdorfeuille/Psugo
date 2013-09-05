@@ -14,6 +14,8 @@ public class Psugo_Login_Activity extends Activity {
 	EditText txtPassword;
 	Button btnLogin;
 	Button btnCancel;
+	String theUserName;
+	String thePassword;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -31,14 +33,19 @@ public class Psugo_Login_Activity extends Activity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
-				if ((txtUserName.getText().toString()).equals(txtPassword
-						.getText().toString())) {
-					Toast.makeText(Psugo_Login_Activity.this, "Login Successful",
-							Toast.LENGTH_LONG).show();
-				} else {
-					Toast.makeText(Psugo_Login_Activity.this, "Invalid Login",
-							Toast.LENGTH_LONG).show();
-				}
+				theUserName = txtUserName.getText().toString();
+				thePassword = txtPassword.getText().toString();
+//				if ((txtUserName.getText().toString()).equals(txtPassword
+//						.getText().toString())) {
+//					Toast.makeText(Psugo_Login_Activity.this, "Login Successful",
+//							Toast.LENGTH_LONG).show();
+//				} else {
+//					Toast.makeText(Psugo_Login_Activity.this, "Invalid Login",
+//							Toast.LENGTH_LONG).show();
+//				}
+				// ici valider avec la BD
+				
+				
 				finish();
 
 			}

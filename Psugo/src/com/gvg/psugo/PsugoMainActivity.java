@@ -135,6 +135,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		Intent request =new Intent(this, Psugo_Login_Activity.class);
 		Bundle b = null;
 		b = new Bundle();
+		// getApplicationContext() ... we can pass in the context here
 		startActivityForResult(request, PSUGO_LOGIN);
 		
 		
