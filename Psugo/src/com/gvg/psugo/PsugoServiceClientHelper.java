@@ -10,6 +10,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 
@@ -18,13 +19,15 @@ import android.os.AsyncTask;
 public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData> {
 
 	final static String STR_COOKIE= "Set-Cookie";
-	String strCookieValue ;  
+	String strCookieValue ;
+    public Context myCtx;
 
 	
-	
-    public String LoginRequest() throws Exception {
-    	final String USER_NAME = "agent01";
-    	final String USER_PWD = "5304240";
+	public PsugoServiceClientHelper(Context baseContext) {
+		this.myCtx = baseContext;
+	}
+
+	public String LoginRequest(String user, String password) throws Exception {
     	final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
     	final String SOAP_ACTION_URN = "urn:wally.v3w.net#Login";
         final String METHOD_NAME = "Login";
@@ -32,8 +35,8 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
     	final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
     	
         SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
-        request.addProperty("user_name", USER_NAME);
-        request.addProperty("password", USER_PWD);
+        request.addProperty("user_name", user);
+        request.addProperty("password", password);
         
             
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -166,15 +169,23 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
 		TempData tData = new TempData();
 		try {
 			
-			int retCode = Integer.parseInt(this.LoginRequest());
+			int retCode = Integer.parseInt(this.LoginRequest(params[1], params[2]));
 		    System.out.println("after Login return code =" + retCode);
-		    if (retCode == 1) { 	
+		    if(retCode == 1){
+		    	// save the username/pasword
+				PsugoDB psudb = new PsugoDB(this.myCtx);
+				psudb.open();
+				psudb.insertUser(params[1], params[2]);
+				psudb.close();
+		    }
+		    if (retCode == 1 && inParm != "Login") { 	
 			// here if no response from server then get data from DB
 			//SystemClock.sleep(1000);
 		    	tData.instArray = this.ListerInstitutionRequest();
 		    	tData.csrArray = this.ListerSectionRuraleRequest();
 		    	// save section rurale...
 		    }
+
 		    // here we have issue we need to get data from DB
 			
 		}

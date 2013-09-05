@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/mainRelative"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="759dp"
         android:contentDescription="@string/imagePreview"
         tools:context=".PsugoMainActivity" >
 

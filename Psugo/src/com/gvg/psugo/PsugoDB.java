@@ -597,5 +597,40 @@ public class PsugoDB {
 
 	}
 
+	// Insert a username-password in login table
+		public void insertUser(String user, String password) {
+			deleteUser(user);
+			String query = "INSERT INTO "
+					+ AndroidOpenDbHelper.TABLE_NAME_LOGIN + " VALUES ( null, "
+					+ DatabaseUtils.sqlEscapeString(user) + ", "
+					+ DatabaseUtils.sqlEscapeString(password) + ")";
+			try {
+				db.execSQL(query);
+			} catch (Exception e) {
+				System.out.println("insertLogin failed ...");
+				e.printStackTrace();
+			}
+		}
+
+		public void deleteUser(String user){
+			db.execSQL("delete from "+ AndroidOpenDbHelper.TABLE_NAME_LOGIN + 
+					" where " + AndroidOpenDbHelper.COLUMN_NAME_LOGIN_USER 
+					+ " = " + DatabaseUtils.sqlEscapeString(user));		
+		}
+		
+		public boolean validateLogin(String user, String password){
+			String query = "select * from " + AndroidOpenDbHelper.TABLE_NAME_LOGIN
+					+ " WHERE " + AndroidOpenDbHelper.COLUMN_NAME_LOGIN_USER
+					+ " = " + DatabaseUtils.sqlEscapeString(user)
+					+ " AND " + AndroidOpenDbHelper.COLUMN_NAME_LOGIN_PASSWORD
+					+ " = " + DatabaseUtils.sqlEscapeString(password);
+			
+			Cursor c = db.rawQuery(query, null);
+
+			if (c.getCount() ==  1) 
+				return true;
+
+			return false;
+		}
 
 }

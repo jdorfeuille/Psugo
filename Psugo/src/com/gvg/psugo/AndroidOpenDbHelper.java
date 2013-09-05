@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "psugo_lite_db2";
-	public static final int DB_VERSION = 18;
+	public static final int DB_VERSION = 20;
 
 	// Table DDL
 	
@@ -100,6 +100,12 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_CS_COMMUNE = "cs_commune_column";
 	public static final String COLUMN_NAME_CS_SECTION_RURALE = "cs_section_rurale_column";
 	
+	
+	//LOGIN
+	public static final String TABLE_NAME_LOGIN = "login_table";
+	public static final String COLUMN_NAME_LOGIN_ID = "login_id_column";           
+	public static final String COLUMN_NAME_LOGIN_USER = "login_user_column";
+	public static final String COLUMN_NAME_LOGIN_PASSWORD = "login_password_column";
 	
 
 	public AndroidOpenDbHelper(Context context) {
@@ -227,6 +233,16 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
 		db.execSQL(sqlQueryToCreateComsectRTable);
 		
+		//
+		// Login
+		String sqlQueryToCreateLoginTable = "create table if not exists " + TABLE_NAME_LOGIN + " ( " 
+				+ COLUMN_NAME_LOGIN_ID + " integer primary key autoincrement, "
+				+ COLUMN_NAME_LOGIN_USER + " text not null, "
+				+ COLUMN_NAME_LOGIN_PASSWORD + " text not null );";
+
+
+		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
+		db.execSQL(sqlQueryToCreateLoginTable);
 		
 		
 	}

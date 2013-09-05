@@ -246,7 +246,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         adrDetEcole=(EditText)findViewById(R.id.adrDetaillee);
        
         // Pictures
-        imageView = (ImageView) findViewById(R.id.imgPrev);
+       // imageView = (ImageView) findViewById(R.id.imgPrev);
         //Scroller 
         scrollView1 = (ScrollView)findViewById(R.id.scroller);
         scrollView1.setEnabled(true);
@@ -373,9 +373,14 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
     	
     	TempData resp = null;
     	try {
-			PsugoServiceClientHelper psch = new PsugoServiceClientHelper();
+			PsugoServiceClientHelper psch = new PsugoServiceClientHelper(getBaseContext());
 
-			AsyncTask<String, String, TempData> servCall_Login = psch.execute(new String[] { "Login" });
+			EditText txtUserName = (EditText) this.findViewById(R.id.txtUname);
+			EditText txtPassword = (EditText) this.findViewById(R.id.txtPwd);
+			String theUserName = txtUserName.getText().toString();
+			String thePassword = txtPassword.getText().toString();
+
+			AsyncTask<String, String, TempData> servCall_Login = psch.execute(new String[] { "Section", theUserName, thePassword });
 			resp = servCall_Login.get();
 			saveNewComsectr(resp.csrArray);
 			
@@ -387,6 +392,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			resp = new TempData();
 			resp.instArray = psudb.selectInstitution();
 			resp.csrArray = psudb.selectComsectR();
+			psudb.close();
 
 		}
     	return resp;

@@ -77,6 +77,6 @@
         <item>Non</item>
     </string-array>
 
-    <string name="Ok">Sauvegarde</string>
+    <string name="Ok">Save</string>
 
 </resources>
