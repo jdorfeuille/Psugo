@@ -44,7 +44,7 @@ public final class R {
         public static final int Ok=0x7f090009;
         public static final int TextView01=0x7f090030;
         public static final int TextView02=0x7f090032;
-        public static final int actionAddClasse=0x7f09001b;
+        public static final int actionAddClasse=0x7f09001a;
         public static final int actionAddClasses=0x7f090008;
         public static final int actionAddDir=0x7f090029;
         public static final int actionAddDirects=0x7f090007;
@@ -76,7 +76,7 @@ public final class R {
         public static final int imgPrev=0x7f090013;
         public static final int instCommune=0x7f09000c;
         public static final int mainRelative=0x7f090001;
-        public static final int nbrEleve=0x7f09001a;
+        public static final int nbrEleve=0x7f09001b;
         public static final int nomClasse=0x7f09001d;
         public static final int nomDir=0x7f090026;
         public static final int nomEcole=0x7f090004;
