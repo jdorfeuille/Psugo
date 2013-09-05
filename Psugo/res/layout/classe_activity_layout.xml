@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="649dp" >
 
         <TextView
             android:id="@+id/textView1"
@@ -36,7 +36,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toLeftOf="@+id/actionFinishClasse"
-            android:layout_toRightOf="@+id/photoClasse"
             android:drawableLeft="@drawable/social_add_person"
             android:focusable="false" />
 
@@ -71,35 +70,6 @@
             android:inputType="textPersonName" >
             <requestFocus />
         </EditText>
-           
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_above="@+id/nomProfClasse"
-            android:text="@string/profTitle"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/genreProfList"
-            android:layout_alignParentLeft="true"
-            android:text="@string/genre"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <EditText
-            android:id="@+id/nomProfClasse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/textView3"
-            android:layout_alignParentLeft="true"
-            android:ems="10"
-            android:hint="@string/nomProfClasse"
-            android:inputType="textPersonName" />
 
         <Button
             android:id="@+id/actionProfPics"
@@ -131,25 +101,52 @@
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/cinProf"
-            android:layout_width="wrap_content"
+            android:id="@+id/nomProfClasse"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/photoClasse"
-            android:layout_marginTop="220dp"
+            android:layout_below="@+id/textView2"
             android:ems="10"
-            android:hint="@string/cin" />
+            android:hint="@string/nomProfClasse"
+            android:inputType="textPersonName" />
 
         <Spinner
             android:id="@+id/genreProfList"
             android:layout_width="wrap_content"
             android:layout_height="46dp"
-            android:layout_alignBottom="@+id/cinProf"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="50dp"
+            android:layout_below="@+id/textView3"
             android:entries="@array/genre_humain_array"
             android:prompt="@string/genre_prompt"
             android:textSize="14pt" />
+
+        <EditText
+            android:id="@+id/cinProf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/genreProfList"
+            android:ems="10"
+            android:hint="@string/cin"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/photoClasse"
+            android:text="@string/profTitle"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/nomProfClasse"
+            android:text="@string/genre"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </RelativeLayout>
 

@@ -69,7 +69,8 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/phoneDir"
             android:ems="10"
-            android:hint="@string/cin" />
+            android:hint="@string/cin" 
+             android:inputType="text"/>
 
         <EditText
             android:id="@+id/phoneDir"

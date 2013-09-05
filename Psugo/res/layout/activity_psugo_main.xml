@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/mainRelative"
         android:layout_width="wrap_content"
-        android:layout_height="874dp"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/imagePreview"
         tools:context=".PsugoMainActivity" >
 
@@ -180,20 +180,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/ecoleTrouveeList"
-            android:layout_marginTop="30dp"
             android:drawableLeft="@drawable/camera"
             android:text="@string/actionSchoolPic" />
-
-        <ImageView
-            android:id="@+id/imgPrev"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/actionSchoolPic"
-            android:layout_marginTop="39dp"
-            android:layout_toLeftOf="@+id/actionAddClasses"
-            android:contentDescription="@string/imagePreview"
-            android:src="@drawable/device_access_camera" />
 
     </RelativeLayout>
 

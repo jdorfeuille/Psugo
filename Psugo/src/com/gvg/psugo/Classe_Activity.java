@@ -250,20 +250,58 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		System.out.println("done onActivityResult - PsugoCameraHelper");
 
 	}
+	
+	
+	public boolean validClasseInput() {
+		boolean isValid = true;
+		if (nomClasse.getText().toString().isEmpty()) {
+			isValid = false;
+		}
+		if (nbrEleve.getText().toString().isEmpty()) {
+			isValid = false;
+		}
+		if (photoClasse == null) {
+			isValid = false;
+		}
+		if (nomProfClasse.getText().toString().isEmpty()) {
+			isValid = false;
+		}
+		if (emailProf.getText().toString().isEmpty()) {
+			isValid = false;
+		}
+		if (phoneProf.getText().toString().isEmpty()) {
+			isValid = false;
+		}
+		if (cinProf.getText().toString().isEmpty()) {
+			isValid = false;
+		}
+		if (genreProf.isEmpty()) {
+			isValid = false;
+		}
+		if (photoProf == null) {
+			isValid = false;
+		}
+		return isValid;
+
+	}
+
 	public void saveScreen() {
-		PsugoDB psudb = new PsugoDB(getBaseContext());
-		psudb.open();
-		System.out.println("instID from SaveScreen classe ==> "+ instId);
-		psudb.insertClasse(instId, nomClasse.getText().toString(), 
-				Integer.parseInt(nbrEleve.getText().toString()), 
-				photoClasse, nomProfClasse.getText().toString(),
-				emailProf.getText().toString(),
-				phoneProf.getText().toString(),
-				cinProf.getText().toString(),
-				genreProf,
-				photoProf);
-		psudb.close();
-		
+
+		System.out.println("instID from SaveScreen classe ==> " + instId);
+		if (this.validClasseInput()) {
+			PsugoDB psudb = new PsugoDB(getBaseContext());
+			psudb.open();
+			psudb.insertClasse(instId, nomClasse.getText().toString(), Integer
+					.parseInt(nbrEleve.getText().toString()), photoClasse,
+					nomProfClasse.getText().toString(), emailProf.getText()
+							.toString(), phoneProf.getText().toString(),
+					cinProf.getText().toString(), genreProf, photoProf);
+			psudb.close();
+		}
+	
+		//Toast.makeText(Psugo_Login_Activity.this, "Invalid Login",
+		//		Toast.LENGTH_LONG).show();
+
 	}
 
 	@Override
