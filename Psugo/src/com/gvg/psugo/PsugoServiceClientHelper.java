@@ -167,12 +167,14 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
 		System.out.println("InParm=" + inParm);
 		
 		TempData tData = new TempData();
+		tData.userIsValid = false;
 		try {
 			
 			int retCode = Integer.parseInt(this.LoginRequest(params[1], params[2]));
 		    System.out.println("after Login return code =" + retCode);
 		    if(retCode == 1){
 		    	// save the username/pasword
+		    	tData.userIsValid = true;
 				PsugoDB psudb = new PsugoDB(this.myCtx);
 				psudb.open();
 				psudb.insertUser(params[1], params[2]);
@@ -181,6 +183,7 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
 		    if (retCode == 1 && inParm != "Login") { 	
 			// here if no response from server then get data from DB
 			//SystemClock.sleep(1000);
+		    	tData.userIsValid = true;
 		    	tData.instArray = this.ListerInstitutionRequest();
 		    	tData.csrArray = this.ListerSectionRuraleRequest();
 		    	// save section rurale...

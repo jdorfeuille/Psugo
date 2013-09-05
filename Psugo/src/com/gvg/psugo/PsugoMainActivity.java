@@ -102,6 +102,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	private static final int ADD_PICS = 100;
 	private static final int ADD_CLASSES = 200;
 	private static final int PSUGO_LOGIN = 999;
+
 	
 	// Location Control "Make sure to get the location only once for this instance
 	// we need to make sure we test this
@@ -115,6 +116,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	LocationManager locationManager;
 	Location location;
 	String provider;
+	String theUserName ;
+	String thePassword;
 	//
 	// Temporary data 
 	TempData tempData; 
@@ -132,18 +135,20 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         
         
         
-		Intent request =new Intent(this, Psugo_Login_Activity.class);
-		Bundle b = null;
-		b = new Bundle();
+		//Intent request =new Intent(this, Psugo_Login_Activity.class);
+		//Bundle b = null;
+		//b = new Bundle();
 		// getApplicationContext() ... we can pass in the context here
-		startActivityForResult(request, PSUGO_LOGIN);
-		
-		
-		
+		//startActivityForResult(request, PSUGO_LOGIN);	
         setContentView(R.layout.activity_psugo_main);
         
         // get Data that will populate the UI fields
        
+        Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			theUserName = extras.getString("theUserName");
+			thePassword = extras.getString("thePassword");
+		}
         tempData = this.getRequiredUIData();
         listNomImst = getListNomInst();
         processListInst();
@@ -375,10 +380,10 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
     	try {
 			PsugoServiceClientHelper psch = new PsugoServiceClientHelper(getBaseContext());
 
-			EditText txtUserName = (EditText) this.findViewById(R.id.txtUname);
-			EditText txtPassword = (EditText) this.findViewById(R.id.txtPwd);
-			String theUserName = txtUserName.getText().toString();
-			String thePassword = txtPassword.getText().toString();
+			//EditText txtUserName = (EditText) this.findViewById(R.id.txtUname);
+			//EditText txtPassword = (EditText) this.findViewById(R.id.txtPwd);
+			//String theUserName = txtUserName.getText().toString();
+			//String thePassword = txtPassword.getText().toString();
 
 			AsyncTask<String, String, TempData> servCall_Login = psch.execute(new String[] { "Section", theUserName, thePassword });
 			resp = servCall_Login.get();
@@ -506,6 +511,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
           case PSUGO_LOGIN:
         	  if(resultCode == RESULT_OK){
         		CharSequence text = "Returned from LOGIN";
+          	  theUserName=data.getStringExtra("theUserName");  
+          	  thePassword=data.getStringExtra("thePassword");  
       			showMessage(text);
       		}
         	  break;
@@ -515,6 +522,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
       			showMessage(text);
       		
         	  break;
+
         }
       }
     }

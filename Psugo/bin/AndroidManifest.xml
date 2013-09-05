@@ -12,6 +12,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
@@ -21,7 +22,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.gvg.psugo.PsugoMainActivity"
+            android:name="com.gvg.psugo.Psugo_Login_Activity"
             android:windowSoftInputMode="adjustPan"
             android:label="@string/app_name" >
             <intent-filter>
@@ -33,7 +34,7 @@
         <activity android:name="com.gvg.psugo.Directeur_Activity"
              android:windowSoftInputMode="adjustPan" >
         </activity>
-        <activity android:name="com.gvg.psugo.Psugo_Login_Activity" >
+        <activity android:name="com.gvg.psugo.PsugoMainActivity" >
         </activity>
         <activity android:name="com.gvg.psugo.Classe_Activity"
              android:windowSoftInputMode="adjustPan" >
