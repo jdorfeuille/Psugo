@@ -118,6 +118,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	String provider;
 	String theUserName ;
 	String thePassword;
+	//boolean isNetworkAvailable;
 	//
 	// Temporary data 
 	TempData tempData; 
@@ -148,6 +149,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		if (extras != null) {
 			theUserName = extras.getString("theUserName");
 			thePassword = extras.getString("thePassword");
+			//isNetworkAvailable = extras.getBoolean("isNetworkAvailable");
 		}
         tempData = this.getRequiredUIData();
         listNomImst = getListNomInst();
@@ -374,24 +376,27 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		
 	}
     
-    private TempData getRequiredUIData() {
-    	
-    	TempData resp = null;
-    	try {
-			PsugoServiceClientHelper psch = new PsugoServiceClientHelper(getBaseContext());
+	private TempData getRequiredUIData() {
 
-			//EditText txtUserName = (EditText) this.findViewById(R.id.txtUname);
-			//EditText txtPassword = (EditText) this.findViewById(R.id.txtPwd);
-			//String theUserName = txtUserName.getText().toString();
-			//String thePassword = txtPassword.getText().toString();
+		TempData resp = null;
+		PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
+		if (pscn.isNetworkAvailable()) {
+			try {
+				PsugoServiceClientHelper psch = new PsugoServiceClientHelper(
+						getBaseContext());
 
-			AsyncTask<String, String, TempData> servCall_Login = psch.execute(new String[] { "Section", theUserName, thePassword });
-			resp = servCall_Login.get();
-			saveNewComsectr(resp.csrArray);
+				AsyncTask<String, String, TempData> servCall_Login = psch
+						.execute(new String[] { "Section", theUserName,
+								thePassword });
+				resp = servCall_Login.get();
+				saveNewComsectr(resp.csrArray);
+
+			} catch (Exception e) {
+				System.out.println("Erreur Fatale pas de donnees pour l'application ... ");
+				//e.printStackTrace(); //Irrecoverable exception needs to handle properly
+			}
+		} else {
 			
-		} catch (Exception e) {
-			System.out.println("Erreur Fatale pas de donnees pour l'application ... ");
-			//e.printStackTrace();
 			PsugoDB psudb = new PsugoDB(getBaseContext());
 			psudb.open();
 			resp = new TempData();
@@ -400,7 +405,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			psudb.close();
 
 		}
-    	return resp;
+		return resp;
     }
     
     /*

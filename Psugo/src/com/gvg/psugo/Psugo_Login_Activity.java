@@ -92,7 +92,7 @@ public class Psugo_Login_Activity extends Activity implements OnClickListener {
 			b = new Bundle();
 			b.putString("theUserName", theUserName);
 			b.putString("thePassword", thePassword);
-			PsugoCheckNetworkConnection pscn = new PsugoCheckNetworkConnection(this.getBaseContext());
+			PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
 			if (pscn.isNetworkAvailable() ) {
 				try { 
 					PsugoServiceClientHelper psch = new PsugoServiceClientHelper(getBaseContext());
@@ -103,6 +103,7 @@ public class Psugo_Login_Activity extends Activity implements OnClickListener {
 					if ( resp.userIsValid) {
 						psudb.insertUser(theUserName, thePassword); // make sure to keep the user and pwd..
 						Intent request = new Intent(this, PsugoMainActivity.class);
+					   // b.putBoolean("isNetworkAvailable", true);
 						request.putExtras(b);
 						startActivityForResult(request, PSUGO_LOGIN);
 					}
@@ -117,10 +118,11 @@ public class Psugo_Login_Activity extends Activity implements OnClickListener {
 			
 			else {		
 					// Local User Validation 
-				
+					
 					if	 (psudb.validateLogin(theUserName, thePassword) )
 					{		 
 						Intent request = new Intent(this, PsugoMainActivity.class);
+						//b.putBoolean("isNetworkAvailable", false);
 						request.putExtras(b);
 						startActivityForResult(request, PSUGO_LOGIN);
 					} 
