@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 public class Psugo_Login_Activity extends Activity implements OnClickListener {
 
+	// sept 5 2013
 	EditText txtUserName;
 	EditText txtPassword;
 	Button btnLogin;
