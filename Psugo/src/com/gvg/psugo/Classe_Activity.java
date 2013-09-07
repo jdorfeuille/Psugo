@@ -49,7 +49,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 	Button actionClassePics;
 	Button actionProfPics;
 	Button actionAddClasse;
-	Button actionFinishClasse;
+	Button actionFinishClasse, actionPreviewPic;
 	
 	//Spinners
 	Spinner genreProfList;
@@ -64,7 +64,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 	EditText cinProf;
 
 	//
-	int idClasse;
+	int idClasse=1;
 	int instId;
 	int ctlLocation = 0;
 	double schoolLatitude;
@@ -144,6 +144,8 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		actionAddClasse.setOnClickListener(this);
 		actionFinishClasse = (Button) findViewById(R.id.actionFinishClasse);
 		actionFinishClasse.setOnClickListener(this);
+		actionPreviewPic = (Button) findViewById(R.id.previewClasses);
+		actionPreviewPic.setOnClickListener(this);
 
 		// GPS Coordinates
 		// Getting LocationManager object
@@ -239,11 +241,11 @@ public class Classe_Activity extends Activity implements OnClickListener,
 				// mImageView.setImageBitmap(mImageBitmap);
 			}
 			if (requestCode == TAKE_PHOTO_PROF_CODE) {
-				Bitmap bmp = (Bitmap) data.getExtras().get("data");
+				Bitmap bmp2 = (Bitmap) data.getExtras().get("data");
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-				byte[] byteArray = stream.toByteArray();
-				photoProf = createPhotoObject(byteArray); 
+				bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
+				byte[] byteArray2 = stream.toByteArray();
+				photoProf = createPhotoObject(byteArray2); 
 
 			}
 		}
@@ -332,7 +334,6 @@ public class Classe_Activity extends Activity implements OnClickListener,
 			phoneProf.setText("");
 			photoProf = null;
 			this.photoClasse = null;
-
 			Intent i = new Intent(this, Classe_Activity.class);
 			Bundle b = new Bundle();
 			b.putInt("idClasse", idClasse);
@@ -346,17 +347,19 @@ public class Classe_Activity extends Activity implements OnClickListener,
 			// onLocationChanged(location);
 			intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(intent, TAKE_PHOTO_CLASSE_CODE);
-			// onLocationChanged(location);
-			String locationDisplay = "Latitude:" + schoolLatitude
-					+ "   Longitude:" + schoolLongitude;
-			Toast.makeText(getBaseContext(), locationDisplay,
-					Toast.LENGTH_SHORT).show();
-
 			break;
 
 		case R.id.actionProfPics:
 			intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(intent, TAKE_PHOTO_PROF_CODE);
+			break;
+			
+		case R.id.previewClasses:
+			Intent i2 = new Intent(this, Liste_Classes_Prof.class);
+			Bundle b2 = new Bundle();
+			b2.putInt("instId", instId);
+			i2.putExtras(b2);
+			startActivity(i2); 
 			break;
 		default:
 			// text = "Dunno what was pushed!";

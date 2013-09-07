@@ -1,8 +1,11 @@
 package com.gvg.psugo;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import org.kobjects.base64.Base64;
 
 public class PsugoUtils {
 
@@ -19,6 +22,21 @@ public class PsugoUtils {
 		 return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	}
 
+	/**
+	 * @param encodedString
+	 * @return bitmap (from given string)
+	 */
+	public Bitmap StringToBitMap(String encodedString) {
+		try {
+			byte[] encodeByte = Base64.decode(encodedString);
+			Bitmap bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
+					encodeByte.length);
+			return bitmap;
+		} catch (Exception e) {
+			e.getMessage();
+			return null;
+		}
+	}
 	public PsugoUtils(Context c) {
 		// TODO Auto-generated constructor stub
 		theContext = c;

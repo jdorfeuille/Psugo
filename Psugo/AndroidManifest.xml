@@ -39,7 +39,11 @@
         <activity android:name="com.gvg.psugo.Classe_Activity"
              android:windowSoftInputMode="adjustPan" >
         </activity>
-        <activity android:name="com.gvg.psugo.PsugoCameraHelper" >
+        <activity android:name="com.gvg.psugo.PsugoCameraHelper" >        
+        </activity>
+        <activity android:name="com.gvg.psugo.Liste_Photo_Inst">
+        </activity>
+        <activity android:name="com.gvg.psugo.Liste_Classes_Prof">
         </activity>
     </application>
     <!-- android:icon="@drawable/ic_launcher" -->

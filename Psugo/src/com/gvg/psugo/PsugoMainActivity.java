@@ -245,9 +245,11 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         //
         adrEcole = (EditText)findViewById(R.id.adrEcole);   
         adrDetEcole = (EditText)findViewById(R.id.adrDetaillee); 
-        sectCommunale = (EditText)findViewById(R.id.sectCommunale);
+        sectCommunale = (EditText)findViewById(R.id.sectCommunale); //to add spinner 09/07
         deptEcole = (EditText)findViewById(R.id.dept);
-        arrondissement = (EditText)findViewById(R.id.arrondissement);
+        deptEcole.setEnabled(false);
+        arrondissement = (EditText)findViewById(R.id.arrondissement); 
+        arrondissement.setEnabled(false);
         commune = (EditText)findViewById(R.id.instCommune);
         phoneEcole = (EditText)findViewById(R.id.phoneEcole);
         adrDetEcole=(EditText)findViewById(R.id.adrDetaillee);
@@ -265,7 +267,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         scrollView1.scrollTo(0,maxScrollPosition);
         
         //Spinner
-        ecoleTrouveeList = (Spinner) findViewById(R.id.ecoleTrouveeList);
+        ecoleTrouveeList = (Spinner) findViewById(R.id.ecoleTrouveeList); // check to see if we can set to what was selected before 09/07
         ecoleTrouveeList.setOnItemSelectedListener(new OnItemSelectedListener() {
 
     			@Override
@@ -422,7 +424,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			String schoolName = myDbInst[i].nomInstitution;
 			idx = getIdxString(schoolName, listNomImst);
 			if (idx == -1) {
-				psudb.deleteInstitution(myDbInst[i].id);
+				psudb.deleteInstitution(myDbInst[i].id); //removing existing institution no longer sent
 			}
 		}
 		// update les institutions recu..
@@ -435,10 +437,11 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		}
 		for (int i = 0; i < tempData.instArray.length; i++) {
 			tempInst = tempData.instArray[i];
-			debugInstitution("processListInst - printing tempDataList", tempInst);
+			//debugInstitution("processListInst - printing tempDataList", tempInst);
 			String schoolName = tempData.instArray[i].nomInstitution;
 			idx = getIdxString(schoolName, instArrayDB);
-			if (idx > -1) {
+			if (idx > -1) { 
+				// we found the inst. in the local DB
 //				if (tempInst.telephone == null )
 //					tempInst.telephone = "";
 //				if (tempInst.instTrouvee == null )

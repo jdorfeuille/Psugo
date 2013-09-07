@@ -444,6 +444,7 @@ public class PsugoDB {
 		Cursor c = db.rawQuery(query, null);
 
 		int nbClasse = 0;
+		int classeId;
 
 		if (c.getCount() > 0) {
 			nbClasse = c.getCount();
@@ -453,8 +454,7 @@ public class PsugoDB {
 
 		if (nbClasse > 0) {
 			c.moveToFirst();
-			int classeId = c.getInt(c
-					.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_CL_ID));
+			
 			int i = 0;
 			Photo photoClasse = null;
 			Photo photoProfesseur = null;
@@ -466,7 +466,8 @@ public class PsugoDB {
 			
 			int professeurId = 0;
 			do {
-
+				classeId = c.getInt(c
+						.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_CL_ID));
 				Cursor c2 = db.rawQuery("select * from "
 						+ AndroidOpenDbHelper.TABLE_NAME_CLASSE_PH + " where "
 						+ AndroidOpenDbHelper.COLUMN_NAME_CL_ID_CL + " = "
@@ -543,7 +544,7 @@ public class PsugoDB {
 						c.getString(c
 								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_CL_NAME)),
 						c.getInt(c
-								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_CL_INST_ID)),
+								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_CL_NBR_ELEVES)),
 						photoClasse, professeur, emailProf, phoneProf, cinProf, genreProf, photoProfesseur);
 				i=i+1;
 			} while (c.moveToNext());

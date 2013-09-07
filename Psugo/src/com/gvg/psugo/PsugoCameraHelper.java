@@ -328,12 +328,17 @@ LocationListener  {
 
 			// takePhoto();
 			// here we need to clear fields (reset form)
-			Intent i = new Intent(this, PsugoCameraHelper.class);
+			/*Intent i = new Intent(this, PsugoCameraHelper.class);
 			Bundle b = new Bundle();
 			b.putInt("idPhoto", idPhoto);
 			i.putExtras(b);
-			startActivity(i);
-			finish();
+			startActivity(i); 
+			finish();*/
+			Intent i = new Intent(this, Liste_Photo_Inst.class);
+			Bundle b = new Bundle();
+			b.putInt("instId", instId);
+			i.putExtras(b);
+			startActivity(i); 
 			break;
 		case R.id.actionFinishPics:
 

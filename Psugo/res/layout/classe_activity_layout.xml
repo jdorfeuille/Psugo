@@ -29,16 +29,6 @@
             android:layout_toRightOf="@+id/nbrEleve"
             android:drawableLeft="@drawable/navigation_back" />
 
-        <Button
-            android:id="@+id/actionAddClasse"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/actionFinishClasse"
-            android:drawableLeft="@drawable/social_add_person"
-            android:focusable="false" />
-
         <EditText
             android:id="@+id/nbrEleve"
             android:layout_width="wrap_content"
@@ -147,6 +137,24 @@
             android:layout_below="@+id/nomProfClasse"
             android:text="@string/genre"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <Button
+            android:id="@+id/previewClasses"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/actionFinishClasse"
+            android:drawableLeft="@drawable/camera_add" />
+
+        <Button
+            android:id="@+id/actionAddClasse"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/previewClasses"
+            android:drawableLeft="@drawable/social_add_person"
+            android:focusable="false" />
 
     </RelativeLayout>
 
