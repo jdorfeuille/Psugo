@@ -67,7 +67,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast; // only Temporary for creating message
 import android.graphics.Bitmap;
 import android.graphics.Color;
-public class PsugoMainActivity extends Activity implements OnClickListener, LocationListener {
+public class PsugoMainActivity extends Activity implements OnClickListener {
 
 	// Composantes d'Interface graphique
 	Button actionSchoolPic;
@@ -109,18 +109,13 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	private static final int ADD_CLASSES = 200;
 	private static final int PSUGO_LOGIN = 999;
 
-	
-	// Location Control "Make sure to get the location only once for this instance
-	// we need to make sure we test this
-	
-	
-	
-	
+
 	int ctlLocation=0;
 	double schoolLatitude ;
 	double schoolLongitude;
 	LocationManager locationManager;
-	Location location, lastLocation;
+	Location location = null;
+	Location  lastLocation = null;
 	String provider;
 	String theUserName ;
 	String thePassword;
@@ -754,17 +749,27 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			// text = "'upload data ' clicked! need method to upload data";
 			// just for today we will test the WS here
 			//Context c = this.getBaseContext();
-			PsugoSendDataParm psdp = new PsugoSendDataParm(this.getBaseContext(), theUserName, thePassword);
-			//PsugoSendDataParm pdp = new 
-			try {
-				PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
-				AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
-				String resp = servCall_send.get();
+			PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
+			if (pscn.isNetworkAvailable()) {
+				PsugoSendDataParm psdp = new PsugoSendDataParm(this.getBaseContext(), theUserName, thePassword);
+				//PsugoSendDataParm pdp = new 
+				try {
+					PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
+					AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
+					String resp = servCall_send.get();
+					
+				} catch (Exception e) {
+					//System.out.println("Exception ... JW...failed UPLOAD service call");
+					CharSequence text1 = "Erreur dans le transfert de donnees...Veuillez Re-essayer plus tard...";
+					showMessage(text1);
+					e.printStackTrace();
+	
+				}
+			}
+			else {
+					CharSequence text = "Fonction Non Disponible actuellement Pas de Services Reseaux";
+					showMessage(text);
 				
-			} catch (Exception e) {
-				System.out.println("Exception ... JW...failed UPLOAD service call");
-				e.printStackTrace();
-
 			}
 
 			break;
@@ -835,7 +840,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		myInstitution.infoBancaire = infoBancaire.getText().toString();
 		// debug printing the object
 		
-		debugInstitution("createInstitutionFromUI", myInstitution);
+		//debugInstitution("createInstitutionFromUI", myInstitution);
 		//
 		return myInstitution;
 	}
@@ -865,43 +870,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		}
 		return null;
 	}
-
-
-
-	// Location Methods
-	@Override
-	public void onLocationChanged(Location location) {
-
-		// here we need to get the location
-		schoolLatitude = location.getLatitude();
-		schoolLongitude = location.getLongitude();
-
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-
-		
-	}
-
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		ctlLocation = 0;  //reset the variable so we can get the location
-		
-		
-	}
-
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-		
-	}
-	// End Location Methods
-
-
 
 
 	

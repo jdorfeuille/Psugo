@@ -7,8 +7,8 @@
     android:fillViewport="true" >
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="649dp" >
+        android:layout_width="wrap_content"
+        android:layout_height="672dp" >
 
         <TextView
             android:id="@+id/textView1"
@@ -18,16 +18,6 @@
             android:layout_alignParentTop="true"
             android:text="@string/classeTitle"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Button
-            android:id="@+id/actionFinishClasse"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignTop="@+id/actionAddClasse"
-            android:layout_toRightOf="@+id/nbrEleve"
-            android:drawableLeft="@drawable/navigation_back" />
 
         <EditText
             android:id="@+id/nbrEleve"
@@ -46,8 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/nbrEleve"
-            android:drawableLeft="@drawable/small_camera_48"
-            android:text="@string/photoClasse" />
+            android:drawableLeft="@drawable/camera" />
 
         <EditText
             android:id="@+id/nomClasse"
@@ -67,8 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/phoneProf"
-            android:drawableLeft="@drawable/camera"
-            android:text="@string/photoProf" />
+            android:drawableLeft="@drawable/camera" />
 
         <EditText
             android:id="@+id/phoneProf"
@@ -143,8 +131,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_alignTop="@+id/actionFinishClasse"
             android:layout_toLeftOf="@+id/actionFinishClasse"
-            android:drawableLeft="@drawable/camera_add" />
+            android:drawableLeft="@drawable/preview_file" />
 
         <Button
             android:id="@+id/actionAddClasse"
@@ -152,9 +141,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="13dp"
             android:layout_toLeftOf="@+id/previewClasses"
-            android:drawableLeft="@drawable/social_add_person"
+            android:drawableLeft="@drawable/add2"
             android:focusable="false" />
+
+        <Button
+            android:id="@+id/actionFinishClasse"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/cinProf"
+            android:drawableLeft="@drawable/arrow_right" />
 
     </RelativeLayout>
 

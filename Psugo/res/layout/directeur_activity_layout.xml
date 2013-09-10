@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="556dp" >
 
         <TextView
             android:id="@+id/textView1"
@@ -40,28 +40,6 @@
             android:layout_toLeftOf="@+id/actionDirectPics"
             android:text="@string/typeDirecteur"
             android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <Button
-            android:id="@+id/actionFinishDirect"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/actionAddDir"
-            android:layout_alignBottom="@+id/actionAddDir"
-            android:layout_marginLeft="79dp"
-            android:layout_toRightOf="@+id/actionDirectPics"
-            android:drawableLeft="@drawable/navigation_back" />
-
-        <Button
-            android:id="@+id/actionAddDir"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="21dp"
-            android:layout_toRightOf="@+id/actionDirectPics"
-            android:drawableLeft="@drawable/social_add_person"
-            android:focusable="false" />
 
         <EditText
             android:id="@+id/cinDir"
@@ -108,7 +86,7 @@
         <Spinner
             android:id="@+id/genreDirList"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+             android:layout_height="55dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView3"
             android:entries="@array/genre_humain_array"
@@ -127,7 +105,7 @@
         <Spinner
             android:id="@+id/typeDirecteurList"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+             android:layout_height="55dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView4"
             android:entries="@array/type_directeur_array"
@@ -135,14 +113,33 @@
             android:textSize="14pt" />
 
         <Button
+            android:id="@+id/actionFinishDirect"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="18dp"
+            android:layout_toRightOf="@+id/actionAddDir"
+            android:drawableLeft="@drawable/arrow_right" />
+
+        <Button
+            android:id="@+id/actionAddDir"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/textView1"
+            android:drawableLeft="@drawable/add2"
+            android:focusable="false" />
+
+        <Button
             android:id="@+id/actionDirectPics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/cinDir"
-            android:layout_marginTop="49dp"
-            android:drawableLeft="@drawable/camera"
-            android:text="@string/photoDir" />
+            android:drawableLeft="@drawable/camera" />
 
     </RelativeLayout>
 

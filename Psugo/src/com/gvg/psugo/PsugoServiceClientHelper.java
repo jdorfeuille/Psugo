@@ -117,7 +117,6 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
         	res[i] = inst;
         }
 
-        // ici on peut ecrire dans la BD Locale ou changer le type pour retourner un array of string
         return res;
         
     }
@@ -134,7 +133,6 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
             
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
-        // It seems that it is a .NET Web service because it doesn't work without next line
         envelope.dotNet = false;
 
         HttpTransportSE transport = new HttpTransportSE(URL);
@@ -196,7 +194,6 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			// here we have issue we need to get data from DB
 			
 		}
 		

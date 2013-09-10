@@ -247,7 +247,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	
 	public int envoyerClasses(int theInstId) throws Exception {
 
-		System.out.println("---envoyerClasses ---envoyerClasses");
+		//System.out.println("---envoyerClasses ---envoyerClasses");
 		// SoapObject login_resp = this.LoginRequest();
 		final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
 		final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerClasse";
@@ -304,13 +304,13 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 			retCode = Integer.parseInt(this.LoginRequest());
 			if (retCode == 1) {
 				retCode = this.envoyerInstitution();
-				System.out.println("Just sent institution with Return Code:" + retCode);
+				//System.out.println("Just sent institution with Return Code:" + retCode);
 
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			// here we have issue we need to get data from DB
+		
 
 		}
 		String resp = "" + retCode;

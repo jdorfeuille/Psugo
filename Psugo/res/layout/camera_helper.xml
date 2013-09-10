@@ -28,8 +28,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/emplacementList"
         android:layout_marginTop="29dp"
-        android:drawableLeft="@drawable/camera"
-        android:text="@string/photoInst" />
+        android:drawableLeft="@drawable/camera" />
 
     <Button
         android:id="@+id/actionAddPics"
@@ -37,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@+id/textView1"
-        android:drawableLeft="@drawable/camera_add" />
+        android:drawableLeft="@drawable/preview_file" />
 
     <Button
         android:id="@+id/actionFinishPics"
@@ -46,6 +45,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignTop="@+id/actionAddPics"
         android:layout_toRightOf="@+id/actionAddPics"
-        android:drawableLeft="@drawable/navigation_back" />
+        android:drawableLeft="@drawable/arrow_right" />
 
 </RelativeLayout>
