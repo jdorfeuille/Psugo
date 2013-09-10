@@ -5,18 +5,22 @@ import android.content.Context;
 public class PsugoSendDataParm {
 
 	public Context theContext;
-	public String dataToSend;
+	String uName;
+	String uPwd;
 	
 	public PsugoSendDataParm() {
 		// TODO Auto-generated constructor stub
 		super();
 	}
 
-	public PsugoSendDataParm(Context theContext, String dataToSend) {
+	public PsugoSendDataParm(Context theContext, String uName, String uPwd) {
 		super();
 		this.theContext = theContext;
-		this.dataToSend = dataToSend;
+		this.uName = uName;
+		this.uPwd = uPwd;
 	}
+
+
 	
 	
 

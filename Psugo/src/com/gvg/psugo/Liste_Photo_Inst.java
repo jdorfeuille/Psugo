@@ -42,7 +42,7 @@ public class Liste_Photo_Inst extends Activity {
 		Institution myInst = getInstitution(theInstID);
 		// create Photo Array from PhotoCollection 
 		int nPhotos = myInst.photo.size();
-		System.out.println("MyInstitution nombre de photos " + nPhotos);
+		//System.out.println("MyInstitution nombre de photos " + nPhotos);
 		Photo[] myPhotoList = new Photo[nPhotos];
 		int idx = 0;
 		Enumeration<Photo> el = myInst.photo.elements();
@@ -131,6 +131,39 @@ public class Liste_Photo_Inst extends Activity {
                 LayoutParams.WRAP_CONTENT));
     }
  
+    private String getTypePhoto(String aType){
+	  String type_Photo_D = "D";
+	  String type_Photo_C = "C";
+	  String type_Photo_1 = "1";
+	  String type_Photo_2 = "2";
+	  String type_Photo_3 = "3";
+	  String type_Photo_4 = "4";
+	  String type_Photo_5 = "5";
+      String res= "";
+		if (aType.equalsIgnoreCase(type_Photo_C)){
+			res=   "Cours";
+		}
+		else if (aType.equalsIgnoreCase(type_Photo_D)){
+			res=   "Devant";
+		}
+		else if (aType.contains("1")){
+			res=   "Autre 1";
+		}
+		else if (aType.contains("2")){
+			res=   "Autre 2";
+		}
+		else if (aType.contains("3")){
+			res=   "Autre 3";
+		}
+		else if (aType.contains("4")){
+			res=   "Autre 4";
+		}
+		else if (aType.contains("5")){
+			res=   "Autre 5";
+		}
+		return res;
+    	
+    }
     /** This function add the data to the table **/
     @SuppressWarnings("deprecation")
 	public void addData(Photo[] myPhotoList){
@@ -145,7 +178,7 @@ public class Liste_Photo_Inst extends Activity {
  
             /** Creating a TextView to add to the row **/
             typePhotoTV = new TextView(this);
-            typePhotoTV.setText(myPhotoList[i].typePhoto);
+            typePhotoTV.setText(getTypePhoto(myPhotoList[i].typePhoto));
             typePhotoTV.setTextColor(Color.RED);
             typePhotoTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
             typePhotoTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));

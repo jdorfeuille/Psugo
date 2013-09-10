@@ -28,7 +28,7 @@ public class PsugoDB {
 	// Insert a record on table Institution with ID, NAME, DEPT, ARROND, COMMUNE
 	// and SECTION_RURALE set.
 	public void insertInstitution(int id, String name, String dept,
-			String arrond, String commune, String sectionr) {
+			String arrond, String commune, String sectionr, String infoBancaire) {
 
 		String query = "INSERT INTO "
 				+ AndroidOpenDbHelper.TABLE_NAME_INSTITUTION + " VALUES ("
@@ -37,7 +37,8 @@ public class PsugoDB {
 				+ DatabaseUtils.sqlEscapeString(dept) + ", "
 				+ DatabaseUtils.sqlEscapeString(arrond) + ", "
 				+ DatabaseUtils.sqlEscapeString(commune) + ", "
-				+ DatabaseUtils.sqlEscapeString(sectionr) + ", '', '', '', '')";
+				+ DatabaseUtils.sqlEscapeString(sectionr) + ", '', '', '', '', " 
+				+ DatabaseUtils.sqlEscapeString(infoBancaire) + ")";
 		try {
 			db.execSQL(query);
 		} catch (Exception e) {
@@ -47,10 +48,10 @@ public class PsugoDB {
 	}
 
 	// update institution NAME, COMMUNE, SECTION_RURALE, ADRESSE,
-	// ADRESSE_DETAIL, PHONE, TROUVEE
+	// ADRESSE_DETAIL, PHONE, TROUVEE, INFOBANCAIRE
 	public void updateInstitution(int id, String name, String commune,
 			String sectionr, String adresse, String adresseDetail,
-			String phone, String trouvee) {
+			String phone, String trouvee, String infoBancaire) {
 
 		String query = "UPDATE " + AndroidOpenDbHelper.TABLE_NAME_INSTITUTION
 				+ " SET " + AndroidOpenDbHelper.COLUMN_NAME_INST_NAME + " = "
@@ -65,6 +66,8 @@ public class PsugoDB {
 				+ DatabaseUtils.sqlEscapeString(adresseDetail) + ", "
 				+ AndroidOpenDbHelper.COLUMN_NAME_INST_PHONE + " = "
 				+ DatabaseUtils.sqlEscapeString(phone) + ", "
+				+ AndroidOpenDbHelper.COLUMN_NAME_INFO_BANCAIRE + " = "
+				+ DatabaseUtils.sqlEscapeString(infoBancaire) + ", "
 				+ AndroidOpenDbHelper.COLUMN_NAME_INST_TROUVEE + " = "
 				+ DatabaseUtils.sqlEscapeString(trouvee) + " " + "WHERE "
 				+ AndroidOpenDbHelper.COLUMN_NAME_INST_ID + " = "
@@ -154,7 +157,9 @@ public class PsugoDB {
 						c.getString(c
 								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INST_PHONE)),
 						c.getString(c
-								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INST_TROUVEE)));
+								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INST_TROUVEE)),
+						c.getString(c
+								.getColumnIndex(AndroidOpenDbHelper.COLUMN_NAME_INFO_BANCAIRE)));
 				count2 = 0;
 				Cursor c2 = db.rawQuery("select * from "
 						+ AndroidOpenDbHelper.TABLE_NAME_INSTITUTION_PH

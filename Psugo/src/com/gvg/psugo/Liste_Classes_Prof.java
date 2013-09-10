@@ -165,6 +165,7 @@ public class Liste_Classes_Prof extends Activity {
             tr.addView(nomClasseTV);  // Adding textView to tablerow.
             
             /** Creating a TextView to add to the row **/
+            // Here we need to check if we have a Prof
             nomProfTV = new TextView(this);
             nomProfTV.setText(myClasseList[i].nomProfesseur);
             nomProfTV.setTextColor(Color.RED);
@@ -183,13 +184,20 @@ public class Liste_Classes_Prof extends Activity {
             tr.addView(photoClasseIV); // Adding textView to tablerow.
             
             /** Creating another imageview **/
+            // Here we need to check if we have a Prof
             //valueTV = new TextView(this);
-            photoProfIV = new ImageView(this);
-            Bitmap bmp2 = psu.StringToBitMap(myClasseList[i].photoProfesseur.photo);
-            Bitmap thmbn2 = ThumbnailUtils.extractThumbnail(bmp, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
-            photoProfIV.setImageBitmap(thmbn2);
-            photoProfIV.setPadding(5, 5,0, 5);
-            tr.addView(photoProfIV); // Adding textView to tablerow.
+            if (myClasseList[i].photoProfesseur != null ){
+            	if (myClasseList[i].photoProfesseur.photo.isEmpty() == false ) {
+	                photoProfIV = new ImageView(this);
+	                Bitmap bmp2 = psu.StringToBitMap(myClasseList[i].photoProfesseur.photo);
+	                Bitmap thmbn2 = ThumbnailUtils.extractThumbnail(bmp, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+	                photoProfIV.setImageBitmap(thmbn2);
+	                photoProfIV.setPadding(5, 5,0, 5);
+	                tr.addView(photoProfIV); // Adding textView to tablerow.
+            	}
+            	
+            }
+
             
  
             // Add the TableRow to the TableLayout

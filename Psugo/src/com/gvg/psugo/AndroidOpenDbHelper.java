@@ -2,13 +2,14 @@ package com.gvg.psugo;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.provider.BaseColumns;
 
 // A helper class to manage database creation and version management. 
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "psugo_lite_db2";
-	public static final int DB_VERSION = 20;
+	public static final int DB_VERSION = 23;
 
 	// Table DDL
 	
@@ -25,6 +26,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_INST_ADRESSE_DETAIL = "inst_adresse_detail_column";
 	public static final String COLUMN_NAME_INST_PHONE = "inst_telephone_column";
 	public static final String COLUMN_NAME_INST_TROUVEE= "inst_trouvee_column"; //????
+	public static final String COLUMN_NAME_INFO_BANCAIRE= "info_bancaire"; 
 	
 	
 	//INST_PHOTO
@@ -109,7 +111,10 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	
 
 	public AndroidOpenDbHelper(Context context) {
-		super(context, DB_NAME, null, DB_VERSION);
+		//super(context, DB_NAME, null, DB_VERSION);
+	    super(context, Environment.getExternalStorageDirectory()
+	            + "/" +  DB_NAME, null, DB_VERSION);
+		
 	}
 
 	// Called when the database is created for the first time. 
@@ -132,7 +137,9 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 																+ COLUMN_NAME_INST_ADRESSE + " text not null, "
 																+ COLUMN_NAME_INST_ADRESSE_DETAIL + " text not null, "
 																+ COLUMN_NAME_INST_PHONE + " text not null, "
-																+ COLUMN_NAME_INST_TROUVEE + " text not null);";
+																+ COLUMN_NAME_INST_TROUVEE + " text not null, "
+																+ COLUMN_NAME_INFO_BANCAIRE + " text not null);";
+		
 		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
 		db.execSQL(sqlQueryToCreateInstitutionTable);
 		

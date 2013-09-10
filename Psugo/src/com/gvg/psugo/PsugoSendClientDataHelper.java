@@ -19,28 +19,31 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.widget.EditText;
 
-public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String> {
+public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, String, String> {
 
 	final static String STR_COOKIE= "Set-Cookie";
 	final static String TYPE_DIR_ADMIN = "Administratif";
 	final static String TYPE_DIR_PEDAG = "Pedagogique";
 	
 	String strCookieValue ;  
+	String theUserId;
+	String theUserPwd;
 	Context theBaseContext;
 	List<Integer> instSentList ;
 	
     public String LoginRequest() throws Exception {
-    	final String USER_NAME = "agent01";
-    	final String USER_PWD = "5304240";
+    	//final String USER_NAME = "agent01";
+    	//final String USER_PWD = "5304240";
     	final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
     	final String SOAP_ACTION_URN = "urn:wally.v3w.net#Login";
         final String METHOD_NAME = "Login";
     	final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
     	
         SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
-        request.addProperty("user_name", USER_NAME);
-        request.addProperty("password", USER_PWD);
+        request.addProperty("user_name", theUserId);
+        request.addProperty("password", theUserPwd);
         
             
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -105,7 +108,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 			Photo thePhoto = (Photo) el.nextElement();
 			debugPhoto(thePhoto);
 		}
-		System.out.println("Done Debug Institution");
+		//System.out.println("Done Debug Institution");
 	}
     
     
@@ -290,10 +293,12 @@ public class PsugoSendClientDataHelper extends AsyncTask<Context, String, String
 
 	}
 	@Override
-	protected String doInBackground(Context... params) {
+	protected String doInBackground(PsugoSendDataParm... params) {
 		// TODO Auto-generated method stub
 
-		theBaseContext = params[0];
+		theBaseContext = params[0].theContext;
+		theUserId = params[0].uName;
+		theUserPwd = params[0].uPwd;
 		int retCode = -1;
 		try {
 			retCode = Integer.parseInt(this.LoginRequest());

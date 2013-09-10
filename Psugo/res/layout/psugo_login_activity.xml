@@ -4,7 +4,14 @@
     android:layout_height="fill_parent"
     android:stretchColumns="1" >
 
-    <TableRow>
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:src="@drawable/psugo" />
+
+    <TableRow android:layout_marginTop="30dp" >
 
         <TextView
             android:id="@+id/TextView01"
@@ -17,8 +24,12 @@
             android:id="@+id/txtUname"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:text="" >
+
         </EditText>
+
     </TableRow>
 
     <TableRow>
@@ -34,26 +45,38 @@
             android:id="@+id/txtPwd"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:password="true"
             android:text="" >
+
         </EditText>
     </TableRow>
 
     <TableRow>
+    </TableRow>
 
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Annuler" >
-        </Button>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" >
 
         <Button
             android:id="@+id/btnLogin"
-            android:layout_width="fill_parent"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="Ouverture de Session" >
-        </Button>
-    </TableRow>
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="20dp"
+            android:text="Ouverture de Session" />
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="100dp"
+            android:text="Annuler" />
+
+    </RelativeLayout>
 
 </TableLayout>

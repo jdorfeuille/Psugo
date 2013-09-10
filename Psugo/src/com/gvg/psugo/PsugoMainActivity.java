@@ -2,6 +2,8 @@ package com.gvg.psugo;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Timer;
 import java.text.SimpleDateFormat;
@@ -61,6 +63,7 @@ import android.widget.EditText;
 import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.Toast; // only Temporary for creating message
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -77,21 +80,24 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	//Spinner
 	Spinner ecoleTrouveeList;
 	AutoCompleteTextView nomEcole; 
+	// Adapters
+	ArrayAdapter<String> adapterSectComm;
+	//SimpleAdapter adapterSectComm;
 	
 	// Text Fields that needs to be save
 	
 	EditText adrEcole, adrDetEcole;
 	EditText deptEcole;
-	EditText sectCommunale, commune;
+	Spinner sectCommunale, commune;
 	EditText arrondissement;
-	EditText phoneEcole;
+	EditText phoneEcole, infoBancaire;
 	
 	// Layout
 
 	ScrollView scrollView1;
 	RelativeLayout mainRelative;
 	// Pictures
-	private ImageView imageView;
+//	private ImageView imageView;
 
 	private static final int TAKE_PHOTO_CODE = 1;
 
@@ -114,7 +120,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	double schoolLatitude ;
 	double schoolLongitude;
 	LocationManager locationManager;
-	Location location;
+	Location location, lastLocation;
 	String provider;
 	String theUserName ;
 	String thePassword;
@@ -122,9 +128,11 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 	//
 	// Temporary data 
 	TempData tempData; 
-	String nomEcoleSelected ;
+	String nomEcoleSelected, sectCommSelected, communeSelected ;
 	String ecoleTrouveSelected;
 	String[] listNomImst;
+	String[] listSectRurale = {""}; // 
+	String[] listCommune    = {""};
 	int idxEcoleSelected;
 	int instId; 
 	//ArrayList<Photo> photoList = new ArrayList<Photo>();
@@ -135,12 +143,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         super.onCreate(savedInstanceState);
         
         
-        
-		//Intent request =new Intent(this, Psugo_Login_Activity.class);
-		//Bundle b = null;
-		//b = new Bundle();
-		// getApplicationContext() ... we can pass in the context here
-		//startActivityForResult(request, PSUGO_LOGIN);	
         setContentView(R.layout.activity_psugo_main);
         
         // get Data that will populate the UI fields
@@ -152,9 +154,12 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			//isNetworkAvailable = extras.getBoolean("isNetworkAvailable");
 		}
         tempData = this.getRequiredUIData();
+        //listCommune = getDistinctListCommune(); JW
+        //listSectRurale = getListSectionRurale();
         listNomImst = getListNomInst();
         processListInst();
-             
+        //
+      
         nomEcole = (AutoCompleteTextView )findViewById(R.id.nomEcole);
         //nomEcole.setThreshold(0);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -180,12 +185,10 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 					instId = tempData.instArray[idx].id;
 					adrEcole.setText(tempData.instArray[idx].adresse);
 					adrDetEcole.setText(tempData.instArray[idx].adresseDetail);
-					sectCommunale
-							.setText(tempData.instArray[idx].sectionRurale);
+					//sectCommunale.setTop(tempData.instArray[idx].sectionRurale);
 					deptEcole.setText(tempData.instArray[idx].departement);
-					arrondissement
-							.setText(tempData.instArray[idx].arrondissement);
-					commune.setText(tempData.instArray[idx].commune);
+					arrondissement.setText(tempData.instArray[idx].arrondissement);
+					//commune.setTop(tempData.instArray[idx].commune);
 				}
 
 			}
@@ -197,6 +200,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 				// main = arg0
 				// position = arg2
 				// Id = arg3
+				System.out.println("nomEcole=====>onItemSelected");
 				String item = arg0.getItemAtPosition(arg2).toString() ;
 				nomEcoleSelected = item;
 				updateUIFields(item);
@@ -211,10 +215,50 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         	
         });
         
-        
-        
-        
         nomEcole.setOnItemClickListener( new OnItemClickListener() {
+        	
+        	public void updateSectCommuneFields(String item) {
+				
+				ArrayList<String> sectRList = new ArrayList<String>();
+				int nElem=0;
+				for(int i=0;i<tempData.csrArray.length;i++){
+					if (tempData.csrArray[i].commune.equals(item) ) {
+						sectRList.add(tempData.csrArray[i].sectionRurale);
+						nElem++;
+					}
+				}
+				listSectRurale = new String[nElem];
+				int idx = 0;
+				Iterator<String> el = sectRList.iterator();
+				while (el.hasNext()) {
+					listSectRurale[idx] = el.next();
+					idx++;
+				}
+				// update Commune
+				String [] tempCommuneList = getDistinctListCommune();
+				listCommune = new String[tempCommuneList.length];
+				listCommune[0] = item; // set the first Item of the list to the received Commune
+				idx=0;
+				int j=1;
+				while ( idx < tempCommuneList.length) {
+					if ( item.equalsIgnoreCase(tempCommuneList[idx])){
+						idx++;
+						
+					}
+					else {
+						listCommune[j] = tempCommuneList[idx];
+						j++;
+						idx++;
+					}
+				}
+		        ArrayAdapter<String> adapterCommune = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line, listCommune);
+		        commune.setAdapter(adapterCommune);
+				//sectRuraleAdapter to update
+				adapterSectComm = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line,  listSectRurale);
+				sectCommunale.setAdapter(adapterSectComm);
+
+
+			}
         	
 			public void updateUIFields() {
 				int idx = PsugoMainActivity.this.getIdxString(nomEcoleSelected,
@@ -223,36 +267,128 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 					instId = tempData.instArray[idx].id;
 					adrEcole.setText(tempData.instArray[idx].adresse);
 					adrDetEcole.setText(tempData.instArray[idx].adresseDetail);
-					sectCommunale
-							.setText(tempData.instArray[idx].sectionRurale);
+					updateSectCommuneFields(tempData.instArray[idx].commune);
 					deptEcole.setText(tempData.instArray[idx].departement);
+					infoBancaire.setText(tempData.instArray[idx].infoBancaire);
 					arrondissement
 							.setText(tempData.instArray[idx].arrondissement);
-					commune.setText(tempData.instArray[idx].commune);
+					// test trouve(o/n)
+					arrondissement
+					.setText(tempData.instArray[idx].arrondissement);
+				
 				}
 
 			}
         	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {	
                 // TODO Auto-generated method stub
+        		
+        		// got called System.out.println("nomEcole=====>onItemClick");
         		nomEcoleSelected = (String)arg0.getItemAtPosition(arg2).toString();
-        		System.out.println("valueSelected = " + nomEcoleSelected);
         		updateUIFields();
-        		Toast.makeText(getApplicationContext(),(CharSequence)arg0.getItemAtPosition(arg2), Toast.LENGTH_LONG).show();
+        		//Toast.makeText(getApplicationContext(),(CharSequence)arg0.getItemAtPosition(arg2), Toast.LENGTH_LONG).show();
         	}
         });
         
+      
+        // Commune 
+        commune = (Spinner )findViewById(R.id.instCommune);
+        ArrayAdapter<String> adapterCommune = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, listCommune);
         
+        //adapterCommune.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        //android.R.layout.simple_dropdown_item_1line or simple_spinner_item
+        commune.setAdapter(adapterCommune);
+        commune.setOnItemSelectedListener(new OnItemSelectedListener() {
+        	
+			public void updateSectCommuneFields(String item) {
+				
+				ArrayList<String> sectRList = new ArrayList<String>();
+				int nElem = 0;
+				for(int i=0;i<tempData.csrArray.length;i++){
+					if (tempData.csrArray[i].commune.equals(item) ) {
+						sectRList.add(tempData.csrArray[i].sectionRurale);
+						nElem++;
+					}
+				}
+
+				listSectRurale = new String[nElem];
+				int idx = 0;
+				Iterator<String> el = sectRList.iterator();
+				while (el.hasNext()) {
+					listSectRurale[idx] = el.next();
+					idx++;
+				}
+				
+				adapterSectComm = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line,  listSectRurale);
+				sectCommunale.setAdapter(adapterSectComm);
+			}
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				// main = arg0
+				// position = arg2
+				// Id = arg3
+				//got called System.out.println("commune=====>onItemSelected");
+				String item = arg0.getItemAtPosition(arg2).toString() ;
+				communeSelected = item;
+				updateSectCommuneFields(item);
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        });
+        
+        // Sect Communale
+        sectCommunale = (Spinner)findViewById(R.id.sectCommunale); 
+        adapterSectComm = new ArrayAdapter<String>(this,android.R.layout.simple_dropdown_item_1line, listSectRurale);
+        adapterSectComm.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        //android.R.layout.simple_dropdown_item_1line or simple_spinner_item
+        adapterSectComm.setNotifyOnChange(true); 
+        sectCommunale.setAdapter(adapterSectComm);
+        sectCommunale.setOnItemSelectedListener(new OnItemSelectedListener() {
+        	
+			
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				// main = arg0
+				// position = arg2
+				// Id = arg3
+				// this method got called 
+				String item = arg0.getItemAtPosition(arg2).toString() ;
+				sectCommSelected = item;
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+        	
+        });
         //
+
         adrEcole = (EditText)findViewById(R.id.adrEcole);   
         adrDetEcole = (EditText)findViewById(R.id.adrDetaillee); 
-        sectCommunale = (EditText)findViewById(R.id.sectCommunale); //to add spinner 09/07
+      
         deptEcole = (EditText)findViewById(R.id.dept);
         deptEcole.setEnabled(false);
         arrondissement = (EditText)findViewById(R.id.arrondissement); 
         arrondissement.setEnabled(false);
-        commune = (EditText)findViewById(R.id.instCommune);
+        
         phoneEcole = (EditText)findViewById(R.id.phoneEcole);
         adrDetEcole=(EditText)findViewById(R.id.adrDetaillee);
+        infoBancaire = (EditText)findViewById(R.id.infoBancaire);
        
         // Pictures
        // imageView = (ImageView) findViewById(R.id.imgPrev);
@@ -312,32 +448,33 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         actionAddClasses.setOnClickListener(this);
         
         //Test Button to remove
-        actOk = (Button)findViewById(R.id.Ok);
-        actOk.setOnClickListener(this);
+       // actOk = (Button)findViewById(R.id.Ok);
+        //actOk.setOnClickListener(this);
         
         //GPS Coordinates
         // Getting LocationManager object
+        LocationListener myLocationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+            if(lastLocation == null){
+            lastLocation = location;
+    		schoolLatitude = location.getLatitude();
+    		schoolLongitude = location.getLongitude();
+
+            }
+            if (location.getAccuracy() <  lastLocation.getAccuracy() || lastLocation.getTime() + 5 * 60 * 1000 > location.getTime()){
+            lastLocation = location;
+    		schoolLatitude = location.getLatitude();
+    		schoolLongitude = location.getLongitude();
+
+            }
+            }            
+            public void onProviderDisabled(String provider) {}
+            public void onProviderEnabled(String provider) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+        }; 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        boolean enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if ( !enabled ) {
-        	  System.out.println("GPS is not enabled");
-        	  Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        	  startActivity(intent);
-        }
-        // Creating an empty criteria object
-        Criteria criteria = new Criteria();
- 
-        // Getting the name of the provider that meets the criteria
-        provider = locationManager.getBestProvider(criteria, false);
-        location = locationManager.getLastKnownLocation(provider);
- 
-     // Initialize the location fields
-        if (location != null) {
-          System.out.println("Provider " + provider + " has been selected.");
-          onLocationChanged(location);
-        }
-        else
-            Toast.makeText(getBaseContext(), "Location can't be retrieved", Toast.LENGTH_SHORT).show();
+        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 60*1000, 10, myLocationListener);
+
         
 
    }
@@ -378,6 +515,36 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		
 	}
     
+	
+	private String[] getListSectionRurale() {
+		String[] res = new String[tempData.csrArray.length];
+		for (int i=0; i<tempData.csrArray.length;i++){
+			res[i] = tempData.csrArray[i].sectionRurale;
+		}
+		return res;
+	}
+	
+	private String[] getDistinctListCommune() {
+		String tempCommune = "";
+		ArrayList<String> dListCommune = new ArrayList<String>();
+		for(int i=0;i<tempData.csrArray.length;i++){
+			if (tempData.csrArray[i].commune.equals(tempCommune) == false ) {
+				tempCommune = tempData.csrArray[i].commune;
+				dListCommune.add(tempCommune);
+			}
+			i++;
+		}
+		String[] res = new String[dListCommune.size()];
+		int idx = 0;
+		Iterator<String> el = dListCommune.iterator();
+		while (el.hasNext()) {
+			res[idx] = el.next();
+			idx++;
+		}
+		return res;
+	}
+	
+	
 	private TempData getRequiredUIData() {
 
 		TempData resp = null;
@@ -435,6 +602,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		for (int i = 0; i < instArrayLen; i++) {
 			instArrayDB[i] = myDbInst[i].nomInstitution;
 		}
+
 		for (int i = 0; i < tempData.instArray.length; i++) {
 			tempInst = tempData.instArray[i];
 			//debugInstitution("processListInst - printing tempDataList", tempInst);
@@ -452,11 +620,14 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 //						tempInst.telephone, tempInst.instTrouvee);
 			} else {
 				// Insert Institution
+				
 				psudb.insertInstitution(tempInst.id, tempInst.nomInstitution,tempInst.departement,
-						tempInst.arrondissement,tempInst.commune, tempInst.sectionRurale);
+						tempInst.arrondissement,tempInst.commune, tempInst.sectionRurale, tempInst.infoBancaire);
 
 			}
 		}
+
+
 		psudb.close();
 	}
     
@@ -469,16 +640,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		toast.show();    	
     }
 
-    /*
-     *  Start Camera to Take Picture 
-     
-    private void takePhoto(){
-    	  final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    	  intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getPicFile(this)) ); 
-    	  startActivityForResult(intent, TAKE_PHOTO_CODE);
-    	}
 
-*/
     private File getPicFile(Context context){
     	  //it will return /sdcard/image.tmp
     	  final File path = new File( Environment.getExternalStorageDirectory(), context.getPackageName() );
@@ -534,8 +696,19 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
         }
       }
     }
-    
-
+    private void saveCurrentData() {
+	    Institution myUpdatedInst = createInstitutionFromUI();
+		 myUpdatedInst.id = instId;
+		 PsugoDB psudb = new PsugoDB(getBaseContext());
+		 psudb.open();
+		 psudb.updateInstitution(instId, myUpdatedInst.nomInstitution,
+				 myUpdatedInst.commune, myUpdatedInst.sectionRurale,
+				 myUpdatedInst.adresse, myUpdatedInst.adresseDetail,
+				 myUpdatedInst.telephone, myUpdatedInst.instTrouvee,
+				 myUpdatedInst.infoBancaire);
+		 
+		 psudb.close();
+    }
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -546,6 +719,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		switch (v.getId()) {
 		case R.id.actionDone:
 			//text = "'Done' clicked!";
+			this.saveCurrentData();
 			finish();
 			break;
 		case R.id.actionSchoolPic:
@@ -561,7 +735,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			camIntent.putExtras(b);
 			startActivityForResult(camIntent, ADD_PICS);
 			break;
-		case R.id.Ok:
+		/*case R.id.Ok:
 			 Institution myUpdatedInst = createInstitutionFromUI();
 			 myUpdatedInst.id = instId;
 			 debugInstitution("onClick avant update", myUpdatedInst);
@@ -574,16 +748,17 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			 
 			 psudb.close();
 			 System.out.println("Bouton Sauvegarde a fait l'Insert sans trop de prob");
-			 break;
+			 break; */
 		case R.id.actionUploadData:
 			// here all we will do is to loop thru the DB and pass data 
 			// text = "'upload data ' clicked! need method to upload data";
 			// just for today we will test the WS here
-			Context c = this.getBaseContext();
+			//Context c = this.getBaseContext();
+			PsugoSendDataParm psdp = new PsugoSendDataParm(this.getBaseContext(), theUserName, thePassword);
 			//PsugoSendDataParm pdp = new 
 			try {
 				PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
-				AsyncTask<Context, String, String> servCall_send = psch.execute(c);
+				AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
 				String resp = servCall_send.get();
 				
 			} catch (Exception e) {
@@ -595,6 +770,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			break;
 		case R.id.actionAddDirects:
 			// here we can save Institution data so we can do an update
+			this.saveCurrentData();
 			Intent request =new Intent(this, Directeur_Activity.class);
 			b = null;
 			b = new Bundle();
@@ -606,6 +782,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 			
 		case R.id.actionAddClasses:
 			// here we can save Institution data so we can do an update
+			this.saveCurrentData();
 			Intent requestClasse =new Intent(this, Classe_Activity.class);
 			b = null;
 			b = new Bundle();
@@ -633,6 +810,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		System.out.println("MyInstitution.commune = " + myInstitution.commune);
 		System.out.println("MyInstitution.telephone = " + myInstitution.telephone);
 		System.out.println("MyInstitution.instTrouvee = " + myInstitution.instTrouvee);
+		System.out.println("MyInstitution.infoBancaire = " + myInstitution.infoBancaire);
 		System.out.println("Done Debug");
 	}
 
@@ -645,8 +823,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		myInstitution.adresseDetail = adrDetEcole.getText().toString();
 		myInstitution.arrondissement = arrondissement.getText().toString();
 		myInstitution.departement = deptEcole.getText().toString();
-		myInstitution.sectionRurale = sectCommunale.getText().toString();
-		myInstitution.commune = commune.getText().toString();
+		myInstitution.sectionRurale = sectCommSelected;
+		myInstitution.commune = communeSelected;
 		myInstitution.telephone = phoneEcole.getText().toString();
 		if (myInstitution.telephone == null )
 			myInstitution.telephone = "";
@@ -654,6 +832,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Loca
 		if (myInstitution.instTrouvee == null )
 			myInstitution.instTrouvee = "";
 		
+		myInstitution.infoBancaire = infoBancaire.getText().toString();
 		// debug printing the object
 		
 		debugInstitution("createInstitutionFromUI", myInstitution);

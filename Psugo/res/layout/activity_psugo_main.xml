@@ -78,21 +78,12 @@
             android:text="@string/actionAddClasses" />
 
         <Button
-            android:id="@+id/Ok"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/actionAddClasses"
-            android:text="@string/Ok" />
-
-        <Button
             android:id="@+id/actionUploadData"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/Ok"
+            android:layout_toRightOf="@+id/actionAddClasses"
             android:text="@string/actionUploadData" />
 
         <Button
@@ -104,22 +95,22 @@
             android:layout_toRightOf="@+id/actionUploadData"
             android:text="@string/actionDone" />
 
-        <EditText
+        <Spinner
             android:id="@+id/instCommune"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_height="55dp"
             android:layout_below="@+id/arrondissement"
             android:ems="10"
             android:hint="@string/commune"
             android:inputType="text" />
 
-        <EditText
+        <Spinner
             android:id="@+id/sectCommunale"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/instCommune"
+            android:layout_height="55dp"
             android:ems="10"
             android:hint="@string/sectCommunale"
             android:inputType="text|textCapWords" />
@@ -153,6 +144,26 @@
             android:hint="@string/phone"
             android:inputType="phone" />
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/phoneEcole"
+            android:layout_marginTop="57dp"
+            android:text="@string/ecoleTrouvee"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/infoBancaire"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/textView1"
+            android:layout_below="@+id/phoneEcole"
+            android:layout_marginTop="13dp"
+            android:ems="10"
+            android:hint="@string/infoBancaire" />
+
         <Spinner
             android:id="@+id/ecoleTrouveeList"
             android:layout_width="match_parent"
@@ -163,16 +174,6 @@
             android:prompt="@string/ecoleTrouvee"
             android:textSize="14pt" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/phoneEcole"
-            android:layout_marginTop="28dp"
-            android:text="@string/ecoleTrouvee" />
-
         <Button
             android:id="@+id/actionSchoolPic"
             style="?android:attr/buttonStyleSmall"
@@ -180,6 +181,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/ecoleTrouveeList"
+            android:layout_marginTop="13dp"
             android:drawableLeft="@drawable/camera"
             android:text="@string/actionSchoolPic" />
 

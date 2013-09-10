@@ -166,12 +166,11 @@ public class Classe_Activity extends Activity implements OnClickListener,
 
 		// Initialize the location fields
 		if (location != null) {
-			System.out.println("Provider " + provider + " has been selected.");
+			//System.out.println("Provider " + provider + " has been selected.");
 			onLocationChanged(location);
-		} else
-			Toast.makeText(getBaseContext(), "Location can't be retrieved",
-					Toast.LENGTH_SHORT).show();
-
+		} else {
+			//Toast.makeText(getBaseContext(), "Location can't be retrieved",Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	/* display a Toast with message text. */
@@ -229,9 +228,9 @@ public class Classe_Activity extends Activity implements OnClickListener,
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// Bitmap datifoto = null;
-		System.out.println("onActivityResult - PsugoCameraHelper");
+		//System.out.println("onActivityResult - PsugoCameraHelper");
 		if (resultCode == RESULT_OK) {
-			System.out.println("inside if resultCode == RESULT_OK");
+			//System.out.println("inside if resultCode == RESULT_OK");
 			if (requestCode == TAKE_PHOTO_CLASSE_CODE) {
 				Bitmap bmp = (Bitmap) data.getExtras().get("data");
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -249,7 +248,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 
 			}
 		}
-		System.out.println("done onActivityResult - PsugoCameraHelper");
+		//System.out.println("done onActivityResult - PsugoCameraHelper");
 
 	}
 	
@@ -265,39 +264,43 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		if (photoClasse == null) {
 			isValid = false;
 		}
-		if (nomProfClasse.getText().toString().isEmpty()) {
-			isValid = false;
-		}
-		if (emailProf.getText().toString().isEmpty()) {
-			isValid = false;
-		}
-		if (phoneProf.getText().toString().isEmpty()) {
-			isValid = false;
-		}
-		if (cinProf.getText().toString().isEmpty()) {
-			isValid = false;
-		}
-		if (genreProf.isEmpty()) {
-			isValid = false;
-		}
-		if (photoProf == null) {
-			isValid = false;
-		}
+	
 		return isValid;
 
 	}
 
 	public void saveScreen() {
 
-		System.out.println("instID from SaveScreen classe ==> " + instId);
+		//System.out.println("instID from SaveScreen classe ==> " + instId);
+		String tNomProf="";
+		String tEmailProf ="";
+		String tPhoneProf = "";
+		String tCinProf = "";
+
 		if (this.validClasseInput()) {
+			
+			if (!nomProfClasse.getText().toString().isEmpty()) {
+				tNomProf = nomProfClasse.getText().toString();
+			}
+			if (!emailProf.getText().toString().isEmpty()) {
+				tEmailProf = emailProf.getText().toString();
+			}
+			if (!phoneProf.getText().toString().isEmpty()) {
+				tPhoneProf = phoneProf.getText().toString();
+			}
+			if (!cinProf.getText().toString().isEmpty()) {
+				tCinProf=cinProf.getText().toString();
+			}
+			if ( photoProf == null ) {
+				photoProf = new Photo("", "","", "","");
+			}
+
 			PsugoDB psudb = new PsugoDB(getBaseContext());
 			psudb.open();
 			psudb.insertClasse(instId, nomClasse.getText().toString(), Integer
 					.parseInt(nbrEleve.getText().toString()), photoClasse,
-					nomProfClasse.getText().toString(), emailProf.getText()
-							.toString(), phoneProf.getText().toString(),
-					cinProf.getText().toString(), genreProf, photoProf);
+					tNomProf,tEmailProf, tPhoneProf,
+					tCinProf, genreProf, photoProf);
 			psudb.close();
 		}
 	

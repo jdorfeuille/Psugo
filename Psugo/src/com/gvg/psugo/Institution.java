@@ -22,6 +22,7 @@ public class Institution implements KvmSerializable {
 	public String cin;
 	public String instTrouvee;
 	public PhotoCollection photo;
+	public String infoBancaire;
 
 	public Institution() {
 		super();
@@ -29,7 +30,7 @@ public class Institution implements KvmSerializable {
 	public Institution(int id, String nomInstitution, String departement,
 			String arrondissement, String commune, String sectionRurale,
 			String adresse, String adresseDetail, String telephone, String cin,
-			Photo[] photo) {
+			Photo[] photo, String infoBancaire) {
 		super();
 		this.id = id;
 		this.nomInstitution = nomInstitution;
@@ -41,7 +42,7 @@ public class Institution implements KvmSerializable {
 		this.adresseDetail = adresseDetail;
 		this.telephone = telephone;
 		this.cin = cin;
-		
+		this.infoBancaire = infoBancaire;
 		PhotoCollection v = new PhotoCollection();
 		for (int i = 0; i< photo.length;i++)
 			v.add(photo[i]);
@@ -50,7 +51,8 @@ public class Institution implements KvmSerializable {
 	}
 
 	public Institution(int id, String nomInstitution, String departement, String arrondissement, String commune,
-						String sectionRurale, String adresse, String adresseDetail, String telephone, String cin) {
+						String sectionRurale, String adresse, String adresseDetail, String telephone, String cin, 
+						String infoBancaire) {
 		this.id = id;
 		this.nomInstitution = nomInstitution;
 		this.departement = departement;
@@ -61,6 +63,7 @@ public class Institution implements KvmSerializable {
 		this.adresseDetail = adresseDetail;
 		this.telephone = telephone;
 		this.cin = cin;
+		this.infoBancaire = infoBancaire;
 	}
 	@Override
 	public Object getProperty(int arg0) {
@@ -91,13 +94,15 @@ public class Institution implements KvmSerializable {
             return this.instTrouvee;
         case 11:
             return this.photo;
+        case 12:
+            return this.infoBancaire;
         }
 		return null;
 	}
 	@Override
 	public int getPropertyCount() {
 		// TODO Auto-generated method stub
-		return 12;
+		return 13;
 	}
 	@Override
 	public void getPropertyInfo(int index, Hashtable arg1, PropertyInfo info) {
@@ -152,6 +157,10 @@ public class Institution implements KvmSerializable {
 	            info.type = PropertyInfo.OBJECT_CLASS; 
 	            info.name = "photo";
 	            break;
+	        case 12:
+	            info.type = PropertyInfo.STRING_CLASS;
+	            info.name = "infoBancaire";
+	            break;
 	        default:break;
 	        }
 		
@@ -196,6 +205,9 @@ public class Institution implements KvmSerializable {
 	            break;
 	        case 11:
 	        	this.photo = (PhotoCollection) value;
+	            break;
+	        case 12:
+	        	this.infoBancaire = value.toString();
 	            break;
 	        default:break;
 	        }

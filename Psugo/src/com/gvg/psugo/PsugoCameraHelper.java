@@ -50,7 +50,7 @@ LocationListener  {
 	private static final String TYPE_PHOTO_5 = "5";
 	
 	LocationManager locationManager;
-	Location location;
+	Location location, lastLocation;
 	String provider;
 	String fileStartName;
 	int idPhoto;
@@ -163,7 +163,7 @@ LocationListener  {
     	  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     	  intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getPicFile(this)) ); 
     	  startActivityForResult(intent, TAKE_PHOTO_CODE);
-    	  System.out.println("done takePhoto()");
+    	  //System.out.println("done takePhoto()");
     	}
 
 

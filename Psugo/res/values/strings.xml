@@ -55,6 +55,7 @@
     <string name="photoProf">Photo Prof</string>
     <string name="photoDir">Photo Directeur</string>
     <string name="imagePreview">Visionner Photo</string>
+    <string name="infoBancaire">Information Bancaire</string>
    
 
     <string-array name="emplacement_pics_array">

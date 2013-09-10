@@ -29,7 +29,8 @@
             android:ems="10"
             android:hint="@string/nomPersonne"
             android:inputType="textPersonName"
-            android:textSize="@dimen/activity_horizontal_margin" />
+            android:textSize="@dimen/activity_horizontal_margin" 
+            />
 
         <TextView
             android:id="@+id/textView2"
@@ -82,7 +83,7 @@
             android:hint="@string/phone"
             android:inputType="phone" >
 
-            <requestFocus />
+          
         </EditText>
 
         <EditText

@@ -35,47 +35,49 @@ public final class R {
         public static final int navigation_accept=0x7f020005;
         public static final int navigation_back=0x7f020006;
         public static final int old_school_icon=0x7f020007;
-        public static final int small_camera_48=0x7f020008;
-        public static final int social_add_group=0x7f020009;
-        public static final int social_add_person=0x7f02000a;
-        public static final int university_icon=0x7f02000b;
+        public static final int psugo=0x7f020008;
+        public static final int small_camera_48=0x7f020009;
+        public static final int social_add_group=0x7f02000a;
+        public static final int social_add_person=0x7f02000b;
+        public static final int university_icon=0x7f02000c;
     }
     public static final class id {
         public static final int LinearLayout01=0x7f090030;
-        public static final int Ok=0x7f090009;
-        public static final int TextView01=0x7f090033;
-        public static final int TextView02=0x7f090035;
+        public static final int TextView01=0x7f090034;
+        public static final int TextView02=0x7f090036;
         public static final int actionAddClasse=0x7f090019;
         public static final int actionAddClasses=0x7f090008;
         public static final int actionAddDir=0x7f090029;
         public static final int actionAddDirects=0x7f090007;
         public static final int actionAddPics=0x7f090015;
         public static final int actionDirectPics=0x7f090027;
-        public static final int actionDone=0x7f09000b;
+        public static final int actionDone=0x7f09000a;
         public static final int actionFinishClasse=0x7f090018;
         public static final int actionFinishDirect=0x7f090028;
         public static final int actionFinishPics=0x7f090016;
         public static final int actionProfPics=0x7f09001d;
         public static final int actionSchoolPic=0x7f090012;
         public static final int actionTakePics=0x7f090014;
-        public static final int actionUploadData=0x7f09000a;
-        public static final int action_settings=0x7f090039;
-        public static final int adrDetaillee=0x7f09000e;
+        public static final int actionUploadData=0x7f090009;
+        public static final int action_settings=0x7f09003a;
+        public static final int adrDetaillee=0x7f09000d;
         public static final int adrEcole=0x7f090006;
         public static final int arrondissement=0x7f090005;
-        public static final int btnCancel=0x7f090037;
+        public static final int btnCancel=0x7f090039;
         public static final int btnLogin=0x7f090038;
         public static final int cinDir=0x7f09002a;
         public static final int cinProf=0x7f090020;
         public static final int classe_table=0x7f090031;
         public static final int dept=0x7f090003;
-        public static final int ecoleTrouveeList=0x7f090010;
+        public static final int ecoleTrouveeList=0x7f090011;
         public static final int emailDir=0x7f09002c;
         public static final int emailProf=0x7f09001f;
         public static final int emplacementList=0x7f090013;
         public static final int genreDirList=0x7f09002d;
         public static final int genreProfList=0x7f090022;
-        public static final int instCommune=0x7f09000c;
+        public static final int imageView1=0x7f090033;
+        public static final int infoBancaire=0x7f090010;
+        public static final int instCommune=0x7f09000b;
         public static final int mainRelative=0x7f090001;
         public static final int maintable=0x7f090032;
         public static final int nbrEleve=0x7f09001a;
@@ -84,20 +86,20 @@ public final class R {
         public static final int nomEcole=0x7f090004;
         public static final int nomProfClasse=0x7f090021;
         public static final int phoneDir=0x7f09002b;
-        public static final int phoneEcole=0x7f09000f;
+        public static final int phoneEcole=0x7f09000e;
         public static final int phoneProf=0x7f09001e;
         public static final int photoClasse=0x7f09001c;
         public static final int previewClasses=0x7f090024;
         public static final int scroller=0x7f090000;
         public static final int scroller_classe=0x7f090017;
         public static final int scroller_direct=0x7f090025;
-        public static final int sectCommunale=0x7f09000d;
+        public static final int sectCommunale=0x7f09000c;
         public static final int textView1=0x7f090002;
-        public static final int textView2=0x7f090011;
+        public static final int textView2=0x7f09000f;
         public static final int textView3=0x7f090023;
         public static final int textView4=0x7f09002f;
-        public static final int txtPwd=0x7f090036;
-        public static final int txtUname=0x7f090034;
+        public static final int txtPwd=0x7f090037;
+        public static final int txtUname=0x7f090035;
         public static final int typeDirecteurList=0x7f09002e;
     }
     public static final class layout {
@@ -108,12 +110,13 @@ public final class R {
         public static final int liste_photos_classe=0x7f030004;
         public static final int liste_photos_institutions=0x7f030005;
         public static final int psugo_login_activity=0x7f030006;
+        public static final int psugo_login_activity_b=0x7f030007;
     }
     public static final class menu {
         public static final int psugo_main=0x7f080000;
     }
     public static final class string {
-        public static final int Ok=0x7f050035;
+        public static final int Ok=0x7f050036;
         public static final int actionAddClasses=0x7f050013;
         public static final int actionAddDirecteurs=0x7f050012;
         public static final int actionAddProf=0x7f050014;
@@ -145,6 +148,7 @@ public final class R {
         public static final int gpsCoordEcole=0x7f050015;
         public static final int hello_world=0x7f050002;
         public static final int imagePreview=0x7f050034;
+        public static final int infoBancaire=0x7f050035;
         public static final int infosPsugo=0x7f050025;
         public static final int nbrClassRoomWithPsugo=0x7f050021;
         public static final int nbrEleve=0x7f05002f;
