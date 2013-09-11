@@ -36,8 +36,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class Directeur_Activity extends Activity implements OnClickListener, 
-		LocationListener {
+public class Directeur_Activity extends Activity implements OnClickListener {
 
 	private static final int TAKE_PHOTO_DIRECT_CODE = 50;
 	// Composantes d'Interface graphique
@@ -59,10 +58,11 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 	int idDir;
 	int instId;
 	int ctlLocation = 0;
-	double schoolLatitude;
-	double schoolLongitude;
+	double photoLatitude;
+	double photoLongitude;
 	LocationManager locationManager;
-	Location location;
+	Location location=null;
+	Location lastLocation = null;
 	String provider;
 	String typeDirSelected, genreDirSelected;
 
@@ -148,28 +148,27 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 
 		// GPS Coordinates
 		// Getting LocationManager object
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		boolean enabled = locationManager
-				.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		if (!enabled) {
-			System.out.println("GPS is not enabled");
-			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-			startActivity(intent);
-		}
-		// Creating an empty criteria object
-		Criteria criteria = new Criteria();
+		LocationListener myLocationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+            if(lastLocation == null){
+            lastLocation = location;
+        	photoLatitude = location.getLatitude();
+        	photoLongitude = location.getLongitude();
 
-		// Getting the name of the provider that meets the criteria
-		provider = locationManager.getBestProvider(criteria, false);
-		location = locationManager.getLastKnownLocation(provider);
+            }
+            if (location.getAccuracy() <  lastLocation.getAccuracy() || lastLocation.getTime() + 5 * 60 * 1000 > location.getTime()){
+            lastLocation = location;
+        	photoLatitude = location.getLatitude();
+        	photoLongitude = location.getLongitude();
 
-		// Initialize the location fields
-		if (location != null) {
-			System.out.println("Provider " + provider + " has been selected.");
-			onLocationChanged(location);
-		} else
-			Toast.makeText(getBaseContext(), "Location can't be retrieved",
-					Toast.LENGTH_SHORT).show();
+            }
+            }            
+            public void onProviderDisabled(String provider) {}
+            public void onProviderEnabled(String provider) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+        }; 
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 60*1000, 10, myLocationListener);
 
 	}
 
@@ -183,12 +182,8 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 	
 	private Photo createPhotoObject(byte[] byteArray){
 		Photo aPhoto = new Photo();
-		aPhoto.latitude = "";
-		aPhoto.longitude = "";
-		if (location != null) {
-			aPhoto.longitude = String.valueOf(location.getLongitude());
-			aPhoto.latitude = String.valueOf(location.getLatitude());
-		}
+		aPhoto.latitude = String.valueOf(photoLatitude);
+		aPhoto.longitude = String.valueOf(photoLongitude);
 		aPhoto.typePhoto = "";
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
 		Date date = new Date();
@@ -260,10 +255,6 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 			// onLocationChanged(location);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 			startActivityForResult(intent, TAKE_PHOTO_DIRECT_CODE);
-			String locationDisplay = "Latitude:" + schoolLatitude
-					+ "   Longitude:" + schoolLongitude;
-			Toast.makeText(getBaseContext(), locationDisplay,
-					Toast.LENGTH_SHORT).show();
 			break;
 
 		default:
@@ -271,28 +262,6 @@ public class Directeur_Activity extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
-	public void onLocationChanged(Location arg0) {
-		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void onProviderDisabled(String arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onProviderEnabled(String arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

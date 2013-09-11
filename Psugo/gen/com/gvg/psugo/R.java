@@ -59,7 +59,7 @@ public final class R {
         public static final int actionAddPics=0x7f090015;
         public static final int actionDirectPics=0x7f090027;
         public static final int actionDone=0x7f09000a;
-        public static final int actionFinishClasse=0x7f090023;
+        public static final int actionFinishClasse=0x7f090022;
         public static final int actionFinishDirect=0x7f09002e;
         public static final int actionFinishPics=0x7f090016;
         public static final int actionProfPics=0x7f09001b;
@@ -96,7 +96,7 @@ public final class R {
         public static final int phoneEcole=0x7f09000e;
         public static final int phoneProf=0x7f09001c;
         public static final int photoClasse=0x7f09001a;
-        public static final int previewClasses=0x7f090022;
+        public static final int previewClasses=0x7f090023;
         public static final int scroller=0x7f090000;
         public static final int scroller_classe=0x7f090017;
         public static final int scroller_direct=0x7f090025;

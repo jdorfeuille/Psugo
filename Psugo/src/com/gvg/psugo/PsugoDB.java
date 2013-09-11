@@ -72,6 +72,7 @@ public class PsugoDB {
 				+ DatabaseUtils.sqlEscapeString(trouvee) + " " + "WHERE "
 				+ AndroidOpenDbHelper.COLUMN_NAME_INST_ID + " = "
 				+ Integer.toString(id);
+		query = query + ";"; // juste pour test...
 		db.execSQL(query);
 	}
 

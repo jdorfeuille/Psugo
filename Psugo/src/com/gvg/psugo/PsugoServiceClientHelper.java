@@ -18,6 +18,8 @@ import android.os.AsyncTask;
 
 public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData> {
 
+	//private static String PSUGO_SERVEUR = "psugo.primature.ht";  
+	private static String PSUGO_SERVEUR = "wally.v3w.net";  
 	final static String STR_COOKIE= "Set-Cookie";
 	String strCookieValue ;
     public Context myCtx;
@@ -28,12 +30,14 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
 	}
 
 	public String LoginRequest(String user, String password) throws Exception {
-    	final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
-    	final String SOAP_ACTION_URN = "urn:wally.v3w.net#Login";
+    	//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
+		final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
+  //  	final String SOAP_ACTION_URN = "urn:wally.v3w.net#Login";
+		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#Login";
         final String METHOD_NAME = "Login";
  //   	final String NAME_SPACE = "http://wally.v3w.net";
-    	final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
-    	
+ //   	final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+    	final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";
         SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
         request.addProperty("user_name", user);
         request.addProperty("password", password);
@@ -67,10 +71,15 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
     public Institution[] ListerInstitutionRequest() throws Exception {
 
     	//SoapObject login_resp = this.LoginRequest();
-    	final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
-    	final String SOAP_ACTION_URN = "urn:wally.v3w.net#ListerInstitution";
+    	final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
+		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#ListerInstitution";
+		final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";
+    	
+    	//-------
+    	//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
+    	//final String SOAP_ACTION_URN = "urn:wally.v3w.net#ListerInstitution";
         final String METHOD_NAME = "ListerInstitution";
-    	final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+    	//final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
         SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
@@ -111,7 +120,7 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
         	inst.infoBancaire = pii.getPropertyAsString("infoBancaire");
         	//inst.infoBancaire = ""; //for test only
         	//System.out.println("adresseDetail = " + inst.adresseDetail);
-        	inst.telephone = ""; // not returned by server
+        	inst.telephone =pii.getPropertyAsString("telephone");
         	inst.instTrouvee = ""; // Not Returned by Server
         	inst.photo = null;
         	res[i] = inst;
@@ -124,10 +133,15 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
     public CommuneSectRurale[] ListerSectionRuraleRequest() throws Exception {
 
     	//SoapObject login_resp = this.LoginRequest();
-    	final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
-    	final String SOAP_ACTION_URN = "urn:wally.v3w.net#ListerSectionRurale";
+    	final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
+		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#ListerSectionRurale";
+		final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";
+    	
+    	//-----
+    	//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
+    	//final String SOAP_ACTION_URN = "urn:wally.v3w.net#ListerSectionRurale";
         final String METHOD_NAME = "ListerSectionRurale";
-    	final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+    	//final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
         SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
  
             
@@ -200,26 +214,4 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
 		return tData;
 	}
 
-	/*
-	@Override
-	protected void onPostExecute(SoapObject result) {
-		// TODO Auto-generated method stub
-		super.onPostExecute(result);
-		System.out.println("on Post Execute will create a message");
-		try {
-		
-				PugoSubTaskHelper psch2 = new PugoSubTaskHelper();
-				AsyncTask<String, String, SoapObject> servCall = psch2
-						.execute(new String[] { "ListerInstitutionRequest" });
-				SoapObject resp_servCall = servCall.get();
-		}
-		catch (Exception e) {
-			System.out.println("onPostExecute got an exception");
-			e.printStackTrace();
-		}
-		
-		System.out.println("finishing onPostExecute  " );
-	}
-	
- */
 }

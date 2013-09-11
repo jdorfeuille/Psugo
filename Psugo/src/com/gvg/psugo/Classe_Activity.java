@@ -39,8 +39,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class Classe_Activity extends Activity implements OnClickListener, 
-		LocationListener {
+public class Classe_Activity extends Activity implements OnClickListener {
 	
 	private static final int TAKE_PHOTO_CLASSE_CODE = 50;
 	private static final int TAKE_PHOTO_PROF_CODE = 60;
@@ -91,11 +90,7 @@ public class Classe_Activity extends Activity implements OnClickListener,
 			instId = extras.getInt("instId");
 			idClasse = idClasse + 1; // incrementing cnt call to self if need be
 		}
-		// nomEcole.getText().toString(); to get the string value...
-		// to get the int value
-		// Integer.parseInt(myEditText.getText().toString())).
-		
-		
+			
 		nomClasse = (EditText) findViewById(R.id.nomClasse);
 		nomProfClasse = (EditText) findViewById(R.id.nomProfClasse);
 		nbrEleve = (EditText) findViewById(R.id.nbrEleve);
@@ -198,12 +193,8 @@ public class Classe_Activity extends Activity implements OnClickListener,
 
 	private Photo createPhotoObject(byte[] byteArray){
 		Photo aPhoto = new Photo();
-		aPhoto.latitude = "";
-		aPhoto.longitude = "";
-		if (location != null) {
-			aPhoto.longitude = String.valueOf(location.getLongitude());
-			aPhoto.latitude = String.valueOf(location.getLatitude());
-		}
+		aPhoto.latitude = String.valueOf(photoLongitude);;
+		aPhoto.longitude = String.valueOf(photoLongitude);;
 		aPhoto.typePhoto = "";
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
 		Date date = new Date();
@@ -357,28 +348,5 @@ public class Classe_Activity extends Activity implements OnClickListener,
 		}
 	}
 
-	@Override
-	public void onLocationChanged(Location arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onProviderDisabled(String arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onProviderEnabled(String arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

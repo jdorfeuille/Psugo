@@ -108,6 +108,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 	private static final int ADD_PICS = 100;
 	private static final int ADD_CLASSES = 200;
 	private static final int PSUGO_LOGIN = 999;
+	private static final int PSUGO_INST_NULL = -9999;
 
 
 	int ctlLocation=0;
@@ -129,7 +130,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 	String[] listSectRurale = {""}; // 
 	String[] listCommune    = {""};
 	int idxEcoleSelected;
-	int instId; 
+	int instId = PSUGO_INST_NULL; 
 	//ArrayList<Photo> photoList = new ArrayList<Photo>();
 	
 	
@@ -173,6 +174,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
         
         nomEcole.setOnItemSelectedListener(new OnItemSelectedListener() {
         	
+        	// may be not needed ...to Trace 09_10
 			public void updateUIFields(String item) {
 				int idx = PsugoMainActivity.this
 						.getIdxString(item, listNomImst);
@@ -183,6 +185,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 					//sectCommunale.setTop(tempData.instArray[idx].sectionRurale);
 					deptEcole.setText(tempData.instArray[idx].departement);
 					arrondissement.setText(tempData.instArray[idx].arrondissement);
+					phoneEcole.setText(tempData.instArray[idx].telephone);
 					//commune.setTop(tempData.instArray[idx].commune);
 				}
 
@@ -262,14 +265,20 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 					instId = tempData.instArray[idx].id;
 					adrEcole.setText(tempData.instArray[idx].adresse);
 					adrDetEcole.setText(tempData.instArray[idx].adresseDetail);
+					phoneEcole.setText(tempData.instArray[idx].telephone);
 					updateSectCommuneFields(tempData.instArray[idx].commune);
 					deptEcole.setText(tempData.instArray[idx].departement);
 					infoBancaire.setText(tempData.instArray[idx].infoBancaire);
 					arrondissement
 							.setText(tempData.instArray[idx].arrondissement);
 					// test trouve(o/n)
-					arrondissement
-					.setText(tempData.instArray[idx].arrondissement);
+					String ecoleTrouvee = tempData.instArray[idx].instTrouvee;
+					//if (ecoleTrouvee.equalsIgnoreCase("O")){
+						//rebuilt array...09_10
+					//}
+					//ecoleTrouveeList.
+					//arrondissement
+					//.setText(tempData.instArray[idx].arrondissement);
 				
 				}
 
@@ -615,7 +624,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 //						tempInst.telephone, tempInst.instTrouvee);
 			} else {
 				// Insert Institution
-				
+				//ICI
 				psudb.insertInstitution(tempInst.id, tempInst.nomInstitution,tempInst.departement,
 						tempInst.arrondissement,tempInst.commune, tempInst.sectionRurale, tempInst.infoBancaire);
 
@@ -692,6 +701,9 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
       }
     }
     private void saveCurrentData() {
+    	
+    	if ( instId != PSUGO_INST_NULL) {
+    	
 	    Institution myUpdatedInst = createInstitutionFromUI();
 		 myUpdatedInst.id = instId;
 		 PsugoDB psudb = new PsugoDB(getBaseContext());
@@ -703,6 +715,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				 myUpdatedInst.infoBancaire);
 		 
 		 psudb.close();
+    	}
     }
 	@Override
 	public void onClick(View v) {
@@ -749,6 +762,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 			// text = "'upload data ' clicked! need method to upload data";
 			// just for today we will test the WS here
 			//Context c = this.getBaseContext();
+			this.saveCurrentData();
 			PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
 			if (pscn.isNetworkAvailable()) {
 				PsugoSendDataParm psdp = new PsugoSendDataParm(this.getBaseContext(), theUserName, thePassword);
@@ -757,7 +771,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 					PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
 					AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
 					String resp = servCall_send.get();
-					
+					System.out.println("response from xfer=" +resp);
 				} catch (Exception e) {
 					//System.out.println("Exception ... JW...failed UPLOAD service call");
 					CharSequence text1 = "Erreur dans le transfert de donnees...Veuillez Re-essayer plus tard...";

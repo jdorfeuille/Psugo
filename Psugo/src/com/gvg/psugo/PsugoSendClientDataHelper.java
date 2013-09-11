@@ -26,6 +26,8 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	final static String STR_COOKIE= "Set-Cookie";
 	final static String TYPE_DIR_ADMIN = "Administratif";
 	final static String TYPE_DIR_PEDAG = "Pedagogique";
+	//private static String PSUGO_SERVEUR = "psugo.primature.ht"; 
+	private static String PSUGO_SERVEUR = "wally.v3w.net";  
 	
 	String strCookieValue ;  
 	String theUserId;
@@ -36,10 +38,16 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
     public String LoginRequest() throws Exception {
     	//final String USER_NAME = "agent01";
     	//final String USER_PWD = "5304240";
-    	final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
-    	final String SOAP_ACTION_URN = "urn:wally.v3w.net#Login";
+    	
+    	final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
+		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#Login";
+		final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";
+		
+		//--
+    	//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
+    	//final String SOAP_ACTION_URN = "urn:wally.v3w.net#Login";
         final String METHOD_NAME = "Login";
-    	final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+    	//final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
     	
         SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
         request.addProperty("user_name", theUserId);
@@ -118,10 +126,14 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	public int envoyerInstitution() throws Exception {
 
 		// SoapObject login_resp = this.LoginRequest();
-		final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
-		final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerInstitution";
+    	final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
+		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#EnvoyerInstitution";
+		final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";
+		//
+		//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
+		//final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerInstitution";
 		final String METHOD_NAME = "EnvoyerInstitution";
-		final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+		//final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
 		int ret = 0;
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
@@ -180,11 +192,16 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	
 	public int sendDirecteur(Directeur theDir) throws Exception {
 		// Probablement un try/catch afin de mieux retourner un message significatif
+    	final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
+		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#EnvoyerDirecteur";
+		final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";
+		
+		//
 	
-		final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
-		final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerDirecteur";
+		//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
+		//final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerDirecteur";
 		final String METHOD_NAME = "EnvoyerDirecteur";
-		final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+		//final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 		envelope.dotNet = false;
@@ -249,10 +266,15 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 
 		//System.out.println("---envoyerClasses ---envoyerClasses");
 		// SoapObject login_resp = this.LoginRequest();
-		final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
-		final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerClasse";
+    	final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
+		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#EnvoyerClasse";
+		final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";		
+		
+		//
+		//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
+		//final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerClasse";
 		final String METHOD_NAME = "EnvoyerClasse";
-		final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
+		//final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
 		int ret = 0;
 		// Photo dumPhoto = new Photo();
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(

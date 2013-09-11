@@ -8,7 +8,7 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="672dp" >
+        android:layout_height="692dp" >
 
         <TextView
             android:id="@+id/textView1"
@@ -127,13 +127,13 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
-            android:id="@+id/previewClasses"
+            android:id="@+id/actionFinishClasse"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_alignTop="@+id/actionFinishClasse"
-            android:layout_toLeftOf="@+id/actionFinishClasse"
-            android:drawableLeft="@drawable/preview_file" />
+            android:layout_toRightOf="@+id/previewClasses"
+            android:drawableLeft="@drawable/arrow_right" />
 
         <Button
             android:id="@+id/actionAddClasse"
@@ -141,19 +141,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="13dp"
             android:layout_toLeftOf="@+id/previewClasses"
             android:drawableLeft="@drawable/add2"
             android:focusable="false" />
 
         <Button
-            android:id="@+id/actionFinishClasse"
-            style="?android:attr/buttonStyleSmall"
+            android:id="@+id/previewClasses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/cinProf"
-            android:drawableLeft="@drawable/arrow_right" />
+            android:layout_alignRight="@+id/cinProf"
+            android:layout_alignTop="@+id/actionFinishClasse"
+            android:drawableLeft="@drawable/preview_file" />
 
     </RelativeLayout>
 
