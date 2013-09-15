@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "psugo_lite_db2";
-	public static final int DB_VERSION = 23;
+	public static final int DB_VERSION = 24;
 
 	// Table DDL
 	

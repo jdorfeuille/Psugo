@@ -35,7 +35,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 public class PsugoCameraHelper extends Activity implements OnClickListener,
 LocationListener  {
@@ -49,8 +49,7 @@ LocationListener  {
 	private static final String TYPE_PHOTO_4 = "4";
 	private static final String TYPE_PHOTO_5 = "5";
 	
-	LocationManager locationManager;
-	Location location, lastLocation;
+	double photoLongitude, photoLatitude;
 	String provider;
 	String fileStartName;
 	int idPhoto;
@@ -79,6 +78,8 @@ LocationListener  {
 		if (extras != null) {
 			idPhoto = extras.getInt("idPhoto");
 			instId = extras.getInt("instId");
+			photoLongitude = extras.getDouble("longitude");
+			photoLatitude = extras.getDouble("latitude");
 			idPhoto = idPhoto + 1; // incrementing cnt call to self if need be
 			System.out.println("instId from PsugoCameraHelper= " + instId);
 		}
@@ -125,32 +126,6 @@ LocationListener  {
 		actionFinishPics = (Button) findViewById(R.id.actionFinishPics);
 		actionFinishPics.setOnClickListener(this);
 
-		// GPS Coordinates
-		// Getting LocationManager object
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		boolean enabled = locationManager
-				.isProviderEnabled(LocationManager.GPS_PROVIDER);
-		if (!enabled) {
-			System.out.println("GPS is not enabled");
-			Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-			startActivity(intent);
-		}
-		// Creating an empty criteria object
-		Criteria criteria = new Criteria();
-
-		// Getting the name of the provider that meets the criteria
-		provider = locationManager.getBestProvider(criteria, false);
-		location = locationManager.getLastKnownLocation(provider);
-		
-
-		// Initialize the location fields
-		if (location != null) {
-			System.out.println("Provider " + provider + " has been selected.");
-			onLocationChanged(location);
-		} else
-			Toast.makeText(getBaseContext(), "Location can't be retrieved",
-					Toast.LENGTH_SHORT).show();
-
 	}
 
 	  /*
@@ -193,12 +168,8 @@ LocationListener  {
 	
 	private Photo createPhotoObject(byte[] byteArray){
 		Photo aPhoto = new Photo();
-		aPhoto.latitude = "";
-		aPhoto.longitude = "";
-		if (location != null) {
-			aPhoto.longitude = String.valueOf(location.getLongitude());
-			aPhoto.latitude = String.valueOf(location.getLatitude());
-		}
+		aPhoto.latitude = String.valueOf(photoLatitude);
+		aPhoto.longitude = String.valueOf(photoLongitude);
 		if (emplacementSelected.equalsIgnoreCase("Cours")){
 			aPhoto.typePhoto = TYPE_PHOTO_C;
 		}
@@ -233,39 +204,7 @@ LocationListener  {
 		//Bitmap datifoto = null;
 		System.out.println("onActivityResult - PsugoCameraHelper");
 		if (resultCode == RESULT_OK) {
-			System.out.println("inside if resultCode == RESULT_OK");
-			
-			/*
-			if (requestCode == TAKE_PHOTO_CODE) {
-			   
-			      Uri picUri = data.getData();//<- get Uri here from data intent
-			       if(picUri !=null){
-			         try {
-			             datifoto = android.provider.MediaStore.Images.Media.getBitmap(
-			                                     this.getContentResolver(), 
-			                                     picUri);
-			         } catch (FileNotFoundException e) {
-			            throw new RuntimeException(e);
-			         } catch (IOException e) {
-			            throw new RuntimeException(e);
-			         }
-			    }
-			}
-			if (datifoto != null ){
-				System.out.println("i have a bitmap");
-				ByteArrayOutputStream stream = new ByteArrayOutputStream();
-				datifoto.compress(Bitmap.CompressFormat.PNG, 100, stream);
-				byte[] byteArray = stream.toByteArray();
-				myPhoto = createPhotoObject(byteArray); // save image
-				psudb = new PsugoDB(getBaseContext());
-				psudb.open();
-				psudb.insertInstitutionPhoto(instId, myPhoto.photo,
-						myPhoto.longitude, myPhoto.latitude, myPhoto.datePhoto,
-						myPhoto.typePhoto);
-				psudb.close();
-			}
-
-			else */
+			//System.out.println("inside if resultCode == RESULT_OK");
 			if (requestCode == TAKE_PHOTO_CODE) {
 				Bitmap bmp = (Bitmap) data.getExtras().get("data"); 
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -281,7 +220,7 @@ LocationListener  {
 				// mImageView.setImageBitmap(mImageBitmap);
 			}
 		}
-		System.out.println("done onActivityResult - PsugoCameraHelper");
+		//System.out.println("done onActivityResult - PsugoCameraHelper");
 
 	}
     

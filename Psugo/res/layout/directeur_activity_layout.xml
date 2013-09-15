@@ -19,19 +19,6 @@
             android:text="@string/directTitle"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-
-        <EditText
-            android:id="@+id/nomDir"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView1"
-            android:ems="10"
-            android:hint="@string/nomPersonne"
-            android:inputType="textPersonName"
-            android:textSize="@dimen/activity_horizontal_margin" 
-            />
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
@@ -113,14 +100,30 @@
             android:textSize="14pt" />
 
         <Button
+            android:id="@+id/actionDirectPics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/cinDir"
+            android:drawableLeft="@drawable/camera" />
+
+        <Button
             android:id="@+id/actionFinishDirect"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="18dp"
-            android:layout_toRightOf="@+id/actionAddDir"
+            android:layout_toRightOf="@+id/phoneDir"
             android:drawableLeft="@drawable/arrow_right" />
+
+        <Button
+            android:id="@+id/actionPreviewDir"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/actionFinishDirect"
+            android:drawableLeft="@drawable/preview_file" />
 
         <Button
             android:id="@+id/actionAddDir"
@@ -128,18 +131,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/textView1"
+            android:layout_toLeftOf="@+id/actionPreviewDir"
             android:drawableLeft="@drawable/add2"
             android:focusable="false" />
 
-        <Button
-            android:id="@+id/actionDirectPics"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/nomDir"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/cinDir"
-            android:drawableLeft="@drawable/camera" />
+            android:layout_below="@+id/dirList"
+            android:ems="10"
+            android:hint="@string/nomPersonne"
+            android:inputType="textPersonName"
+            android:textSize="@dimen/activity_horizontal_margin" >
+
+            
+        </EditText>
+
+        <AutoCompleteTextView
+            android:id="@+id/dirList"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_below="@+id/textView1"
+            android:layout_toRightOf="@+id/textView2"
+            android:ems="10"
+            android:hint="Directeurs Existants">
+            
+           	 <requestFocus />
+        </AutoCompleteTextView> 
 
     </RelativeLayout>
 

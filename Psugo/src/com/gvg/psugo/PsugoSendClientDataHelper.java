@@ -26,8 +26,8 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	final static String STR_COOKIE= "Set-Cookie";
 	final static String TYPE_DIR_ADMIN = "Administratif";
 	final static String TYPE_DIR_PEDAG = "Pedagogique";
-	//private static String PSUGO_SERVEUR = "psugo.primature.ht"; 
-	private static String PSUGO_SERVEUR = "wally.v3w.net";  
+	private static String PSUGO_SERVEUR = "psugo.primature.ht"; 
+	//private static String PSUGO_SERVEUR = "wally.v3w.net";  
 	
 	String strCookieValue ;  
 	String theUserId;
@@ -144,9 +144,9 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		int instSize = myDbInst.length;
 		instSentList = new ArrayList<Integer>();
 		for (int i = 0; i < instSize; i++) {
-			if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0) {
-				System.out.println("Debug EnvoyerInstitution" + myDbInst[i].photo.size());
-			}
+			//if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0) {
+				//System.out.println("Debug EnvoyerInstitution" + myDbInst[i].photo.size());
+			//}
 			// ne pas transmettre si pas de photos... ou bien si l'utilisateur n'a pas mis a jour
 			if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0 && (!myDbInst[i].photo.isEmpty() )){
 				//debugInstitution("envoyerInstitution", myDbInst[i]);
@@ -321,12 +321,19 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		theBaseContext = params[0].theContext;
 		theUserId = params[0].uName;
 		theUserPwd = params[0].uPwd;
+		String msg = "";
+		PsugoUtils pscn = new PsugoUtils(theBaseContext);
 		int retCode = -1;
 		try {
 			retCode = Integer.parseInt(this.LoginRequest());
 			if (retCode == 1) {
 				retCode = this.envoyerInstitution();
 				//System.out.println("Just sent institution with Return Code:" + retCode);
+				if (retCode == 0 ) {
+					//msg = 
+					//pscn.displayMessage("Transfert Complete avec succes !!!");
+				}
+				//else pscn.displayMessage("le Transfert n'a pu etre Completer veuillez re-essayer plus tard!!!");
 
 			}
 

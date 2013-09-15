@@ -18,8 +18,8 @@ import android.os.AsyncTask;
 
 public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData> {
 
-	//private static String PSUGO_SERVEUR = "psugo.primature.ht";  
-	private static String PSUGO_SERVEUR = "wally.v3w.net";  
+	private static String PSUGO_SERVEUR = "psugo.primature.ht";  
+	//private static String PSUGO_SERVEUR = "wally.v3w.net";  
 	final static String STR_COOKIE= "Set-Cookie";
 	String strCookieValue ;
     public Context myCtx;
@@ -120,7 +120,8 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
         	inst.infoBancaire = pii.getPropertyAsString("infoBancaire");
         	//inst.infoBancaire = ""; //for test only
         	//System.out.println("adresseDetail = " + inst.adresseDetail);
-        	inst.telephone =pii.getPropertyAsString("telephone");
+        	//inst.telephone =pii.getPropertyAsString("telephone");
+        	inst.telephone = "";
         	inst.instTrouvee = ""; // Not Returned by Server
         	inst.photo = null;
         	res[i] = inst;

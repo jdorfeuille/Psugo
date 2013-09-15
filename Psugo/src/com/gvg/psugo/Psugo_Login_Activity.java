@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -79,6 +81,20 @@ public class Psugo_Login_Activity extends Activity implements OnClickListener {
 		finish();
 	}
 
+	
+	public void displayMessage(String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setMessage(message)
+		       .setCancelable(false)
+		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                //do things
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -122,6 +138,9 @@ public class Psugo_Login_Activity extends Activity implements OnClickListener {
 					
 					if	 (psudb.validateLogin(theUserName, thePassword) )
 					{		 
+						String msg="";
+						msg=getResources().getString(R.string.MsgNoNetworkLocalWrk);
+						this.displayMessage(msg);
 						Intent request = new Intent(this, PsugoMainActivity.class);
 						//b.putBoolean("isNetworkAvailable", false);
 						request.putExtras(b);

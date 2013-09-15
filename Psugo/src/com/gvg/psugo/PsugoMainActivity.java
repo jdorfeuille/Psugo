@@ -39,7 +39,9 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 
 import android.content.Context;
 import android.text.Editable;
@@ -131,6 +133,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 	String[] listCommune    = {""};
 	int idxEcoleSelected;
 	int instId = PSUGO_INST_NULL; 
+	Boolean doneDisplay = false;
 	//ArrayList<Photo> photoList = new ArrayList<Photo>();
 	
 	
@@ -150,6 +153,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 			//isNetworkAvailable = extras.getBoolean("isNetworkAvailable");
 		}
         tempData = this.getRequiredUIData();
+        nomEcoleSelected="";
         //listCommune = getDistinctListCommune(); JW
         //listSectRurale = getListSectionRurale();
         listNomImst = getListNomInst();
@@ -457,31 +461,61 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
         
         //GPS Coordinates
         // Getting LocationManager object
+      //GPS Coordinates
+        // Getting LocationManager object
         LocationListener myLocationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-            if(lastLocation == null){
-            lastLocation = location;
-    		schoolLatitude = location.getLatitude();
-    		schoolLongitude = location.getLongitude();
+        	public void onLocationChanged(Location location) {
+        		if(lastLocation == null){
+        			lastLocation = location;
+        			schoolLatitude = location.getLatitude();
+        			schoolLongitude = location.getLongitude();
 
-            }
-            if (location.getAccuracy() <  lastLocation.getAccuracy() || lastLocation.getTime() + 5 * 60 * 1000 > location.getTime()){
-            lastLocation = location;
-    		schoolLatitude = location.getLatitude();
-    		schoolLongitude = location.getLongitude();
+        		}
+        		if (location.getAccuracy() <  lastLocation.getAccuracy() || lastLocation.getTime() + 5 * 60 * 1000 > location.getTime()){
+        			lastLocation = location;
+        			schoolLatitude = location.getLatitude();
+        			schoolLongitude = location.getLongitude();
 
-            }
-            }            
-            public void onProviderDisabled(String provider) {}
-            public void onProviderEnabled(String provider) {}
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+        		}
+        	}            
+        	public void onProviderDisabled(String provider) {}
+        	public void onProviderEnabled(String provider) {}
+        	public void onStatusChanged(String provider, int status, Bundle extras) {}
         }; 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 60*1000, 10, myLocationListener);
+        locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 5*60*1000, 10, myLocationListener);
+        lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        // si on a les 2 localisations
+        if(location != null && lastLocation != null){
+        	// on prend la plus precise (accuracy la plus petite)
+        	if(location.getAccuracy() > lastLocation.getAccuracy()){
+        		schoolLatitude = lastLocation.getLatitude();
+        		schoolLongitude = lastLocation.getLongitude();
+        	}
+        	else{
+        		schoolLatitude = location.getLatitude();
+        		schoolLongitude = location.getLongitude();
+        	}
+        }
+        else if (location != null){
+        	schoolLatitude = location.getLatitude();
+        	schoolLongitude = location.getLongitude();
+        }
+        else if (lastLocation != null){
+        	schoolLatitude = lastLocation.getLatitude();
+        	schoolLongitude = lastLocation.getLongitude();
+        }
+        else {
+        	schoolLatitude = 0;
+        	schoolLongitude = 0;
+        }
+   }
 
         
 
-   }
+   
 
 
     private String[] getListNomInst() {
@@ -613,28 +647,36 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 			String schoolName = tempData.instArray[i].nomInstitution;
 			idx = getIdxString(schoolName, instArrayDB);
 			if (idx > -1) { 
-				// we found the inst. in the local DB
-//				if (tempInst.telephone == null )
-//					tempInst.telephone = "";
-//				if (tempInst.instTrouvee == null )
-//					tempInst.instTrouvee = "";
-//				psudb.updateInstitution(tempInst.id, tempInst.nomInstitution,
-//						tempInst.commune, tempInst.sectionRurale,
-//						tempInst.adresse, tempInst.adresseDetail,
-//						tempInst.telephone, tempInst.instTrouvee);
+				// Data found Locally so we take update for display
+				tempData.instArray[i].adresseDetail = myDbInst[idx].adresseDetail;
+				tempData.instArray[i].telephone =  myDbInst[idx].telephone;
+				tempData.instArray[i].infoBancaire =   myDbInst[idx].infoBancaire;
+				//**** 
 			} else {
-				// Insert Institution
-				//ICI
 				psudb.insertInstitution(tempInst.id, tempInst.nomInstitution,tempInst.departement,
 						tempInst.arrondissement,tempInst.commune, tempInst.sectionRurale, tempInst.infoBancaire);
 
 			}
 		}
 
-
 		psudb.close();
 	}
     
+	public void displayMessage(String message) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setMessage(message)
+		       .setCancelable(false)
+		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		           public void onClick(DialogInterface dialog, int id) {
+		                //do things
+		        	   doneDisplay=true;
+		           }
+		       });
+		AlertDialog alert = builder.create();
+		alert.show();
+		//alert.dismiss();
+	}
     
     /* display a Toast with message text. */
     private void showMessage(CharSequence text) {
@@ -662,7 +704,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
       if (resultCode == RESULT_OK) {
         switch(requestCode){
           case TAKE_PHOTO_CODE:
-        	 System.out.println("what am i doing here !!!!!!!!!!!!");
         	 //here 
             final File file = getPicFile(this);
             try {
@@ -721,7 +762,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		// dummy method for now to test the buttons and display all values
-		
+		PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
+		String msg = "";
 		Bundle b;
 		//CharSequence text;
 		switch (v.getId()) {
@@ -734,36 +776,25 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 			//CharSequence text = "Activating the camera for a picture";
 			//takePhoto();
 			//showMessage(text);
-			
-			Intent camIntent = new Intent(this, PsugoCameraHelper.class);
-			b = null;
-			b = new Bundle();
-			b.putInt("idPhoto", ADD_PICS);
-			b.putInt("instId", instId);
-			camIntent.putExtras(b);
-			startActivityForResult(camIntent, ADD_PICS);
+			if ( instId != PSUGO_INST_NULL) {
+				Intent camIntent = new Intent(this, PsugoCameraHelper.class);
+				b = null;
+				b = new Bundle();
+				b.putInt("idPhoto", ADD_PICS);
+				b.putInt("instId", instId);
+				b.putDouble("longitude", schoolLongitude);
+				b.putDouble("latitude", schoolLatitude);
+				camIntent.putExtras(b);
+				startActivityForResult(camIntent, ADD_PICS);
+			}
+			else {
+				msg =getResources().getString(R.string.MsgNoInstSelected);
+				this.displayMessage(msg);
+			}
 			break;
-		/*case R.id.Ok:
-			 Institution myUpdatedInst = createInstitutionFromUI();
-			 myUpdatedInst.id = instId;
-			 debugInstitution("onClick avant update", myUpdatedInst);
-			 PsugoDB psudb = new PsugoDB(getBaseContext());
-			 psudb.open();
-			 psudb.updateInstitution(instId, myUpdatedInst.nomInstitution,
-					 myUpdatedInst.commune, myUpdatedInst.sectionRurale,
-					 myUpdatedInst.adresse, myUpdatedInst.adresseDetail,
-					 myUpdatedInst.telephone, myUpdatedInst.instTrouvee);
-			 
-			 psudb.close();
-			 System.out.println("Bouton Sauvegarde a fait l'Insert sans trop de prob");
-			 break; */
 		case R.id.actionUploadData:
-			// here all we will do is to loop thru the DB and pass data 
-			// text = "'upload data ' clicked! need method to upload data";
-			// just for today we will test the WS here
-			//Context c = this.getBaseContext();
 			this.saveCurrentData();
-			PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
+			
 			if (pscn.isNetworkAvailable()) {
 				PsugoSendDataParm psdp = new PsugoSendDataParm(this.getBaseContext(), theUserName, thePassword);
 				//PsugoSendDataParm pdp = new 
@@ -771,44 +802,61 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 					PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
 					AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
 					String resp = servCall_send.get();
-					System.out.println("response from xfer=" +resp);
+					msg = getResources().getString(R.string.MsgXferSuccess);
+					this.displayMessage(msg);
+					//System.out.println("response from xfer=" +resp);
 				} catch (Exception e) {
 					//System.out.println("Exception ... JW...failed UPLOAD service call");
-					CharSequence text1 = "Erreur dans le transfert de donnees...Veuillez Re-essayer plus tard...";
-					showMessage(text1);
-					e.printStackTrace();
+					msg = getResources().getString(R.string.MsgXferFail);
+					this.displayMessage(msg);
+					//e.printStackTrace();
 	
 				}
 			}
 			else {
-					CharSequence text = "Fonction Non Disponible actuellement Pas de Services Reseaux";
-					showMessage(text);
-				
+					msg =getResources().getString(R.string.MsgNoNetworkForFn);
+					this.displayMessage(msg);
 			}
 
 			break;
 		case R.id.actionAddDirects:
 			// here we can save Institution data so we can do an update
-			this.saveCurrentData();
-			Intent request =new Intent(this, Directeur_Activity.class);
-			b = null;
-			b = new Bundle();
-			b.putInt("idDir", ADD_DIRECTEURS);
-			b.putInt("instId", instId);
-			request.putExtras(b);
-			startActivityForResult(request, ADD_DIRECTEURS);
+			if ( instId != PSUGO_INST_NULL) {
+				this.saveCurrentData();
+				Intent request =new Intent(this, Directeur_Activity.class);
+				b = null;
+				b = new Bundle();
+				b.putInt("idDir", ADD_DIRECTEURS);
+				b.putInt("instId", instId);
+				b.putDouble("longitude", schoolLongitude);
+				b.putDouble("latitude", schoolLatitude);
+				request.putExtras(b);
+				startActivityForResult(request, ADD_DIRECTEURS);
+			}
+			else {
+				msg =getResources().getString(R.string.MsgNoInstSelected);
+				this.displayMessage(msg);
+			}
 			break;
 			
 		case R.id.actionAddClasses:
 			// here we can save Institution data so we can do an update
-			this.saveCurrentData();
-			Intent requestClasse =new Intent(this, Classe_Activity.class);
-			b = null;
-			b = new Bundle();
-			b.putInt("idClasse", ADD_CLASSES);
-			b.putInt("instId", instId);
-			requestClasse.putExtras(b);
-			startActivityForResult(requestClasse, ADD_CLASSES);
+			if ( instId != PSUGO_INST_NULL) {
+				this.saveCurrentData();
+				Intent requestClasse =new Intent(this, Classe_Activity.class);
+				b = null;
+				b = new Bundle();
+				b.putInt("idClasse", ADD_CLASSES);
+				b.putInt("instId", instId);
+				b.putDouble("longitude", schoolLongitude);
+				b.putDouble("latitude", schoolLatitude);
+				requestClasse.putExtras(b);
+				startActivityForResult(requestClasse, ADD_CLASSES);
+			}
+			else {
+				msg =getResources().getString(R.string.MsgNoInstSelected);
+				this.displayMessage(msg);
+			}
 			break;
 		default:
 			//text = "Dunno what was pushed!"; actionAddClasses

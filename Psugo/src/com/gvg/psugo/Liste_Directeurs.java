@@ -18,18 +18,21 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.TableRow.LayoutParams;
  
-public class Liste_Classes_Prof extends Activity {
+public class Liste_Directeurs extends Activity {
  
 
 	
-	// we need to getExtra institutionID
-	 Classe[] myClasseList;
-	 int theInstID;
+
+    private static final String TYPE_ADMINISTRATIF ="Administratif";
+    private static  final String TYPE_PEDAGOGIQUE = "Pedagogique";
+    Directeur dirAdm, dirPed;
+    Directeur[] dirList;
+	int theInstID;
  
      TableLayout tl;
      TableRow tr;
-     TextView nomClasseTV,nomProfTV;
-     ImageView photoClasseIV, photoProfIV;
+     TextView nomDirecteurTV, genreDirectTV, typeDirectTV, photoDirectTV;
+     ImageView photoDirecteurIV;
      final int THUMBNAIL_SIZE = 200;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,10 +45,23 @@ public class Liste_Classes_Prof extends Activity {
 		}
 		PsugoDB psudb = new PsugoDB(getBaseContext()); 
 		psudb.open(); 
-		myClasseList = psudb.selectClasse(theInstID);
+		dirAdm = psudb.selectDirecteur(theInstID, TYPE_ADMINISTRATIF);
+		dirPed = psudb.selectDirecteur(theInstID, TYPE_PEDAGOGIQUE);
 		psudb.close();
-        setContentView(R.layout.liste_photos_classe);
-        tl = (TableLayout) findViewById(R.id.classe_table);
+		int nDir = 0;
+		if (dirAdm != null ) nDir++;
+		if (dirPed != null ) nDir++;
+		dirList = new Directeur[nDir];
+		int idx=0;
+		if (dirAdm != null ) {
+			dirList[idx]=dirAdm;
+			idx++;
+		}
+		if (dirPed != null ) {
+			dirList[idx]=dirPed;
+		}
+        setContentView(R.layout.liste_directeurs);
+        tl = (TableLayout) findViewById(R.id.directeurs_table);
         addHeaders();
         addData();
     }
@@ -62,40 +78,40 @@ public class Liste_Classes_Prof extends Activity {
                 LayoutParams.WRAP_CONTENT));
  
         /** Creating a TextView to add to the row **/
-        TextView nomClasseTV = new TextView(this);
-        nomClasseTV.setText("Nom Classe");
-        nomClasseTV.setTextColor(Color.GRAY);
-        nomClasseTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        nomClasseTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-        nomClasseTV.setPadding(11, 5, 5, 0);
-        tr.addView(nomClasseTV);  // Adding textView to tablerow.
+        nomDirecteurTV = new TextView(this);
+        nomDirecteurTV.setText("Nom  ");
+        nomDirecteurTV.setTextColor(Color.GRAY);
+        nomDirecteurTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        nomDirecteurTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+        nomDirecteurTV.setPadding(11, 5, 5, 0);
+        tr.addView(nomDirecteurTV);  // Adding textView to tablerow.
  
         /** Creating another textview **/
-        TextView nomProfTV = new TextView(this);
-        nomProfTV.setText("Nom Prof");
-        nomProfTV.setTextColor(Color.GRAY);
-        nomProfTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-        nomProfTV.setPadding(11, 5, 5, 0);
-        nomProfTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        tr.addView(nomProfTV); // Adding textView to tablerow.
+        typeDirectTV = new TextView(this);
+        typeDirectTV.setText("Type  ");
+        typeDirectTV.setTextColor(Color.GRAY);
+        typeDirectTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+        typeDirectTV.setPadding(11, 5, 5, 0);
+        typeDirectTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(typeDirectTV); // Adding textView to tablerow.
         
         /** Creating another textview **/
-        TextView photoClasseTV = new TextView(this);
-        photoClasseTV.setText("photo Classe");
-        photoClasseTV.setTextColor(Color.GRAY);
-        photoClasseTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-        photoClasseTV.setPadding(11, 5, 5, 0);
-        photoClasseTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        tr.addView(photoClasseTV); // Adding textView to tablerow.
+        genreDirectTV = new TextView(this);
+        genreDirectTV.setText("genre  ");
+        genreDirectTV.setTextColor(Color.GRAY);
+        genreDirectTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+        genreDirectTV.setPadding(11, 5, 5, 0);
+        genreDirectTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(genreDirectTV); // Adding textView to tablerow.
         
         /** Creating another textview **/
-        TextView photoProfTV = new TextView(this);
-        photoProfTV.setText("photo Prof");
-        photoProfTV.setTextColor(Color.GRAY);
-        photoProfTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-        photoProfTV.setPadding(11, 5, 5, 0);
-        photoProfTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-        tr.addView(photoProfTV); // Adding textView to tablerow.
+        photoDirectTV = new TextView(this);
+        photoDirectTV.setText("photo ");
+        photoDirectTV.setTextColor(Color.GRAY);
+        photoDirectTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+        photoDirectTV.setPadding(11, 5, 5, 0);
+        photoDirectTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+        tr.addView(photoDirectTV); // Adding textView to tablerow.
  
         // Add the TableRow to the TableLayout
         tl.addView(tr, new TableLayout.LayoutParams(
@@ -151,7 +167,7 @@ public class Liste_Classes_Prof extends Activity {
     @SuppressWarnings("deprecation")
 	public void addData(){
     	PsugoUtils psu = new PsugoUtils(getBaseContext());
-        for (int i = 0; i < myClasseList.length; i++)
+        for (int i = 0; i < dirList.length; i++)
         {
             /** Create a TableRow dynamically **/
             tr = new TableRow(this);
@@ -160,47 +176,45 @@ public class Liste_Classes_Prof extends Activity {
                     LayoutParams.WRAP_CONTENT));
  
             /** Creating a TextView to add to the row **/
-            nomClasseTV = new TextView(this);
-            nomClasseTV.setText(myClasseList[i].nomClasse);
-            nomClasseTV.setTextColor(Color.RED);
-            nomClasseTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            nomClasseTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-            nomClasseTV.setPadding(11, 5, 0, 5);
-            tr.addView(nomClasseTV);  // Adding textView to tablerow.
+            nomDirecteurTV = new TextView(this);
+            nomDirecteurTV.setText(dirList[i].nom);
+            nomDirecteurTV.setTextColor(Color.RED);
+            nomDirecteurTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            nomDirecteurTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+            nomDirecteurTV.setPadding(11, 5, 0, 5);
+            tr.addView(nomDirecteurTV);  // Adding textView to tablerow.
             
             /** Creating a TextView to add to the row **/
             // Here we need to check if we have a Prof
-            nomProfTV = new TextView(this);
-            nomProfTV.setText(myClasseList[i].nomProfesseur);
-            nomProfTV.setTextColor(Color.RED);
-            nomProfTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
-            nomProfTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
-            nomProfTV.setPadding(11, 5, 0, 5);
-            tr.addView(nomProfTV);  // Adding textView to tablerow.
+            typeDirectTV = new TextView(this);
+            typeDirectTV.setText(dirList[i].typeDirection);
+            typeDirectTV.setTextColor(Color.RED);
+            typeDirectTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            typeDirectTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+            typeDirectTV.setPadding(11, 5, 0, 5);
+            tr.addView(typeDirectTV);  // Adding textView to tablerow.
  
             /** Creating an  imageview **/
 
-            photoClasseIV = new ImageView(this);
-            Bitmap bmp = psu.StringToBitMap(myClasseList[i].photoClasse.photo);
-            Bitmap thmbn = ThumbnailUtils.extractThumbnail(bmp, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
-            photoClasseIV.setImageBitmap(thmbn);
-            photoClasseIV.setPadding(5, 5,0, 5);
-            tr.addView(photoClasseIV); // Adding textView to tablerow.
+            genreDirectTV = new TextView(this);
+            genreDirectTV.setText(dirList[i].genre);
+            genreDirectTV.setTextColor(Color.RED);
+            genreDirectTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
+            genreDirectTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
+            genreDirectTV.setPadding(5, 5,0, 5);
+            tr.addView(genreDirectTV); // Adding textView to tablerow.
             
             /** Creating another imageview **/
             // Here we need to check if we have a Prof
             //valueTV = new TextView(this);
-            if (myClasseList[i].photoProfesseur != null ){
-            	if (myClasseList[i].photoProfesseur.photo.isEmpty() == false ) {
-	                photoProfIV = new ImageView(this);
-	                Bitmap bmp2 = psu.StringToBitMap(myClasseList[i].photoProfesseur.photo);
-	                Bitmap thmbn2 = ThumbnailUtils.extractThumbnail(bmp2, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
-	                photoProfIV.setImageBitmap(thmbn2);
-	                photoProfIV.setPadding(5, 5,0, 5);
-	                tr.addView(photoProfIV); // Adding textView to tablerow.
-            	}
-            	
-            }
+
+            photoDirecteurIV = new ImageView(this);
+            Bitmap bmp2 = psu.StringToBitMap(dirList[i].photo.photo);
+            Bitmap thmbn2 = ThumbnailUtils.extractThumbnail(bmp2, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
+            photoDirecteurIV.setImageBitmap(thmbn2);
+            photoDirecteurIV.setPadding(5, 5,0, 5);
+            tr.addView(photoDirecteurIV); // Adding textView to tablerow.
+
 
             
  
@@ -218,29 +232,6 @@ public class Liste_Classes_Prof extends Activity {
         tl.addView(tr, new TableLayout.LayoutParams(
                 LayoutParams.FILL_PARENT,
                 LayoutParams.WRAP_CONTENT));
-        // Adding the button 
-        tr = new TableRow(this);
-        tr.setLayoutParams(new LayoutParams(
-                LayoutParams.WRAP_CONTENT));
-        
-        Button backButton = new Button(this);
-        backButton.setText("Retour");
-        backButton.setId(15);
-      
-        tr.addView(backButton);
-        tl.addView(tr, new TableLayout.LayoutParams(
-                LayoutParams.FILL_PARENT,
-                LayoutParams.WRAP_CONTENT));
-        //tl.addView(backButton);
-        backButton.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-        	
-        });
         // Test Image Button
         tr = new TableRow(this);
         tr.setLayoutParams(new LayoutParams(
@@ -256,7 +247,7 @@ public class Liste_Classes_Prof extends Activity {
         	@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-        		System.out.println("Yeah Image Button ");
+        		//System.out.println("Yeah Image Button ");
 				finish();
 			}
         });

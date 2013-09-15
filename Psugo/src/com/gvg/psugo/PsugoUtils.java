@@ -1,6 +1,8 @@
 package com.gvg.psugo;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -37,6 +39,9 @@ public class PsugoUtils {
 			return null;
 		}
 	}
+	
+
+
 	public PsugoUtils(Context c) {
 		// TODO Auto-generated constructor stub
 		theContext = c;

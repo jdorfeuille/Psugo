@@ -46,8 +46,9 @@
     <string name="num_photo">numero photo</string>
     <string name="classeTitle">Classe</string>
     <string name="profTitle">Professeur</string>
-    <string name="nomClasse">Nom Classe</string>
-     <string name="nomProfClasse">Nom Professeur</string>
+    <string name="nomClasse">Nouvelle Classe</string>
+    <string name="classList">Classes Existantes</string>
+    <string name="nomProfClasse">Nom Professeur</string>
     <string name="nbrEleve">Nombre d\'Eleves</string>
     <!--  photo Classe et Photo Prof ???-->
     <string name="photoClasse">Photo Classe</string>
@@ -56,6 +57,11 @@
     <string name="photoDir">Photo Directeur</string>
     <string name="imagePreview">Visionner Photo</string>
     <string name="infoBancaire">Information Bancaire</string>
+    <string name="MsgXferSuccess">Le Transfert a ete complete avec succes</string>
+    <string name="MsgXferFail">Transfert non complete veuillez re-essayer plus tard</string>
+    <string name="MsgNoNetworkForFn">Fonction Non Disponible actuellement Pas de Services Reseaux</string>
+    <string name="MsgNoNetworkLocalWrk">Reseau Non Disponible, Vous etes en mode Locale</string>
+    <string name="MsgNoInstSelected">Veuillez Selectionner une Institution SVP!!!</string>
    
 
     <string-array name="emplacement_pics_array">

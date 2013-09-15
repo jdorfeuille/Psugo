@@ -8,6 +8,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.ThumbnailUtils;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -27,6 +31,8 @@ public class Liste_Photo_Inst extends Activity {
      TextView typePhotoTV,valueTV;
      ImageView valueIV;
      final int THUMBNAIL_SIZE = 200;
+     public final static int mButtonHeight = 100;
+     public final static int mButtonWidth = 80;
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	//
@@ -205,5 +211,33 @@ public class Liste_Photo_Inst extends Activity {
                     LayoutParams.FILL_PARENT,
                     LayoutParams.WRAP_CONTENT));
         }
+        
+    	Button valueB = new Button(this);
+    	valueB.setText("Retour");
+    	valueB.setId(5);
+    	//LayoutParams lpView = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+    	//lpView.gravity = Gravity.BOTTOM;
+    	valueB.setPadding(0, 0, 0, 100);
+    	//valueB.setGravity(Gravity.BOTTOM);
+    	valueB.setWidth(mButtonWidth);
+    	valueB.setHeight(mButtonHeight);
+    	valueB.setTextSize(18);
+
+    	
+    	valueB.setOnClickListener( new OnClickListener() {
+    		
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				setResult(RESULT_OK);
+				finish();
+				
+			}
+    	});
+    	tl.addView(valueB);
+    	//tl.addView(valueB, new TableLayout.LayoutParams(
+    	//		mButtonWidth,
+    	//		mButtonHeight));
+    	
     }
 }

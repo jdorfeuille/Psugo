@@ -392,8 +392,8 @@ public class PsugoDB {
 		p.bindLong(2, profId);
 		p.bindString(3, photoProf.photo);
 		p.bindString(4, photoProf.longitude);
-		p.bindString(5, photoClasse.latitude);
-		p.bindString(6, photoClasse.datePhoto);
+		p.bindString(5, photoProf.latitude);
+		p.bindString(6, photoProf.datePhoto);
 		p.executeInsert();
 	}
 
@@ -449,15 +449,18 @@ public class PsugoDB {
 				+ " = " + instId;
 		Cursor c = db.rawQuery(query, null);
 
-		int nbClasse = 0;
+		int nbClasse =0;
+		int cursorRows = c.getCount();
 		int classeId;
 
-		if (c.getCount() > 0) {
-			nbClasse = c.getCount();
+		
+		if (cursorRows > 0){
+			nbClasse = cursorRows;
 		}
-
+		
 		Classe[] classes = new Classe[nbClasse];
-
+		
+		
 		if (nbClasse > 0) {
 			c.moveToFirst();
 			

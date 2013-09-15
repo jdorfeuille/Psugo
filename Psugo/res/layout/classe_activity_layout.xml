@@ -38,18 +38,6 @@
             android:layout_below="@+id/nbrEleve"
             android:drawableLeft="@drawable/camera" />
 
-        <EditText
-            android:id="@+id/nomClasse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/textView1"
-            android:ems="10"
-            android:hint="@string/nomClasse"
-            android:inputType="textPersonName" >
-            <requestFocus />
-        </EditText>
-
         <Button
             android:id="@+id/actionProfPics"
             android:layout_width="wrap_content"
@@ -153,6 +141,24 @@
             android:layout_alignRight="@+id/cinProf"
             android:layout_alignTop="@+id/actionFinishClasse"
             android:drawableLeft="@drawable/preview_file" />
+
+        <AutoCompleteTextView
+            android:id="@+id/classList"
+            android:layout_width="match_parent"
+            android:layout_height="46dp"
+            android:layout_below="@+id/textView1"
+            android:hint="@string/classList"
+            android:prompt="@string/classList" />
+
+        <EditText
+            android:id="@+id/nomClasse"
+            android:layout_width="match_parent"           
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/classList"
+            android:ems="10"
+            android:hint="@string/nomClasse"
+            android:inputType="textPersonName" />
 
     </RelativeLayout>
 
