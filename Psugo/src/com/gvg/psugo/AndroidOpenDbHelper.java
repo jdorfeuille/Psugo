@@ -1,5 +1,6 @@
 package com.gvg.psugo;
 import android.content.Context;
+import java.io.File;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
@@ -9,7 +10,8 @@ import android.provider.BaseColumns;
 public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "psugo_lite_db2";
-	public static final int DB_VERSION = 24;
+	public static final String DB_FILE_PATH = "/storage/sdcard1";
+	public static final int DB_VERSION = 26;
 
 	// Table DDL
 	
@@ -112,8 +114,9 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 
 	public AndroidOpenDbHelper(Context context) {
 		//super(context, DB_NAME, null, DB_VERSION);
-	    super(context, Environment.getExternalStorageDirectory()
-	            + "/" +  DB_NAME, null, DB_VERSION);
+
+				super(context, DB_FILE_PATH + File.separator +  DB_NAME, null, DB_VERSION);
+	    
 		
 	}
 

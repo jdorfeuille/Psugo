@@ -114,8 +114,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 
 
 	int ctlLocation=0;
-	double schoolLatitude ;
-	double schoolLongitude;
+	static double schoolLatitude ;
+	static double schoolLongitude;
 	LocationManager locationManager;
 	Location location = null;
 	Location  lastLocation = null;
@@ -154,8 +154,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 		}
         tempData = this.getRequiredUIData();
         nomEcoleSelected="";
-        //listCommune = getDistinctListCommune(); JW
-        //listSectRurale = getListSectionRurale();
         listNomImst = getListNomInst();
         processListInst();
         //
@@ -202,7 +200,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				// main = arg0
 				// position = arg2
 				// Id = arg3
-				System.out.println("nomEcole=====>onItemSelected");
+				//System.out.println("nomEcole=====>onItemSelected");
 				String item = arg0.getItemAtPosition(arg2).toString() ;
 				nomEcoleSelected = item;
 				updateUIFields(item);
@@ -348,7 +346,9 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
 				// TODO Auto-generated method stub
-				
+			//	String[] tmp = getResources().getStringArray(R.array.type_directeur_array);
+			//	communeSelected = tmp[0];
+				 
 			}
         	
         });
@@ -599,7 +599,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				saveNewComsectr(resp.csrArray);
 
 			} catch (Exception e) {
-				System.out.println("Erreur Fatale pas de donnees pour l'application ... ");
+				e.printStackTrace();
+				//System.out.println("Erreur Fatale pas de donnees pour l'application ... ");
 				//e.printStackTrace(); //Irrecoverable exception needs to handle properly
 			}
 		} else {
@@ -630,6 +631,10 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 			idx = getIdxString(schoolName, listNomImst);
 			if (idx == -1) {
 				psudb.deleteInstitution(myDbInst[i].id); //removing existing institution no longer sent
+				Classe[] lClasses = psudb.selectClasse(myDbInst[i].id);
+				for (int k=0;k<lClasses.length;k++){
+					psudb.deleteClasse(myDbInst[i].id, lClasses[k].nomClasse);
+				}
 			}
 		}
 		// update les institutions recu..
@@ -681,7 +686,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
     /* display a Toast with message text. */
     private void showMessage(CharSequence text) {
     	Context context = getApplicationContext();
-		int duration = Toast.LENGTH_SHORT;
+		int duration = Toast.LENGTH_LONG;
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();    	
     }
@@ -719,22 +724,22 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
           break;
           case ADD_DIRECTEURS:
         	  if(resultCode == RESULT_OK){
-        		CharSequence text = "Returned from Adding Directeurs";
-      			showMessage(text);
+        		//CharSequence text = "Returned from Adding Directeurs";
+      			//showMessage(text);
       		}
         	  break;
           case PSUGO_LOGIN:
         	  if(resultCode == RESULT_OK){
-        		CharSequence text = "Returned from LOGIN";
+        		//CharSequence text = "Returned from LOGIN";
           	  theUserName=data.getStringExtra("theUserName");  
           	  thePassword=data.getStringExtra("thePassword");  
-      			showMessage(text);
+      			//showMessage(text);
       		}
         	  break;
           case ADD_PICS:
-        		CharSequence text = "Returned from Taking Pictures";
-        		System.out.println("ok i did take some pic");
-      			showMessage(text);
+        		//CharSequence text = "Returned from Taking Pictures";
+        		//System.out.println("ok i did take some pic");
+      			//showMessage(text);
       		
         	  break;
 
@@ -770,6 +775,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 		case R.id.actionDone:
 			//text = "'Done' clicked!";
 			this.saveCurrentData();
+			this.showMessage(Environment.getExternalStorageDirectory().getPath());
 			finish();
 			break;
 		case R.id.actionSchoolPic:
@@ -782,8 +788,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				b = new Bundle();
 				b.putInt("idPhoto", ADD_PICS);
 				b.putInt("instId", instId);
-				b.putDouble("longitude", schoolLongitude);
-				b.putDouble("latitude", schoolLatitude);
 				camIntent.putExtras(b);
 				startActivityForResult(camIntent, ADD_PICS);
 			}
@@ -799,11 +803,17 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				PsugoSendDataParm psdp = new PsugoSendDataParm(this.getBaseContext(), theUserName, thePassword);
 				//PsugoSendDataParm pdp = new 
 				try {
+					msg = getResources().getString(R.string.MsgXferRunning);
+					this.displayMessage(msg);
+					boolean ctl = false;
+					String resp= "";
 					PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
 					AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
-					String resp = servCall_send.get();
-					msg = getResources().getString(R.string.MsgXferSuccess);
-					this.displayMessage(msg);
+					resp = servCall_send.get();
+					if ( !resp.isEmpty()){
+						msg = getResources().getString(R.string.MsgXferSuccess);
+						this.displayMessage(msg);
+					}
 					//System.out.println("response from xfer=" +resp);
 				} catch (Exception e) {
 					//System.out.println("Exception ... JW...failed UPLOAD service call");
@@ -828,8 +838,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				b = new Bundle();
 				b.putInt("idDir", ADD_DIRECTEURS);
 				b.putInt("instId", instId);
-				b.putDouble("longitude", schoolLongitude);
-				b.putDouble("latitude", schoolLatitude);
 				request.putExtras(b);
 				startActivityForResult(request, ADD_DIRECTEURS);
 			}
@@ -848,8 +856,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				b = new Bundle();
 				b.putInt("idClasse", ADD_CLASSES);
 				b.putInt("instId", instId);
-				b.putDouble("longitude", schoolLongitude);
-				b.putDouble("latitude", schoolLatitude);
 				requestClasse.putExtras(b);
 				startActivityForResult(requestClasse, ADD_CLASSES);
 			}
@@ -932,6 +938,11 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 		}
 		return null;
 	}
+	@Override
+	public void onBackPressed() {
+		// disable back key
+	}
+
 
 
 	

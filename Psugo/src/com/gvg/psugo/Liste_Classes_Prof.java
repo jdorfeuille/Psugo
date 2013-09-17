@@ -50,7 +50,10 @@ public class Liste_Classes_Prof extends Activity {
         addData();
     }
  
-   
+	@Override
+	public void onBackPressed() {
+		// disable back key
+	}
 
 	/** This function add the headers to the table**/
     public void addHeaders(){
@@ -218,29 +221,7 @@ public class Liste_Classes_Prof extends Activity {
         tl.addView(tr, new TableLayout.LayoutParams(
                 LayoutParams.FILL_PARENT,
                 LayoutParams.WRAP_CONTENT));
-        // Adding the button 
-        tr = new TableRow(this);
-        tr.setLayoutParams(new LayoutParams(
-                LayoutParams.WRAP_CONTENT));
-        
-        Button backButton = new Button(this);
-        backButton.setText("Retour");
-        backButton.setId(15);
-      
-        tr.addView(backButton);
-        tl.addView(tr, new TableLayout.LayoutParams(
-                LayoutParams.FILL_PARENT,
-                LayoutParams.WRAP_CONTENT));
-        //tl.addView(backButton);
-        backButton.setOnClickListener(new OnClickListener(){
 
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				finish();
-			}
-        	
-        });
         // Test Image Button
         tr = new TableRow(this);
         tr.setLayoutParams(new LayoutParams(
@@ -256,7 +237,7 @@ public class Liste_Classes_Prof extends Activity {
         	@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-        		System.out.println("Yeah Image Button ");
+        		//System.out.println("Yeah Image Button ");
 				finish();
 			}
         });

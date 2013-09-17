@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -55,7 +56,7 @@ public class Classe_Activity extends Activity implements OnClickListener {
 
 	// Spinners
 	Spinner genreProfList;
-	AutoCompleteTextView classList;
+	Spinner classList;
 	Classe[] classesFromDB;
 	String[] listNomClasse;
 	String classSelected;
@@ -73,13 +74,14 @@ public class Classe_Activity extends Activity implements OnClickListener {
 	int idClasse = 1;
 	int instId;
 	int ctlLocation = 0;
-	double photoLatitude;
-	double photoLongitude;
+	//double photoLatitude;
+	//double photoLongitude;
 	LocationManager locationManager;
 	Location location = null;
 	Location lastLocation = null;
 	String provider;
 	Photo photoProf, photoClasse;
+	String photoPath;
 
 	//
 	CharSequence text;
@@ -95,14 +97,16 @@ public class Classe_Activity extends Activity implements OnClickListener {
 		if (extras != null) {
 			idClasse = extras.getInt("idClasse");
 			instId = extras.getInt("instId");
-			photoLongitude = extras.getDouble("longitude");
-			photoLatitude = extras.getDouble("latitude");
+			//photoLongitude = extras.getDouble("longitude");
+			//photoLatitude = extras.getDouble("latitude");
 			idClasse = idClasse + 1; // incrementing cnt call to self if need be
 		}
 
 		PsugoDB psudb = new PsugoDB(getBaseContext());
 		psudb.open();
 		classesFromDB = psudb.selectClasse(instId);
+		Classe[] tempClass = copyClassFromDB(); // manipulation pour accomoder le display
+		classesFromDB = tempClass;
 		psudb.close();
 		listNomClasse = this.getListNomClasse();
 		nomClasse = (EditText) findViewById(R.id.nomClasse);
@@ -144,21 +148,15 @@ public class Classe_Activity extends Activity implements OnClickListener {
 
 		});
 
-		classList = (AutoCompleteTextView) findViewById(R.id.classList);
+		classList = (Spinner) findViewById(R.id.classList);
 		ArrayAdapter<String> adapterClasse = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, listNomClasse);
 		adapterClasse
 				.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 		// android.R.layout.simple_dropdown_item_1line
 		classList.setAdapter(adapterClasse);
-		classList.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				classList.showDropDown();
-			}
-		});
-
-		classList.setOnItemClickListener(new OnItemClickListener() {
+		
+		classList.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			private int getClasseInfos(String sLookup, String[] arrayToLook) {
 				int idx = -1;
@@ -174,40 +172,58 @@ public class Classe_Activity extends Activity implements OnClickListener {
 
 			public void updateUIFields() {
 
-				int idx = getClasseInfos(classSelected, listNomClasse);
-				if (idx > -1) {
-					nomClasse.setText(classesFromDB[idx].nomClasse);
-					nomClasse.setEnabled(false); // disable so we don't update
-													// this field
-					nbrEleve.setText(String
-							.valueOf(classesFromDB[idx].nombreEleve));
-					photoClasse = classesFromDB[idx].photoClasse;
-					nomProfClasse.setText(classesFromDB[idx].nomProfesseur);
-					emailProf.setText(classesFromDB[idx].emailProf);
-					phoneProf.setText(classesFromDB[idx].phoneProf);
-					photoProf = classesFromDB[idx].photoProfesseur;
-					cinProf.setText(classesFromDB[idx].cinProf);
-					genreProf = classesFromDB[idx].genreProf;
-					String temp = (String) genreProfList.getItemAtPosition(0);
-					if (temp.equalsIgnoreCase(genreProf))
-						genreProfList.setSelection(0);
-					else
-						genreProfList.setSelection(1);
-
+				if (classSelected.isEmpty()) {
+					nomClasse.setText("");
+					nomClasse.setEnabled(true);
+					nbrEleve.setText("");
+					photoClasse = null;
+					nomProfClasse.setText("");
+					cinProf.setText("");
+					phoneProf.setText("");
+				
+				}
+				else {
+					int idx = getClasseInfos(classSelected, listNomClasse);
+					if (idx > -1) {
+						nomClasse.setText(classesFromDB[idx].nomClasse);
+						nomClasse.setEnabled(false); // disable so we don't update
+														// this field
+						nbrEleve.setText(String
+								.valueOf(classesFromDB[idx].nombreEleve));
+						photoClasse = classesFromDB[idx].photoClasse;
+						nomProfClasse.setText(classesFromDB[idx].nomProfesseur);
+						emailProf.setText(classesFromDB[idx].emailProf);
+						phoneProf.setText(classesFromDB[idx].phoneProf);
+						photoProf = classesFromDB[idx].photoProfesseur;
+						cinProf.setText(classesFromDB[idx].cinProf);
+						genreProf = classesFromDB[idx].genreProf;
+						String temp = (String) genreProfList.getItemAtPosition(0);
+						if (temp.equalsIgnoreCase(genreProf))
+							genreProfList.setSelection(0);
+						else
+							genreProfList.setSelection(1);
+	
+					}
 				}
 
 			}
+			
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
 
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
-
-				// got called System.out.println("classList=====>onItemClick");
-				classSelected = (String) arg0.getItemAtPosition(arg2)
-						.toString();
-				System.out.println("class selected = " + classSelected);
+				String item = arg0.getItemAtPosition(arg2).toString();
+				classSelected = item;
 				updateUIFields();
+
 			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			
 		});
 
 		// String.valueOf(spinner1.getSelectedItem()) to get the values
@@ -240,11 +256,37 @@ public class Classe_Activity extends Activity implements OnClickListener {
 	private String[] getListNomClasse() {
 		int instArrayLen = classesFromDB.length;
 		String[] instArray = new String[instArrayLen];
+		instArray[0]= ""; // empty string 
+
 		for (int i = 0; i < instArrayLen; i++) {
 			instArray[i] = classesFromDB[i].nomClasse;
 		}
 		return instArray;
 
+	}
+	
+	private Classe[] copyClassFromDB(){
+		int newLen = classesFromDB.length + 1;
+		Classe[] newClasseArray = new Classe[newLen];
+		newClasseArray[0] = new Classe();
+		newClasseArray[0].institutionId = instId;
+		newClasseArray[0].nomClasse = "";
+		newClasseArray[0].nombreEleve = 0;
+		newClasseArray[0].photoClasse = null;
+		newClasseArray[0].nomProfesseur = "";
+		newClasseArray[0].emailProf = "";
+		newClasseArray[0].phoneProf = "" ;
+		newClasseArray[0].cinProf = "";
+		newClasseArray[0].genreProf = "";
+		newClasseArray[0].photoProfesseur = null;
+		int idx=1;
+		for (int i=0; i<classesFromDB.length;i++ ){
+			newClasseArray[idx]= classesFromDB[i];
+			idx++;
+		}
+		
+		return newClasseArray;
+		
 	}
 
 	//
@@ -280,10 +322,8 @@ public class Classe_Activity extends Activity implements OnClickListener {
 
 	private Photo createPhotoObject(byte[] byteArray) {
 		Photo aPhoto = new Photo();
-		aPhoto.latitude = String.valueOf(photoLongitude);
-		;
-		aPhoto.longitude = String.valueOf(photoLongitude);
-		;
+		aPhoto.latitude = String.valueOf(PsugoMainActivity.schoolLatitude);
+		aPhoto.longitude = String.valueOf(PsugoMainActivity.schoolLongitude);
 		aPhoto.typePhoto = "";
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
 		Date date = new Date();
@@ -300,20 +340,39 @@ public class Classe_Activity extends Activity implements OnClickListener {
 		if (resultCode == RESULT_OK) {
 			// System.out.println("inside if resultCode == RESULT_OK");
 			if (requestCode == TAKE_PHOTO_CLASSE_CODE) {
+				/*
 				Bitmap bmp = (Bitmap) data.getExtras().get("data");
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				byte[] byteArray = stream.toByteArray();
 				photoClasse = createPhotoObject(byteArray);
+				*/
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+				Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
+				
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+				byte[] byteArray = stream.toByteArray();
+				photoClasse = createPhotoObject(byteArray); // 
 
 			}
 			if (requestCode == TAKE_PHOTO_PROF_CODE) {
+				/*
 				Bitmap bmp2 = (Bitmap) data.getExtras().get("data");
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				bmp2.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				byte[] byteArray2 = stream.toByteArray();
 				photoProf = createPhotoObject(byteArray2);
-
+				*/
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+				Bitmap bmp2 = BitmapFactory.decodeFile(photoPath, options);			
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bmp2.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+				byte[] byteArray2 = stream.toByteArray();
+				photoProf = createPhotoObject(byteArray2); // 
+				
 			}
 		}
 		// System.out.println("done onActivityResult - PsugoCameraHelper");
@@ -375,7 +434,10 @@ public class Classe_Activity extends Activity implements OnClickListener {
 		// Toast.LENGTH_LONG).show();
 
 	}
-
+	@Override
+	public void onBackPressed() {
+		// disable back key
+	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
@@ -385,18 +447,18 @@ public class Classe_Activity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.actionFinishClasse:
 			this.saveScreen();
-			text = "'Done' clicked!";
+			//text = "'Done' clicked!";
 			// save Daa
-			showMessage(text);
+			//showMessage(text);
 			setResult(RESULT_OK);
 			finish();
 			break;
 		case R.id.actionAddClasse:
-			text = "Activating the same intent to add another Classe";
+			//text = "Activating the same intent to add another Classe";
 			// takePhoto();
 			// save the current class
 			this.saveScreen();
-			showMessage(text);
+			//showMessage(text);
 			nomClasse.setText("");
 			nomProfClasse.setText("");
 			nbrEleve.setText("");
@@ -410,18 +472,49 @@ public class Classe_Activity extends Activity implements OnClickListener {
 			b.putInt("instId", instId);
 			i.putExtras(b);
 			startActivity(i);
+			setResult(RESULT_OK); 
 			finish();
 			break;
 		case R.id.photoClasse:
 
 			// onLocationChanged(location);
 			intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, TAKE_PHOTO_CLASSE_CODE);
+			try {
+				final File path = new File(
+						Environment.getExternalStorageDirectory(),
+						this.getPackageName());
+				if (!path.exists()) {
+					path.mkdir();
+				}
+				File image = File.createTempFile("phototmp", "jpg", path);
+				photoPath = image.getAbsolutePath();
+				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
+				startActivityForResult(intent, TAKE_PHOTO_CLASSE_CODE);
+				image.delete();
+			} catch (IOException e) {
+				e.printStackTrace();
+
+			}
 			break;
 
 		case R.id.actionProfPics:
 			intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, TAKE_PHOTO_PROF_CODE);
+	    	try {
+				 final File path = new File( Environment.getExternalStorageDirectory(), this.getPackageName() );
+		    	  if(!path.exists()){
+		    	    path.mkdir();
+		    	  }
+				
+				File image = File.createTempFile("phototmp", "jpg", path);	   
+				photoPath = image.getAbsolutePath();
+		    	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image)); 
+		    	startActivityForResult(intent, TAKE_PHOTO_PROF_CODE);
+		    	image.delete();
+	    	}
+	    	catch (IOException e) {
+	    		e.printStackTrace();
+	    		
+	    	}
 			break;
 
 		case R.id.previewClasses:

@@ -42,6 +42,7 @@
     <string name="categorie_prompt">Selectionner le Type de photo</string>
     <string name="emplacement_prompt">Emplacement</string>
     <string name="type_directeur_prompt">Type Directeur</string>
+     <string name="dirExistants">Directeurs Existants</string>
     <string name="genre_prompt">Genre</string>
     <string name="num_photo">numero photo</string>
     <string name="classeTitle">Classe</string>
@@ -59,6 +60,7 @@
     <string name="infoBancaire">Information Bancaire</string>
     <string name="MsgXferSuccess">Le Transfert a ete complete avec succes</string>
     <string name="MsgXferFail">Transfert non complete veuillez re-essayer plus tard</string>
+    <string name="MsgXferRunning">Transfert en cours !!!</string>
     <string name="MsgNoNetworkForFn">Fonction Non Disponible actuellement Pas de Services Reseaux</string>
     <string name="MsgNoNetworkLocalWrk">Reseau Non Disponible, Vous etes en mode Locale</string>
     <string name="MsgNoInstSelected">Veuillez Selectionner une Institution SVP!!!</string>

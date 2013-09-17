@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -64,6 +65,10 @@ public class Liste_Photo_Inst extends Activity {
         addData(myPhotoList);
     }
  
+	@Override
+	public void onBackPressed() {
+		// disable back key
+	}
     private Institution getInstitution(int instIdTofind) {
 		// TODO Auto-generated method stub
     	Institution theFoundInst= null;
@@ -211,33 +216,37 @@ public class Liste_Photo_Inst extends Activity {
                     LayoutParams.FILL_PARENT,
                     LayoutParams.WRAP_CONTENT));
         }
-        
-    	Button valueB = new Button(this);
-    	valueB.setText("Retour");
-    	valueB.setId(5);
-    	//LayoutParams lpView = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-    	//lpView.gravity = Gravity.BOTTOM;
-    	valueB.setPadding(0, 0, 0, 100);
-    	//valueB.setGravity(Gravity.BOTTOM);
-    	valueB.setWidth(mButtonWidth);
-    	valueB.setHeight(mButtonHeight);
-    	valueB.setTextSize(18);
 
-    	
-    	valueB.setOnClickListener( new OnClickListener() {
-    		
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				setResult(RESULT_OK);
-				finish();
-				
-			}
-    	});
-    	tl.addView(valueB);
     	//tl.addView(valueB, new TableLayout.LayoutParams(
     	//		mButtonWidth,
     	//		mButtonHeight));
-    	
+        // Test Image Button
+    	tr = new TableRow(this);
+        tr.setLayoutParams(new LayoutParams(
+                LayoutParams.WRAP_CONTENT));
+        TextView blankLine = new TextView(this);
+        blankLine.setText(" ");   
+        tr.addView(blankLine); // Adding textView to tablerow.
+        tl.addView(tr, new TableLayout.LayoutParams(
+                LayoutParams.FILL_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        tr = new TableRow(this);
+        tr.setLayoutParams(new LayoutParams(
+                LayoutParams.WRAP_CONTENT));
+        ImageButton btn = new ImageButton(this);
+        btn.setImageResource(R.drawable.arrow_right);
+        btn.setId(16);
+        tr.addView(btn);
+        tl.addView(tr, new TableLayout.LayoutParams(
+                LayoutParams.FILL_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        btn.setOnClickListener(new OnClickListener() {
+        	@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+        		//System.out.println("Yeah Image Button ");
+				finish();
+			}
+        });
     }
 }

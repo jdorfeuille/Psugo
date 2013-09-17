@@ -35,8 +35,8 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/phoneDir"
             android:ems="10"
-            android:hint="@string/cin" 
-             android:inputType="text"/>
+            android:hint="@string/cin"
+            android:inputType="number" />
 
         <EditText
             android:id="@+id/phoneDir"
@@ -140,26 +140,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_below="@+id/dirList"
+            android:layout_below="@+id/textView1"
+            android:layout_marginTop="45dp"
             android:ems="10"
             android:hint="@string/nomPersonne"
             android:inputType="textPersonName"
             android:textSize="@dimen/activity_horizontal_margin" >
 
-            
         </EditText>
 
-        <AutoCompleteTextView
+        <Spinner
             android:id="@+id/dirList"
             android:layout_width="match_parent"
             android:layout_height="46dp"
+            android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView1"
-            android:layout_toRightOf="@+id/textView2"
-            android:ems="10"
-            android:hint="Directeurs Existants">
-            
-           	 <requestFocus />
-        </AutoCompleteTextView> 
+            android:focusable="true"
+            android:focusableInTouchMode="true" />
 
     </RelativeLayout>
 

@@ -127,12 +127,13 @@ public final class R {
         public static final int psugo_main=0x7f080000;
     }
     public static final class string {
-        public static final int MsgNoInstSelected=0x7f05003b;
-        public static final int MsgNoNetworkForFn=0x7f050039;
-        public static final int MsgNoNetworkLocalWrk=0x7f05003a;
-        public static final int MsgXferFail=0x7f050038;
-        public static final int MsgXferSuccess=0x7f050037;
-        public static final int Ok=0x7f05003c;
+        public static final int MsgNoInstSelected=0x7f05003d;
+        public static final int MsgNoNetworkForFn=0x7f05003b;
+        public static final int MsgNoNetworkLocalWrk=0x7f05003c;
+        public static final int MsgXferFail=0x7f050039;
+        public static final int MsgXferRunning=0x7f05003a;
+        public static final int MsgXferSuccess=0x7f050038;
+        public static final int Ok=0x7f05003e;
         public static final int actionAddClasses=0x7f050013;
         public static final int actionAddDirecteurs=0x7f050012;
         public static final int actionAddProf=0x7f050014;
@@ -149,11 +150,12 @@ public final class R {
         public static final int camera_Title=0x7f050003;
         public static final int categorie_prompt=0x7f050026;
         public static final int cin=0x7f05000e;
-        public static final int classList=0x7f05002e;
-        public static final int classeTitle=0x7f05002b;
+        public static final int classList=0x7f05002f;
+        public static final int classeTitle=0x7f05002c;
         public static final int commune=0x7f050008;
         public static final int departement=0x7f050009;
         public static final int desc=0x7f050024;
+        public static final int dirExistants=0x7f050029;
         public static final int directTitle=0x7f050016;
         public static final int ecoleTrouvee=0x7f05000b;
         public static final int email=0x7f05000d;
@@ -161,30 +163,30 @@ public final class R {
         public static final int genre=0x7f05001d;
         public static final int genreFemme=0x7f05001c;
         public static final int genreHomme=0x7f05001b;
-        public static final int genre_prompt=0x7f050029;
+        public static final int genre_prompt=0x7f05002a;
         public static final int gpsCoordEcole=0x7f050015;
         public static final int hello_world=0x7f050002;
-        public static final int imagePreview=0x7f050035;
-        public static final int infoBancaire=0x7f050036;
+        public static final int imagePreview=0x7f050036;
+        public static final int infoBancaire=0x7f050037;
         public static final int infosPsugo=0x7f050025;
         public static final int nbrClassRoomWithPsugo=0x7f050021;
-        public static final int nbrEleve=0x7f050030;
+        public static final int nbrEleve=0x7f050031;
         public static final int nbrElevesWithPsugo=0x7f050023;
         public static final int nbrEnseignantWithPsugo=0x7f050022;
         public static final int nbrNivScolWithPsugo=0x7f050020;
-        public static final int nomClasse=0x7f05002d;
+        public static final int nomClasse=0x7f05002e;
         public static final int nomEcole=0x7f050004;
         public static final int nomPersonne=0x7f050017;
-        public static final int nomProfClasse=0x7f05002f;
-        public static final int num_photo=0x7f05002a;
+        public static final int nomProfClasse=0x7f050030;
+        public static final int num_photo=0x7f05002b;
         public static final int phone=0x7f05000c;
         /**   photo Classe et Photo Prof ???
          */
-        public static final int photoClasse=0x7f050031;
-        public static final int photoDir=0x7f050034;
-        public static final int photoInst=0x7f050032;
-        public static final int photoProf=0x7f050033;
-        public static final int profTitle=0x7f05002c;
+        public static final int photoClasse=0x7f050032;
+        public static final int photoDir=0x7f050035;
+        public static final int photoInst=0x7f050033;
+        public static final int photoProf=0x7f050034;
+        public static final int profTitle=0x7f05002d;
         public static final int sectCommunale=0x7f050007;
         public static final int typeAdministratif=0x7f050019;
         public static final int typeDirecteur=0x7f050018;

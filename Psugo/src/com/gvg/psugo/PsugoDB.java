@@ -84,6 +84,8 @@ public class PsugoDB {
 		db.execSQL("DELETE FROM " + AndroidOpenDbHelper.TABLE_NAME_INSTITUTION
 				+ " WHERE " + AndroidOpenDbHelper.COLUMN_NAME_INST_ID + " = "
 				+ id);
+		
+		
 	}
 
 	// delete (if exist) and insert institution_photo

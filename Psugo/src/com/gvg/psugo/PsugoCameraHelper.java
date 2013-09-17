@@ -14,6 +14,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -49,9 +50,10 @@ LocationListener  {
 	private static final String TYPE_PHOTO_4 = "4";
 	private static final String TYPE_PHOTO_5 = "5";
 	
-	double photoLongitude, photoLatitude;
+//	double photoLongitude, photoLatitude;
 	String provider;
 	String fileStartName;
+	String photoPath;
 	int idPhoto;
 	int instId;
 	
@@ -78,8 +80,6 @@ LocationListener  {
 		if (extras != null) {
 			idPhoto = extras.getInt("idPhoto");
 			instId = extras.getInt("instId");
-			photoLongitude = extras.getDouble("longitude");
-			photoLatitude = extras.getDouble("latitude");
 			idPhoto = idPhoto + 1; // incrementing cnt call to self if need be
 			System.out.println("instId from PsugoCameraHelper= " + instId);
 		}
@@ -168,8 +168,8 @@ LocationListener  {
 	
 	private Photo createPhotoObject(byte[] byteArray){
 		Photo aPhoto = new Photo();
-		aPhoto.latitude = String.valueOf(photoLatitude);
-		aPhoto.longitude = String.valueOf(photoLongitude);
+		aPhoto.latitude = String.valueOf(PsugoMainActivity.schoolLatitude);
+		aPhoto.longitude = String.valueOf(PsugoMainActivity.schoolLongitude);
 		if (emplacementSelected.equalsIgnoreCase("Cours")){
 			aPhoto.typePhoto = TYPE_PHOTO_C;
 		}
@@ -205,6 +205,7 @@ LocationListener  {
 		System.out.println("onActivityResult - PsugoCameraHelper");
 		if (resultCode == RESULT_OK) {
 			//System.out.println("inside if resultCode == RESULT_OK");
+			/*
 			if (requestCode == TAKE_PHOTO_CODE) {
 				Bitmap bmp = (Bitmap) data.getExtras().get("data"); 
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -219,6 +220,22 @@ LocationListener  {
 				psudb.close();
 				// mImageView.setImageBitmap(mImageBitmap);
 			}
+			*/
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+			Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
+			
+			ByteArrayOutputStream stream = new ByteArrayOutputStream();
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+			byte[] byteArray = stream.toByteArray();
+			myPhoto = createPhotoObject(byteArray); // 
+			psudb = new PsugoDB(getBaseContext());
+			psudb.open();
+			psudb.insertInstitutionPhoto(instId, myPhoto.photo,
+					myPhoto.longitude, myPhoto.latitude, myPhoto.datePhoto,
+					myPhoto.typePhoto);
+			psudb.close();
+			
 		}
 		//System.out.println("done onActivityResult - PsugoCameraHelper");
 
@@ -247,32 +264,41 @@ LocationListener  {
 		// TODO Auto-generated method stub
 		
 	}
+	@Override
+	public void onBackPressed() {
+		// disable back key
+	}
 
-	//here
+
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		// takePhoto();
+
 		switch (v.getId()) {
 		case R.id.actionTakePics:
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			//intent.putExtra(MediaStore.EXTRA_OUTPUT,
-			//		Uri.fromFile(getPicFile(this)));
-			startActivityForResult(intent, TAKE_PHOTO_CODE);
-			//System.out.println("done takePhoto()");
-			//setResult(RESULT_OK);
-			// finish();
+			try {
+				 final File path = new File( Environment.getExternalStorageDirectory(), this.getPackageName() );
+		    	  if(!path.exists()){
+		    	    path.mkdir();
+		    	  }
+				
+				File image = File.createTempFile("phototmp", "jpg", path);	   
+				photoPath = image.getAbsolutePath();
+				intent.putExtra(MediaStore.EXTRA_OUTPUT,
+						Uri.fromFile(image));
+				startActivityForResult(intent, TAKE_PHOTO_CODE);
+				image.delete();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
+
 			break;
 		case R.id.actionAddPics:
 
-			// takePhoto();
-			// here we need to clear fields (reset form)
-			/*Intent i = new Intent(this, PsugoCameraHelper.class);
-			Bundle b = new Bundle();
-			b.putInt("idPhoto", idPhoto);
-			i.putExtras(b);
-			startActivity(i); 
-			finish();*/
+			//Preview pics wrong button name 
 			Intent i = new Intent(this, Liste_Photo_Inst.class);
 			Bundle b = new Bundle();
 			b.putInt("instId", instId);

@@ -15,12 +15,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.provider.MediaStore.Images.Media;
@@ -59,19 +61,20 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 	EditText phoneDirecteur;
 	EditText cinDirecteur;
 	EditText emailDirecteur;
-	AutoCompleteTextView dirList;
+	Spinner dirList;
 
 	//
 	int idDir;
 	int instId;
 	int ctlLocation = 0;
-	double photoLatitude;
-	double photoLongitude;
+//	double photoLatitude;
+//	double photoLongitude;
 	String provider;
 	String typeDirSelected, genreDirSelected, dirSelected;
 	Photo photoDir;
 	Directeur[] directeursFromDB;
 	String[] listNomDirect;
+	String photoPath;
 
 	//
 	CharSequence text;
@@ -87,8 +90,8 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 		if (extras != null) {
 			idDir = extras.getInt("idDir");
 			instId = extras.getInt("instId");
-			photoLongitude = extras.getDouble("longitude");
-			photoLatitude = extras.getDouble("latitude");
+//			photoLongitude = extras.getDouble("longitude");
+//			photoLatitude = extras.getDouble("latitude");
 			idDir = idDir + 1; // incrementing cnt call to self if need be
 		}
 		directeursFromDB = this.getDirecteursFromDB(instId);
@@ -96,24 +99,23 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 
 		nomDirecteur = (EditText) findViewById(R.id.nomDir);
 		//
-		dirList = (AutoCompleteTextView) findViewById(R.id.dirList);
+		dirList = (Spinner) findViewById(R.id.dirList);
 
 		// directList = (AutoCompleteTextView)findViewById(R.id.directList);
 		ArrayAdapter<String> adapterDirect = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, listNomDirect);
-		adapterDirect
-				.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+		//adapterDirect.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 		// android.R.layout.simple_dropdown_item_1line
 		dirList.setAdapter(adapterDirect);
-		dirList.setAdapter(adapterDirect);
+		/*
 		dirList.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-				dirList.showDropDown();
+				//dirList.showDropDown();
 			}
 		});
-
-		dirList.setOnItemClickListener(new OnItemClickListener() {
+		*/
+		dirList.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			private int getDirInfos(String sLookup, String[] arrayToLook) {
 				int idx = -1;
@@ -129,45 +131,64 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 
 			public void updateUIFields() {
 
-				int idx = getDirInfos(dirSelected, listNomDirect);
-				if (idx > -1) {
-					nomDirecteur.setText(directeursFromDB[idx].nom);
-					nomDirecteur.setEnabled(false); // disable so we don't
-													// update this field
-					emailDirecteur.setText(String
-							.valueOf(directeursFromDB[idx].email));
-					photoDir = directeursFromDB[idx].photo;
-					cinDirecteur.setText(directeursFromDB[idx].cin);
-					phoneDirecteur.setText(directeursFromDB[idx].telephone);
-
-					genreDirSelected = directeursFromDB[idx].genre;
-					String temp = (String) genreDirecteurList
-							.getItemAtPosition(0);
-					if (temp.equalsIgnoreCase(genreDirSelected))
-						genreDirecteurList.setSelection(0);
-					else
-						genreDirecteurList.setSelection(1);
-
-					typeDirSelected = directeursFromDB[idx].typeDirection;
-					temp = (String) typeDirecteurList.getItemAtPosition(0);
-					if (temp.equalsIgnoreCase(typeDirSelected))
-						typeDirecteurList.setSelection(0);
-					else
-						typeDirecteurList.setSelection(1);
-
+				if (dirSelected.isEmpty()) {
+					nomDirecteur.setText("");
+					nomDirecteur.setEnabled(true);
+					emailDirecteur.setText("");
+					photoDir = null;
+					cinDirecteur.setText("");
+					phoneDirecteur.setText("");
+					genreDirSelected = "";
+					typeDirSelected = "";	
 				}
-
+				else {
+					int idx = getDirInfos(dirSelected, listNomDirect);
+					
+					if (idx > -1) {
+						nomDirecteur.setText(directeursFromDB[idx].nom);
+						nomDirecteur.setEnabled(false); // disable so we don't
+														// update this field
+						emailDirecteur.setText(String
+								.valueOf(directeursFromDB[idx].email));
+						photoDir = directeursFromDB[idx].photo;
+						cinDirecteur.setText(directeursFromDB[idx].cin);
+						phoneDirecteur.setText(directeursFromDB[idx].telephone);
+	
+						genreDirSelected = directeursFromDB[idx].genre;
+						String temp = (String) genreDirecteurList
+								.getItemAtPosition(0);
+						
+						if (temp.equalsIgnoreCase(genreDirSelected))
+							genreDirecteurList.setSelection(0);
+						else
+							genreDirecteurList.setSelection(1);
+	
+						typeDirSelected = directeursFromDB[idx].typeDirection;
+						temp = (String) typeDirecteurList.getItemAtPosition(0);
+						if (temp.equalsIgnoreCase(typeDirSelected))
+							typeDirecteurList.setSelection(0);
+						else
+							typeDirecteurList.setSelection(1);
+	
+					}
+				}
 			}
 
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				// TODO Auto-generated method stub
+			public void onItemSelected(AdapterView<?> arg0, View arg1,
+					int arg2, long arg3) {
 
-				// got called System.out.println("directList=====>onItemClick");
-				dirSelected = (String) arg0.getItemAtPosition(arg2).toString();
-				System.out.println("class selected = " + dirSelected);
+				String item = arg0.getItemAtPosition(arg2).toString();
+				dirSelected = item;
 				updateUIFields();
+
 			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
 		});
 
 		//
@@ -195,6 +216,8 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 					@Override
 					public void onNothingSelected(AdapterView<?> arg0) {
 						// TODO Auto-generated method stub
+						String[] tmp = getResources().getStringArray(R.array.type_directeur_array);
+						typeDirSelected = tmp[0];
 
 					}
 
@@ -216,7 +239,8 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 					@Override
 					public void onNothingSelected(AdapterView<?> arg0) {
 						// TODO Auto-generated method stub
-
+						String[] tmp = getResources().getStringArray(R.array.genre_humain_array);
+						genreDirSelected = tmp[0];
 					}
 
 				});
@@ -258,8 +282,9 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 			nDir++;
 		if (dirPed != null)
 			nDir++;
-		Directeur[] dirList = new Directeur[nDir];
-		int idx = 0;
+		Directeur[] dirList = new Directeur[nDir+1];
+		dirList[0] = new Directeur(instId, "","","","","","", null); //dummy to allow no selection if needed
+		int idx = 1;
 		if (dirAdm != null) {
 			dirList[idx] = dirAdm;
 			idx++;
@@ -280,8 +305,8 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 
 	private Photo createPhotoObject(byte[] byteArray) {
 		Photo aPhoto = new Photo();
-		aPhoto.latitude = String.valueOf(photoLatitude);
-		aPhoto.longitude = String.valueOf(photoLongitude);
+		aPhoto.latitude = String.valueOf(PsugoMainActivity.schoolLatitude);
+		aPhoto.longitude = String.valueOf(PsugoMainActivity.schoolLongitude);
 		aPhoto.typePhoto = "";
 		DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
 		Date date = new Date();
@@ -330,24 +355,43 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// Bitmap datifoto = null;
-		System.out.println("onActivityResult - PsugoCameraHelper");
+		//System.out.println("onActivityResult - PsugoCameraHelper");
 		if (resultCode == RESULT_OK) {
-			System.out.println("inside if resultCode == RESULT_OK");
+			//System.out.println("inside if resultCode == RESULT_OK");
 			if (requestCode == TAKE_PHOTO_DIRECT_CODE) {
+				/*
 				Bitmap bmp = (Bitmap) data.getExtras().get("data");
 				ByteArrayOutputStream stream = new ByteArrayOutputStream();
 				bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
 				byte[] byteArray = stream.toByteArray();
 				Photo myPhoto = createPhotoObject(byteArray);
 				photoDir = myPhoto;
+				
+				*/
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+				Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
+				
+				ByteArrayOutputStream stream = new ByteArrayOutputStream();
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
+				byte[] byteArray = stream.toByteArray();
+				photoDir = createPhotoObject(byteArray); // 
+				if (genreDirSelected.isEmpty()){
+					String[] tmp = getResources().getStringArray(R.array.genre_humain_array);
+					genreDirSelected = tmp[0];
+				}
+				if (typeDirSelected.isEmpty()) {
+					String[] tmp = getResources().getStringArray(R.array.type_directeur_array);
+					typeDirSelected = tmp[0];
+				}
+
 				PsugoDB psudb = new PsugoDB(getBaseContext());
 				psudb.open();
 				psudb.insertDirecteur(instId,
 						nomDirecteur.getText().toString(), genreDirSelected,
 						typeDirSelected, emailDirecteur.getText().toString(),
-						phoneDirecteur.getText().toString(), cinDirecteur
-								.getText().toString(), myPhoto.photo,
-						myPhoto.longitude, myPhoto.latitude, myPhoto.datePhoto);
+						phoneDirecteur.getText().toString(), cinDirecteur.getText().toString(), 
+						photoDir.photo, photoDir.longitude, photoDir.latitude, photoDir.datePhoto);
 
 				psudb.close();
 				// mImageView.setImageBitmap(mImageBitmap);
@@ -358,6 +402,10 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 	}
 
 	@Override
+	public void onBackPressed() {
+		// disable back key
+	}
+	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		// dummy method for now to test the buttons and display all values
@@ -365,15 +413,15 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 		// CharSequence text;
 		switch (v.getId()) {
 		case R.id.actionFinishDirect:
-			text = "'Done' clicked!";
-			showMessage(text);
+			//text = "'Done' clicked!";
+			//showMessage(text);
 			setResult(RESULT_OK);
 			finish();
 			break;
 		case R.id.actionAddDir:
-			text = "Activating the same intent to add another director";
+			//text = "Activating the same intent to add another director";
 			// takePhoto();
-			showMessage(text);
+			//showMessage(text);
 			nomDirecteur.setText("");
 			Intent i = new Intent(this, Directeur_Activity.class);
 			Bundle b = new Bundle();
@@ -381,13 +429,28 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 			b.putInt("instId", instId);
 			i.putExtras(b);
 			startActivity(i);
+			setResult(RESULT_OK); 
 			finish();
 			break;
 		case R.id.actionDirectPics:
 
 			// onLocationChanged(location);
 			Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			startActivityForResult(intent, TAKE_PHOTO_DIRECT_CODE);
+			try {
+				 final File path = new File( Environment.getExternalStorageDirectory(), this.getPackageName() );
+		    	  if(!path.exists()){
+		    	    path.mkdir();
+		    	  }
+				File image = File.createTempFile("phototmp", "jpg", path);	   
+				photoPath = image.getAbsolutePath();
+		    	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image)); 
+		    	startActivityForResult(intent, TAKE_PHOTO_DIRECT_CODE);
+		    	image.delete();
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+			}
+			
 			break;
 
 		case R.id.actionPreviewDir:

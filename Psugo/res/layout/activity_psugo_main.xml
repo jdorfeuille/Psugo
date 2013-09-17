@@ -183,7 +183,8 @@
             android:layout_below="@+id/phoneEcole"
             android:layout_marginTop="13dp"
             android:ems="10"
-            android:hint="@string/infoBancaire" />
+            android:hint="@string/infoBancaire"
+            android:inputType="number" />
 
     </RelativeLayout>
 

@@ -94,7 +94,7 @@
             android:layout_below="@+id/genreProfList"
             android:ems="10"
             android:hint="@string/cin"
-            android:inputType="text" />
+            android:inputType="number" />
 
         <TextView
             android:id="@+id/textView2"
@@ -142,7 +142,7 @@
             android:layout_alignTop="@+id/actionFinishClasse"
             android:drawableLeft="@drawable/preview_file" />
 
-        <AutoCompleteTextView
+        <Spinner
             android:id="@+id/classList"
             android:layout_width="match_parent"
             android:layout_height="46dp"

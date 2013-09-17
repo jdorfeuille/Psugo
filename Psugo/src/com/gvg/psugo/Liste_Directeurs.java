@@ -66,6 +66,10 @@ public class Liste_Directeurs extends Activity {
         addData();
     }
  
+	@Override
+	public void onBackPressed() {
+		// disable back key
+	}
    
 
 	/** This function add the headers to the table**/
