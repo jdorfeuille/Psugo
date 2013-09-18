@@ -51,6 +51,7 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 	Button actionAddDirect;
 	Button actionPreviewDir;
 	Button actionFinishDirect;
+	File image = null;
 
 	// Spinners
 
@@ -302,7 +303,23 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
 	}
-
+	
+	/*
+	private File getPicFile(Context context) throws IOException{
+  	  //it will return /sdcard/image.tmp
+  	  final File path = new File( Environment.getExternalStorageDirectory(), context.getPackageName() );
+  	  if(!path.exists()){
+  	    path.mkdir();
+  	  }
+  	  String fileStartName = "Inst_" + String.valueOf(typeDirecteurList.getSelectedItem());
+  	  System.out.println("fileStartName=" + fileStartName);
+  	  String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+	  String filename = fileStartName + timeStamp ;
+	  return File.createTempFile(filename, "jpg", path);
+  	  //return new File(path, filename);
+  	}
+	 */
+	
 	private Photo createPhotoObject(byte[] byteArray) {
 		Photo aPhoto = new Photo();
 		aPhoto.latitude = String.valueOf(PsugoMainActivity.schoolLatitude);
@@ -324,6 +341,8 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 		String tEmailDir = "";
 		String tPhoneDir = "";
 		String tCinDir = "";
+		PsugoDB psudb = new PsugoDB(getBaseContext());
+		psudb.open();
 		if (!nomDirecteur.getText().toString().isEmpty()) {
 			tNomDir = nomDirecteur.getText().toString();
 		}
@@ -336,18 +355,16 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 		if (!cinDirecteur.getText().toString().isEmpty()) {
 			tCinDir = cinDirecteur.getText().toString();
 		}
-		if (photoDir == null) {
-			photoDir = new Photo("", "", "", "", "");
+		if (photoDir != null) {
+			
+			psudb.insertDirecteur(instId, tNomDir, genreDirSelected,
+					typeDirSelected, tEmailDir, tPhoneDir, tCinDir, photoDir.photo,
+					photoDir.longitude, photoDir.latitude, photoDir.datePhoto);
+	
+			
 		}
 
-		PsugoDB psudb = new PsugoDB(getBaseContext());
-		psudb.open();
-		psudb.insertDirecteur(instId, tNomDir, genreDirSelected,
-				typeDirSelected, tEmailDir, tPhoneDir, tCinDir, photoDir.photo,
-				photoDir.longitude, photoDir.latitude, photoDir.datePhoto);
-
 		psudb.close();
-
 		// Toast.makeText(Psugo_Login_Activity.this, "Invalid Login",
 		// Toast.LENGTH_LONG).show();
 
@@ -376,6 +393,7 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
 				byte[] byteArray = stream.toByteArray();
 				photoDir = createPhotoObject(byteArray); // 
+				image.delete();
 				if (genreDirSelected.isEmpty()){
 					String[] tmp = getResources().getStringArray(R.array.genre_humain_array);
 					genreDirSelected = tmp[0];
@@ -441,11 +459,12 @@ public class Directeur_Activity extends Activity implements OnClickListener {
 		    	  if(!path.exists()){
 		    	    path.mkdir();
 		    	  }
-				File image = File.createTempFile("phototmp", "jpg", path);	   
+				image = File.createTempFile("phototmp", "jpg", path);	   
+				//image = this.getPicFile(this);
 				photoPath = image.getAbsolutePath();
 		    	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image)); 
 		    	startActivityForResult(intent, TAKE_PHOTO_DIRECT_CODE);
-		    	image.delete();
+		    	
 			}
 			catch(IOException e) {
 				e.printStackTrace();

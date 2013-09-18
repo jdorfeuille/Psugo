@@ -20,9 +20,6 @@ import android.widget.TableRow.LayoutParams;
  
 public class Liste_Directeurs extends Activity {
  
-
-	
-
     private static final String TYPE_ADMINISTRATIF ="Administratif";
     private static  final String TYPE_PEDAGOGIQUE = "Pedagogique";
     Directeur dirAdm, dirPed;
@@ -100,6 +97,7 @@ public class Liste_Directeurs extends Activity {
         tr.addView(typeDirectTV); // Adding textView to tablerow.
         
         /** Creating another textview **/
+        /*
         genreDirectTV = new TextView(this);
         genreDirectTV.setText("genre  ");
         genreDirectTV.setTextColor(Color.GRAY);
@@ -107,6 +105,7 @@ public class Liste_Directeurs extends Activity {
         genreDirectTV.setPadding(11, 5, 5, 0);
         genreDirectTV.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(genreDirectTV); // Adding textView to tablerow.
+        */
         
         /** Creating another textview **/
         photoDirectTV = new TextView(this);
@@ -145,6 +144,7 @@ public class Liste_Directeurs extends Activity {
         divider2.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(divider2); // Adding textView to tablerow.
         
+        /*
         TextView divider3 = new TextView(this);
         divider3.setText("--------------");
         divider3.setTextColor(Color.GREEN);
@@ -152,6 +152,7 @@ public class Liste_Directeurs extends Activity {
         divider3.setPadding(11, 0, 0, 0);
         divider3.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
         tr.addView(divider3); // Adding textView to tablerow.
+        */
         
         TextView divider4 = new TextView(this);
         divider4.setText("------------");
@@ -199,6 +200,7 @@ public class Liste_Directeurs extends Activity {
             tr.addView(typeDirectTV);  // Adding textView to tablerow.
  
             /** Creating an  imageview **/
+            /*
 
             genreDirectTV = new TextView(this);
             genreDirectTV.setText(dirList[i].genre);
@@ -207,6 +209,8 @@ public class Liste_Directeurs extends Activity {
             genreDirectTV.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.WRAP_CONTENT));
             genreDirectTV.setPadding(5, 5,0, 5);
             tr.addView(genreDirectTV); // Adding textView to tablerow.
+            
+            */
             
             /** Creating another imageview **/
             // Here we need to check if we have a Prof

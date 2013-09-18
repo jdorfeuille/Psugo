@@ -69,7 +69,7 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast; // only Temporary for creating message
 import android.graphics.Bitmap;
 import android.graphics.Color;
-public class PsugoMainActivity extends Activity implements OnClickListener {
+public class PsugoMainActivity extends Activity implements OnClickListener, PsugoOnTaskCompleted {
 
 	// Composantes d'Interface graphique
 	Button actionSchoolPic;
@@ -133,7 +133,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 	String[] listCommune    = {""};
 	int idxEcoleSelected;
 	int instId = PSUGO_INST_NULL; 
-	Boolean doneDisplay = false;
+	//Boolean doneDisplay = false;
+	PsugoOnTaskCompleted potc;
 	//ArrayList<Photo> photoList = new ArrayList<Photo>();
 	
 	
@@ -253,6 +254,9 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				}
 		        ArrayAdapter<String> adapterCommune = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line, listCommune);
 		        commune.setAdapter(adapterCommune);
+		        // init communeSelected
+		        //	String[] tmp = getResources().getStringArray(R.array.genre_humain_array);
+		        //	communeSelected = tmp[0];
 				//sectRuraleAdapter to update
 				adapterSectComm = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line,  listSectRurale);
 				sectCommunale.setAdapter(adapterSectComm);
@@ -675,7 +679,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 		       .setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		           public void onClick(DialogInterface dialog, int id) {
 		                //do things
-		        	   doneDisplay=true;
+		        	   //doneDisplay=true;
 		           }
 		       });
 		AlertDialog alert = builder.create();
@@ -775,7 +779,6 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 		case R.id.actionDone:
 			//text = "'Done' clicked!";
 			this.saveCurrentData();
-			this.showMessage(Environment.getExternalStorageDirectory().getPath());
 			finish();
 			break;
 		case R.id.actionSchoolPic:
@@ -805,15 +808,12 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 				try {
 					msg = getResources().getString(R.string.MsgXferRunning);
 					this.displayMessage(msg);
-					boolean ctl = false;
 					String resp= "";
-					PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper();
+					potc = this;
+					PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper(potc);
 					AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
-					resp = servCall_send.get();
-					if ( !resp.isEmpty()){
-						msg = getResources().getString(R.string.MsgXferSuccess);
-						this.displayMessage(msg);
-					}
+					//resp = servCall_send.get();
+
 					//System.out.println("response from xfer=" +resp);
 				} catch (Exception e) {
 					//System.out.println("Exception ... JW...failed UPLOAD service call");
@@ -941,6 +941,28 @@ public class PsugoMainActivity extends Activity implements OnClickListener {
 	@Override
 	public void onBackPressed() {
 		// disable back key
+	}
+
+
+
+
+
+
+	@Override
+	public void onTaskCompleted(String reponse) {
+		// TODO Auto-generated method stub
+		//	System.out.println("Main after Transfert reponse=" + reponse);
+			if ( reponse.equalsIgnoreCase("1")) {
+				String	msg = getResources().getString(R.string.MsgXferSuccess);
+				this.displayMessage(msg);
+			}
+			else {
+				String	msg = getResources().getString(R.string.MsgXferFail);
+				this.displayMessage(msg);
+			}
+
+			
+		
 	}
 
 

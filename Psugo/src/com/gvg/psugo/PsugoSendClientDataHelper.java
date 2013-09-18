@@ -21,19 +21,32 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.widget.EditText;
 
-public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, String, String> {
+import org.apache.log4j.Logger;
+
+public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, String, String> 
+										implements PsugoOnTaskCompleted {
 
 	final static String STR_COOKIE= "Set-Cookie";
 	final static String TYPE_DIR_ADMIN = "Administratif";
 	final static String TYPE_DIR_PEDAG = "Pedagogique";
 	private static String PSUGO_SERVEUR = "psugo.primature.ht"; 
 	//private static String PSUGO_SERVEUR = "wally.v3w.net";  
+	private static final String DEBUG_TAG= "PsugoSendClientDataHelper";
+	private final Logger log = Logger.getLogger(PsugoSendClientDataHelper.class);
+
 	
 	String strCookieValue ;  
+	String logMessage;
 	String theUserId;
 	String theUserPwd;
 	Context theBaseContext;
-	List<Integer> instSentList ;
+	//List<Integer> instSentList ;
+	String finalResponse = "";
+	private PsugoOnTaskCompleted listener;
+	
+    public PsugoSendClientDataHelper(PsugoOnTaskCompleted listener){
+        this.listener=listener;
+    }
 	
     public String LoginRequest() throws Exception {
     	//final String USER_NAME = "agent01";
@@ -142,15 +155,22 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		psudb.open();
 		Institution[] myDbInst = psudb.selectInstitution();
 		int instSize = myDbInst.length;
-		instSentList = new ArrayList<Integer>();
+		//instSentList = new ArrayList<Integer>();
+		logMessage = "envoyerInstitution Nombre Institutions au depart:" + instSize;
+//		Log.i(DEBUG_TAG, logMessage); 
 		for (int i = 0; i < instSize; i++) {
 			//if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0) {
 				//System.out.println("Debug EnvoyerInstitution" + myDbInst[i].photo.size());
 			//}
 			// ne pas transmettre si pas de photos... ou bien si l'utilisateur n'a pas mis a jour
+			logMessage = "Verification de Photos pour Institution :" +myDbInst[i].id;
+	//		Log.i(DEBUG_TAG, logMessage); 
 			if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0 && (!myDbInst[i].photo.isEmpty() )){
 				//debugInstitution("envoyerInstitution", myDbInst[i]);
-				instSentList.add(myDbInst[i].id);
+				//instSentList.add(myDbInst[i].id);
+				logMessage = "Photo Existantes pour institution :" +myDbInst[i].id;
+		//		Log.i(DEBUG_TAG, logMessage); 
+
 				SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
 				envelope.setOutputSoapObject(request);
 				envelope.encodingStyle = SoapEnvelope.ENC;
@@ -174,8 +194,12 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 				//SoapObject result = (SoapObject) envelope.getResponse();
 				ret = Integer.parseInt( envelope.getResponse().toString());
 				if (ret == 1 ) {
+					logMessage = "Procahaine Etape Envoie de Directeurs :" +myDbInst[i].id;
+					//Log.i(DEBUG_TAG, logMessage); 
 						int retCodeDir = this.envoyerDirecteurs(myDbInst[i].id);
 						if (retCodeDir == 1 ) {
+							logMessage = "Procahaine Etape Envoie de Classes :" +myDbInst[i].id;
+							//Log.i(DEBUG_TAG, logMessage); 
 							int retCodeClasse = this.envoyerClasses(myDbInst[i].id);
 							if (retCodeClasse != 1 ) break;
 						}
@@ -237,26 +261,34 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		// SoapObject login_resp = this.LoginRequest();
 		
 	
-		int retCode=0;
+		int retCode=1;
 		//Photo dumPhoto = new Photo();
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
 		envelope.dotNet = false;
 		PsugoDB psudb = new PsugoDB(theBaseContext);
 		psudb.open();
-		Iterator<Integer> elem = instSentList.iterator();
-		while (elem.hasNext())  {
-			theInstId = elem.next();
-			Directeur dirAdmin = psudb.selectDirecteur(theInstId, TYPE_DIR_ADMIN);
-			if (dirAdmin != null ) {
+		Directeur dirAdmin = psudb.selectDirecteur(theInstId, TYPE_DIR_ADMIN);
+		if (dirAdmin != null ) {
+				logMessage = "Envoie Directeur Admin :" ;
+				//Log.i(DEBUG_TAG, logMessage); 
 				retCode = sendDirecteur(dirAdmin);
-			}
-			Directeur dirPedag = psudb.selectDirecteur(theInstId, TYPE_DIR_PEDAG);
-			if (dirPedag != null ) {
-				retCode = sendDirecteur(dirPedag);
-			}
-		
+				if (retCode != 1 ){
+					logMessage = "Envoie Directeur Admin en Echec !!!";
+					//Log.i(DEBUG_TAG, logMessage);
+				}
 		}
+		Directeur dirPedag = psudb.selectDirecteur(theInstId, TYPE_DIR_PEDAG);
+		if (dirPedag != null ) {
+			logMessage = "Envoie Directeur Pedagogique :" ;
+			//Log.i(DEBUG_TAG, logMessage); 
+			retCode = sendDirecteur(dirPedag);
+			if (retCode != 1) {
+				logMessage = "Envoie Directeur Pedagogique en Echec !!!";
+				//Log.i(DEBUG_TAG, logMessage);
+			}
+		}
+
 		psudb.close();
 		return retCode;
 
@@ -275,7 +307,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		//final String SOAP_ACTION_URN = "urn:wally.v3w.net#EnvoyerClasse";
 		final String METHOD_NAME = "EnvoyerClasse";
 		//final String NAME_SPACE_URN = "urn:wally.v3w.net:PsugoSoapServer:server.wsdl";
-		int ret = 0;
+		int ret = 1;
 		// Photo dumPhoto = new Photo();
 		SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
 				SoapEnvelope.VER11);
@@ -284,30 +316,41 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		psudb.open();
 		Classe[] myClasses = psudb.selectClasse(theInstId);
 		int classeSize = myClasses.length;
+		logMessage = "Prochaine Etapes tentative denvoyer Nbre de Classes :"+ classeSize ;
+		//Log.i(DEBUG_TAG, logMessage); 
 		for (int i = 0; i < classeSize; i++) {
-			SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
-			envelope.setOutputSoapObject(request);
-			envelope.encodingStyle = SoapEnvelope.ENC;
-			new MarshalBase64().register(envelope); // serialization
-			HttpTransportSE transport = new HttpTransportSE(URL);
-			List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
-			String aCookiePair = this.strCookieValue + ";";
-			HeaderProperty headerPropertyObj = new HeaderProperty("Cookie",
-					aCookiePair);
-			headerList.add(headerPropertyObj);
-			PropertyInfo pi = new PropertyInfo();
-			pi.setName("myClasse");
-			pi.setValue(myClasses[i]);
-			pi.setType(myClasses[i].getClass());
-			request.addProperty(pi);
-			envelope.addMapping(NAME_SPACE_URN, "Classe",
-					myClasses[i].getClass());
+			logMessage = "Verification pour Envoie :"+ myClasses[i].nomClasse ;
+			//Log.i(DEBUG_TAG, logMessage); 
+			if (!myClasses[i].nomClasse.isEmpty()
+					&& myClasses[i].photoClasse != null) {
+				logMessage = "Cette Classe va etre envoyer :"+ myClasses[i].nomClasse ;
+				//Log.i(DEBUG_TAG, logMessage); 
+				SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
+				envelope.setOutputSoapObject(request);
+				envelope.encodingStyle = SoapEnvelope.ENC;
+				new MarshalBase64().register(envelope); // serialization
+				HttpTransportSE transport = new HttpTransportSE(URL);
+				List<HeaderProperty> headerList = new ArrayList<HeaderProperty>();
+				String aCookiePair = this.strCookieValue + ";";
+				HeaderProperty headerPropertyObj = new HeaderProperty("Cookie",
+						aCookiePair);
+				headerList.add(headerPropertyObj);
+				PropertyInfo pi = new PropertyInfo();
+				pi.setName("myClasse");
+				pi.setValue(myClasses[i]);
+				pi.setType(myClasses[i].getClass());
+				request.addProperty(pi);
+				envelope.addMapping(NAME_SPACE_URN, "Classe",
+						myClasses[i].getClass());
 
-			transport.call(SOAP_ACTION_URN, envelope, headerList);
+				transport.call(SOAP_ACTION_URN, envelope, headerList);
 
-			ret = Integer.parseInt(envelope.getResponse().toString());
-			if (ret != 1) {
-				break;
+				ret = Integer.parseInt(envelope.getResponse().toString());
+				if (ret != 1) {
+					logMessage = "Envoie de Classe en Echec :"+ myClasses[i].nomClasse ;
+					//Log.i(DEBUG_TAG, logMessage); 
+					break;
+				}
 			}
 		}
 		psudb.close();
@@ -338,12 +381,34 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 			}
 
 		} catch (Exception e) {
+			finalResponse = "0";
+			logMessage = "Exception !!!!!" + e.getMessage();
+			//Log.i(DEBUG_TAG, logMessage); 
 			e.printStackTrace();
-		
+			
 
 		}
 		String resp = "" + retCode;
+		finalResponse = resp;
+		//System.out.println("finalReponse = " + finalResponse);
 		return resp;
+	}
+	
+
+
+	@Override
+	protected void onPostExecute(String result) {
+		// TODO Auto-generated method stub
+		super.onPostExecute(result);
+		//System.out.println("result=" + result);
+		//System.out.println("finalResponse from PostExecute" + finalResponse);
+		listener.onTaskCompleted(finalResponse);
+	}
+
+	@Override
+	public void onTaskCompleted(String reponse) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

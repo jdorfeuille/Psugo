@@ -82,6 +82,7 @@ public class Classe_Activity extends Activity implements OnClickListener {
 	String provider;
 	Photo photoProf, photoClasse;
 	String photoPath;
+	File image = null;
 
 	//
 	CharSequence text;
@@ -147,7 +148,9 @@ public class Classe_Activity extends Activity implements OnClickListener {
 			}
 
 		});
-
+		//initialise genreProf just if user doesn't select anything from dropdown
+		String[] tmp = getResources().getStringArray(R.array.genre_humain_array);
+		genreProf = tmp[0];
 		classList = (Spinner) findViewById(R.id.classList);
 		ArrayAdapter<String> adapterClasse = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, listNomClasse);
@@ -305,8 +308,8 @@ public class Classe_Activity extends Activity implements OnClickListener {
 		// alert.dismiss();
 	}
 
-	//
-	private File getPicFile(Context context, String entite) {
+	/*
+	private File getPicFile(Context context, String entite) throws IOException {
 		// it will return /sdcard/image.tmp
 		final File path = new File(Environment.getExternalStorageDirectory(),
 				context.getPackageName());
@@ -316,10 +319,11 @@ public class Classe_Activity extends Activity implements OnClickListener {
 		String fileStartName = entite;
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US)
 				.format(new Date());
-		String filename = fileStartName + timeStamp + ".jpg";
-		return new File(path, filename);
+		String filename = fileStartName + timeStamp ;
+		return  File.createTempFile(filename, "jpg", path);
 	}
 
+  */
 	private Photo createPhotoObject(byte[] byteArray) {
 		Photo aPhoto = new Photo();
 		aPhoto.latitude = String.valueOf(PsugoMainActivity.schoolLatitude);
@@ -355,6 +359,8 @@ public class Classe_Activity extends Activity implements OnClickListener {
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 80, stream);
 				byte[] byteArray = stream.toByteArray();
 				photoClasse = createPhotoObject(byteArray); // 
+				image.delete();
+				
 
 			}
 			if (requestCode == TAKE_PHOTO_PROF_CODE) {
@@ -372,6 +378,7 @@ public class Classe_Activity extends Activity implements OnClickListener {
 				bmp2.compress(Bitmap.CompressFormat.JPEG, 80, stream);
 				byte[] byteArray2 = stream.toByteArray();
 				photoProf = createPhotoObject(byteArray2); // 
+				image.delete();
 				
 			}
 		}
@@ -486,11 +493,12 @@ public class Classe_Activity extends Activity implements OnClickListener {
 				if (!path.exists()) {
 					path.mkdir();
 				}
-				File image = File.createTempFile("phototmp", "jpg", path);
+				image = File.createTempFile("phototmp", "jpg", path);
+				//image = this.getPicFile(this, "Classe");
 				photoPath = image.getAbsolutePath();
 				intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image));
 				startActivityForResult(intent, TAKE_PHOTO_CLASSE_CODE);
-				image.delete();
+				//image.delete();
 			} catch (IOException e) {
 				e.printStackTrace();
 
@@ -505,11 +513,12 @@ public class Classe_Activity extends Activity implements OnClickListener {
 		    	    path.mkdir();
 		    	  }
 				
-				File image = File.createTempFile("phototmp", "jpg", path);	   
+		    	image = File.createTempFile("phototmp", "jpg", path);	 
+				//image = this.getPicFile(this, "Prof");
 				photoPath = image.getAbsolutePath();
 		    	intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(image)); 
 		    	startActivityForResult(intent, TAKE_PHOTO_PROF_CODE);
-		    	image.delete();
+		    	//image.delete();
 	    	}
 	    	catch (IOException e) {
 	    		e.printStackTrace();

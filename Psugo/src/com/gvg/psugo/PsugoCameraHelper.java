@@ -56,6 +56,7 @@ LocationListener  {
 	String photoPath;
 	int idPhoto;
 	int instId;
+	File image=null;
 	
 	//EditText numPhoto;
 	
@@ -132,7 +133,7 @@ LocationListener  {
      *  Start Camera to Take Picture 
      */
 	
-	
+	/*
     private void takePhoto(){
     	
     	  Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -142,17 +143,19 @@ LocationListener  {
     	}
 
 
-
-	private File getPicFile(Context context){
+ */
+	private File getPicFile(Context context) throws IOException{
     	  //it will return /sdcard/image.tmp
     	  final File path = new File( Environment.getExternalStorageDirectory(), context.getPackageName() );
     	  if(!path.exists()){
     	    path.mkdir();
     	  }
     	  fileStartName = "Inst_" + String.valueOf(emplacementList.getSelectedItem());
+    	  System.out.println("fileStartName=" + fileStartName);
     	  String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
-		  String filename = this.fileStartName + timeStamp + ".jpg";
-    	  return new File(path, filename);
+		  String filename = this.fileStartName + timeStamp ;
+		  return File.createTempFile(filename, "jpg", path);
+    	  //return new File(path, filename);
     	}
 
 
@@ -235,6 +238,7 @@ LocationListener  {
 					myPhoto.longitude, myPhoto.latitude, myPhoto.datePhoto,
 					myPhoto.typePhoto);
 			psudb.close();
+			image.delete();
 			
 		}
 		//System.out.println("done onActivityResult - PsugoCameraHelper");
@@ -284,12 +288,13 @@ LocationListener  {
 		    	    path.mkdir();
 		    	  }
 				
-				File image = File.createTempFile("phototmp", "jpg", path);	   
+				image = File.createTempFile("phototmp", "jpg", path);	
+				//image = this.getPicFile(this);
 				photoPath = image.getAbsolutePath();
 				intent.putExtra(MediaStore.EXTRA_OUTPUT,
 						Uri.fromFile(image));
 				startActivityForResult(intent, TAKE_PHOTO_CODE);
-				image.delete();
+				
 			}
 			catch(IOException e){
 				e.printStackTrace();
