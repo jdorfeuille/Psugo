@@ -1,7 +1,11 @@
 package com.gvg.psugo;
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Level;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
+
 import android.os.Environment;
 import de.mindpipe.android.logging.log4j.LogConfigurator;
 public class ConfigureLog4J {
@@ -16,6 +20,8 @@ public class ConfigureLog4J {
 	        logConfigurator.setRootLevel(Level.DEBUG);
 	        // Set log level of a specific logger
 	        logConfigurator.setLevel("org.apache", Level.ERROR);
+	      //
+	        
 	        logConfigurator.configure();
 	    }
 

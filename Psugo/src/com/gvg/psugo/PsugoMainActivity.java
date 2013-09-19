@@ -228,6 +228,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
        				int idx = PsugoMainActivity.this.getIdxString(nomEcoleSelected,
        						listNomImst);
        				if (idx > -1) {
+       					idxEcoleSelected = idx;
        					instId = tempData.instArray[idx].id;
        					adrEcole.setText(tempData.instArray[idx].adresse);
        					adrDetEcole.setText(tempData.instArray[idx].adresseDetail);
@@ -235,13 +236,23 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
        					updateSectCommuneFields(tempData.instArray[idx].commune);
        					deptEcole.setText(tempData.instArray[idx].departement);
        					infoBancaire.setText(tempData.instArray[idx].infoBancaire);
+       					
        					arrondissement
        							.setText(tempData.instArray[idx].arrondissement);
        					String ecoleTrouvee = tempData.instArray[idx].instTrouvee;
-       				
-       				}
+						String temp = (String) ecoleTrouveeList.getItemAtPosition(0);
+						if (temp.equalsIgnoreCase(ecoleTrouvee)) {
+							ecoleTrouveeList.setSelection(0);
+							ecoleTrouveSelected = temp;
+						}
+						else {
+								ecoleTrouveeList.setSelection(1);
+								ecoleTrouveSelected = (String) ecoleTrouveeList.getItemAtPosition(1);
+						}
 
+       				}
        			}
+       				
                	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,long arg3) {	
                        // TODO Auto-generated method stub
                		
@@ -376,7 +387,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
         scrollView1.scrollTo(0,maxScrollPosition);
         
         //Spinner
-        ecoleTrouveeList = (Spinner) findViewById(R.id.ecoleTrouveeList); // check to see if we can set to what was selected before 09/07
+        ecoleTrouveeList = (Spinner) findViewById(R.id.ecoleTrouveeList); 
         ecoleTrouveeList.setOnItemSelectedListener(new OnItemSelectedListener() {
 
     			@Override
@@ -396,16 +407,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
             	
 
         });
-        /*
-        ecoleTrouveeList.setOnItemClickListener( new OnItemClickListener() {
-        	
-        	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {	
-                // TODO Auto-generated method stub
-        		ecoleTrouveSelected = (String)arg0.getItemAtPosition(arg2).toString();
-        		System.out.println("valueSelected = " + nomEcoleSelected);
-        	}
-        });
-        */
+
         
         // Buttons 
         actionSchoolPic = (Button)findViewById(R.id.actionSchoolPic);
@@ -618,10 +620,12 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 			idx = getIdxString(schoolName, instArrayDB);
 			if (idx > -1) { 
 				// Data found Locally so we take update for display
+				tempData.instArray[i].adresse = myDbInst[idx].adresse;
 				tempData.instArray[i].adresseDetail = myDbInst[idx].adresseDetail;
 				tempData.instArray[i].telephone =  myDbInst[idx].telephone;
 				tempData.instArray[i].infoBancaire =   myDbInst[idx].infoBancaire;
-				//**** 
+				tempData.instArray[i].instTrouvee = myDbInst[i].instTrouvee;
+				ecoleTrouveSelected = myDbInst[i].instTrouvee;
 			} else {
 				psudb.insertInstitution(tempInst.id, tempInst.nomInstitution,tempInst.departement,
 						tempInst.arrondissement,tempInst.commune, tempInst.sectionRurale, tempInst.infoBancaire);
@@ -713,7 +717,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
     }
     private void saveCurrentData() {
     	
-    	if ( instId != PSUGO_INST_NULL) {
+
     	
 	    Institution myUpdatedInst = createInstitutionFromUI();
 		 myUpdatedInst.id = instId;
@@ -726,7 +730,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 				 myUpdatedInst.infoBancaire);
 		 
 		 psudb.close();
-    	}
+		 
+
     }
 	@Override
 	public void onClick(View v) {
@@ -871,12 +876,24 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 		if (myInstitution.telephone == null )
 			myInstitution.telephone = "";
 		myInstitution.instTrouvee = ecoleTrouveSelected;
-		if (myInstitution.instTrouvee == null )
-			myInstitution.instTrouvee = "";
+
 		
 		myInstitution.infoBancaire = infoBancaire.getText().toString();
 		// debug printing the object
 		
+				
+		// Refresh TempData
+		int idx = idxEcoleSelected ;
+		tempData.instArray[idx].adresse = myInstitution.adresse;
+		tempData.instArray[idx].adresseDetail = myInstitution.adresseDetail;
+		tempData.instArray[idx].telephone = myInstitution.telephone;
+		tempData.instArray[idx].commune = myInstitution.commune;
+		tempData.instArray[idx].departement =myInstitution.departement;
+		tempData.instArray[idx].infoBancaire =myInstitution.infoBancaire;
+		tempData.instArray[idx].arrondissement = myInstitution.arrondissement;
+		tempData.instArray[idx].instTrouvee = myInstitution.instTrouvee;
+	
+
 		//debugInstitution("createInstitutionFromUI", myInstitution);
 		//
 		return myInstitution;

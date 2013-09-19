@@ -1,5 +1,7 @@
 package com.gvg.psugo;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -17,11 +19,14 @@ import org.kxml2.kdom.Element;
 import org.kobjects.base64.Base64;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.widget.EditText;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
+import org.apache.log4j.RollingFileAppender;
 
 public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, String, String> 
 										implements PsugoOnTaskCompleted {
@@ -32,7 +37,9 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	private static String PSUGO_SERVEUR = "psugo.primature.ht"; 
 	//private static String PSUGO_SERVEUR = "wally.v3w.net";  
 	private static final String DEBUG_TAG= "PsugoSendClientDataHelper";
-	private final Logger log = Logger.getLogger(PsugoSendClientDataHelper.class);
+//	private final Logger log = Logger.getLogger(PsugoSendClientDataHelper.class);
+	private PatternLayout layout = new PatternLayout("%d{ISO8601} [%t] %-5p %c %x - %m%n");
+	
 
 	
 	String strCookieValue ;  
@@ -44,8 +51,33 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	String finalResponse = "";
 	private PsugoOnTaskCompleted listener;
 	
+	static {
+
+	}
     public PsugoSendClientDataHelper(PsugoOnTaskCompleted listener){
         this.listener=listener;
+//        File path ;
+//        boolean res;
+//        String fnPathAndName = "";
+//        String tname = "Psugo.log";
+//        try {
+//	        path = new File( Environment.getExternalStorageDirectory(), "PsugoTmp" );
+//	    	if(!path.exists()){
+//	    	    path.mkdir();
+//	    	 }
+//	    	File fn = new File(path, "Psudo.log");
+//	    	fnPathAndName = path + File.separator + tname;
+//	    	if (fn.exists()) {
+//	    		log.addAppender(new RollingFileAppender(layout, "Psugo.log"));
+//	    	}
+//	    	else {
+//	    			res= fn.createNewFile();
+//	    			log.addAppender(new RollingFileAppender(layout, "Psugo.log"));
+//	    	}
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
     }
 	
     public String LoginRequest() throws Exception {
@@ -133,7 +165,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	}
     
     private void outLogMessage(String msg) {
-    	log.info(msg);
+    	//log.info(msg);
     	
     }
     
@@ -157,6 +189,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		PsugoDB psudb = new PsugoDB(theBaseContext);
 		psudb.open();
 		Institution[] myDbInst = psudb.selectInstitution();
+		psudb.close();
 		int instSize = myDbInst.length;
 		//instSentList = new ArrayList<Integer>();
 		logMessage = "envoyerInstitution Nombre Institutions au depart:" + instSize;
@@ -212,7 +245,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 				
 			}
 		}
-		psudb.close();
+
 		return ret;
 
 	}
@@ -318,6 +351,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		PsugoDB psudb = new PsugoDB(theBaseContext);
 		psudb.open();
 		Classe[] myClasses = psudb.selectClasse(theInstId);
+		psudb.close();
 		int classeSize = myClasses.length;
 		logMessage = "Prochaine Etapes tentative denvoyer Nbre de Classes :"+ classeSize ;
 		this.outLogMessage(logMessage);
@@ -356,7 +390,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 				}
 			}
 		}
-		psudb.close();
+
 		return ret;
 
 	}
@@ -380,13 +414,17 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 					//pscn.displayMessage("Transfert Complete avec succes !!!");
 				}
 				//else pscn.displayMessage("le Transfert n'a pu etre Completer veuillez re-essayer plus tard!!!");
-
+				
 			}
+			finalResponse = "" + retCode;
 
 		} catch (Exception e) {
 			finalResponse = "0";
 			retCode =1; //Herve's ... 
-			logMessage = "Exception !!!!!" + e.getMessage();
+			if (e != null ) 
+				logMessage = "Exception PsugoSendClientDataHelper- doInBackground !!!!!" + e.getMessage();
+			else 
+				logMessage = "Exception PsugoSendClientDataHelper- doInBackground !!!!! (e) is Null";
 			this.outLogMessage(logMessage);
 			//PsugoException pse = new PsugoException(logMessage);
 
@@ -398,7 +436,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 
 		}
 		String resp = "" + retCode;
-		finalResponse = resp;
+	
 		//System.out.println("finalReponse = " + finalResponse);
 		return resp;
 	}

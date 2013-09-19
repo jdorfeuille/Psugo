@@ -117,10 +117,8 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 		
 		//super(context, DB_NAME, null, DB_VERSION);
 
-				
-
-		super(context, Environment.getExternalStorageDirectory() + File.separator +  DB_NAME, null, DB_VERSION);	
-		//super(context, DB_FILE_PATH + File.separator +  DB_NAME, null, DB_VERSION);
+		//super(context, Environment.getExternalStorageDirectory() + File.separator +  DB_NAME, null, DB_VERSION);	
+		super(context, DB_FILE_PATH + File.separator +  DB_NAME, null, DB_VERSION);
 	    
 		
 	}
