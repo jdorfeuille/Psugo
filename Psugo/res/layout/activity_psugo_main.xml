@@ -42,21 +42,19 @@
             android:ems="10"
             android:hint="@string/arrondissement" />
 
-        <AutoCompleteTextView
+        <Spinner
             android:id="@+id/nomEcole"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
+            android:layout_height="46dp"
+            android:focusable="true"
             android:completionThreshold="1"
 			android:dropDownHeight="200dp"
             android:layout_alignLeft="@+id/textView1"
             android:layout_below="@+id/textView1"
             android:layout_marginTop="17dp"
             android:ems="10"
-            android:hint="@string/nomEcole"
-            android:inputType="textAutoComplete" >
+            android:hint="@string/nomEcole"  />
 
-            <requestFocus />
-        </AutoCompleteTextView>
 
         <!-- android:text="@string/actionSchoolPic" />  the previous works as we see the camera icon -->
 

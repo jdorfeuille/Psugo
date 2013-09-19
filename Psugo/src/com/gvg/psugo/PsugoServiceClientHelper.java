@@ -120,9 +120,11 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
         	inst.infoBancaire = pii.getPropertyAsString("infoBancaire");
         	//inst.infoBancaire = ""; //for test only
         	//System.out.println("adresseDetail = " + inst.adresseDetail);
-        	//inst.telephone =pii.getPropertyAsString("telephone");
-        	inst.telephone = "";
-        	inst.instTrouvee = ""; // Not Returned by Server
+        	
+        	inst.telephone =pii.getPropertyAsString("telephone");
+
+        	//inst.telephone = "";
+        	//inst.instTrouvee = ""; // Not Returned by Server
         	inst.photo = null;
         	res[i] = inst;
         }

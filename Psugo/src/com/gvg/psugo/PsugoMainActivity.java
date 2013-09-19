@@ -81,7 +81,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 	
 	//Spinner
 	Spinner ecoleTrouveeList;
-	AutoCompleteTextView nomEcole; 
+	Spinner nomEcole; 
 	// Adapters
 	ArrayAdapter<String> adapterSectComm;
 	//SimpleAdapter adapterSectComm;
@@ -158,146 +158,107 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
         listNomImst = getListNomInst();
         processListInst();
         //
-      
-        nomEcole = (AutoCompleteTextView )findViewById(R.id.nomEcole);
+        // ------- NOM ECOLE
+        nomEcole = (Spinner )findViewById(R.id.nomEcole);
         //nomEcole.setThreshold(0);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_dropdown_item_1line, listNomImst);
-        
+       		android.R.layout.simple_dropdown_item_1line, listNomImst);
+
         adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        //android.R.layout.simple_dropdown_item_1line
+               //android.R.layout.simple_dropdown_item_1line
         nomEcole.setAdapter(adapter);
-        nomEcole.setOnClickListener(new OnClickListener() {
-            
-            public void onClick(View v) {
-            	nomEcole.showDropDown();               
-            }
-        });
-       
-        
-        nomEcole.setOnItemSelectedListener(new OnItemSelectedListener() {
-        	
-        	// may be not needed ...to Trace 09_10
-			public void updateUIFields(String item) {
-				int idx = PsugoMainActivity.this
-						.getIdxString(item, listNomImst);
-				if (idx > -1) {
-					instId = tempData.instArray[idx].id;
-					adrEcole.setText(tempData.instArray[idx].adresse);
-					adrDetEcole.setText(tempData.instArray[idx].adresseDetail);
-					//sectCommunale.setTop(tempData.instArray[idx].sectionRurale);
-					deptEcole.setText(tempData.instArray[idx].departement);
-					arrondissement.setText(tempData.instArray[idx].arrondissement);
-					phoneEcole.setText(tempData.instArray[idx].telephone);
-					//commune.setTop(tempData.instArray[idx].commune);
-				}
-
-			}
-
-			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
-				// TODO Auto-generated method stub
-				// main = arg0
-				// position = arg2
-				// Id = arg3
-				//System.out.println("nomEcole=====>onItemSelected");
-				String item = arg0.getItemAtPosition(arg2).toString() ;
-				nomEcoleSelected = item;
-				updateUIFields(item);
-				
-			}
-
-			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-        	
-        });
-        
-        nomEcole.setOnItemClickListener( new OnItemClickListener() {
-        	
-        	public void updateSectCommuneFields(String item) {
-				
-				ArrayList<String> sectRList = new ArrayList<String>();
-				int nElem=0;
-				for(int i=0;i<tempData.csrArray.length;i++){
-					if (tempData.csrArray[i].commune.equals(item) ) {
-						sectRList.add(tempData.csrArray[i].sectionRurale);
-						nElem++;
-					}
-				}
-				listSectRurale = new String[nElem];
-				int idx = 0;
-				Iterator<String> el = sectRList.iterator();
-				while (el.hasNext()) {
-					listSectRurale[idx] = el.next();
-					idx++;
-				}
-				// update Commune
-				String [] tempCommuneList = getDistinctListCommune();
-				listCommune = new String[tempCommuneList.length];
-				listCommune[0] = item; // set the first Item of the list to the received Commune
-				idx=0;
-				int j=1;
-				while ( idx < tempCommuneList.length) {
-					if ( item.equalsIgnoreCase(tempCommuneList[idx])){
-						idx++;
-						
-					}
-					else {
-						listCommune[j] = tempCommuneList[idx];
-						j++;
-						idx++;
-					}
-				}
-		        ArrayAdapter<String> adapterCommune = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line, listCommune);
-		        commune.setAdapter(adapterCommune);
-		        // init communeSelected
-		        //	String[] tmp = getResources().getStringArray(R.array.genre_humain_array);
-		        //	communeSelected = tmp[0];
-				//sectRuraleAdapter to update
-				adapterSectComm = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line,  listSectRurale);
-				sectCommunale.setAdapter(adapterSectComm);
+       		/*
+               nomEcole.setOnClickListener(new OnClickListener() {
+                   
+                   public void onClick(View v) {
+                   	nomEcole.showDropDown();               
+                   }
+       			
+               });
+       		*/
+       	nomEcole.setOnItemSelectedListener( new OnItemSelectedListener() {
+               	
+               	public void updateSectCommuneFields(String item) {
+       				
+       				ArrayList<String> sectRList = new ArrayList<String>();
+       				int nElem=0;
+       				for(int i=0;i<tempData.csrArray.length;i++){
+       					if (tempData.csrArray[i].commune.equals(item) ) {
+       						sectRList.add(tempData.csrArray[i].sectionRurale);
+       						nElem++;
+       					}
+       				}
+       				listSectRurale = new String[nElem];
+       				int idx = 0;
+       				Iterator<String> el = sectRList.iterator();
+       				while (el.hasNext()) {
+       					listSectRurale[idx] = el.next();
+       					idx++;
+       				}
+       				// update Commune
+       				String [] tempCommuneList = getDistinctListCommune();
+       				listCommune = new String[tempCommuneList.length];
+       				listCommune[0] = item; // set the first Item of the list to the received Commune
+       				idx=0;
+       				int j=1;
+       				while ( idx < tempCommuneList.length) {
+       					if ( item.equalsIgnoreCase(tempCommuneList[idx])){
+       						idx++;
+       						
+       					}
+       					else {
+       						listCommune[j] = tempCommuneList[idx];
+       						j++;
+       						idx++;
+       					}
+       				}
+       		        ArrayAdapter<String> adapterCommune = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line, listCommune);
+       		        commune.setAdapter(adapterCommune);
+       		        // init communeSelected
+       		        //	String[] tmp = getResources().getStringArray(R.array.genre_humain_array);
+       		        //	communeSelected = tmp[0];
+       				//sectRuraleAdapter to update
+       				adapterSectComm = new ArrayAdapter<String>(PsugoMainActivity.this, android.R.layout.simple_dropdown_item_1line,  listSectRurale);
+       				sectCommunale.setAdapter(adapterSectComm);
 
 
-			}
-        	
-			public void updateUIFields() {
-				int idx = PsugoMainActivity.this.getIdxString(nomEcoleSelected,
-						listNomImst);
-				if (idx > -1) {
-					instId = tempData.instArray[idx].id;
-					adrEcole.setText(tempData.instArray[idx].adresse);
-					adrDetEcole.setText(tempData.instArray[idx].adresseDetail);
-					phoneEcole.setText(tempData.instArray[idx].telephone);
-					updateSectCommuneFields(tempData.instArray[idx].commune);
-					deptEcole.setText(tempData.instArray[idx].departement);
-					infoBancaire.setText(tempData.instArray[idx].infoBancaire);
-					arrondissement
-							.setText(tempData.instArray[idx].arrondissement);
-					// test trouve(o/n)
-					String ecoleTrouvee = tempData.instArray[idx].instTrouvee;
-					//if (ecoleTrouvee.equalsIgnoreCase("O")){
-						//rebuilt array...09_10
-					//}
-					//ecoleTrouveeList.
-					//arrondissement
-					//.setText(tempData.instArray[idx].arrondissement);
-				
-				}
+       			}
+               	
+       			public void updateUIFields() {
+       				int idx = PsugoMainActivity.this.getIdxString(nomEcoleSelected,
+       						listNomImst);
+       				if (idx > -1) {
+       					instId = tempData.instArray[idx].id;
+       					adrEcole.setText(tempData.instArray[idx].adresse);
+       					adrDetEcole.setText(tempData.instArray[idx].adresseDetail);
+       					phoneEcole.setText(tempData.instArray[idx].telephone);
+       					updateSectCommuneFields(tempData.instArray[idx].commune);
+       					deptEcole.setText(tempData.instArray[idx].departement);
+       					infoBancaire.setText(tempData.instArray[idx].infoBancaire);
+       					arrondissement
+       							.setText(tempData.instArray[idx].arrondissement);
+       					String ecoleTrouvee = tempData.instArray[idx].instTrouvee;
+       				
+       				}
 
-			}
-        	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,long arg3) {	
-                // TODO Auto-generated method stub
-        		
-        		// got called System.out.println("nomEcole=====>onItemClick");
-        		nomEcoleSelected = (String)arg0.getItemAtPosition(arg2).toString();
-        		updateUIFields();
-        		//Toast.makeText(getApplicationContext(),(CharSequence)arg0.getItemAtPosition(arg2), Toast.LENGTH_LONG).show();
-        	}
-        });
+       			}
+               	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,long arg3) {	
+                       // TODO Auto-generated method stub
+               		
+               		// got called System.out.println("nomEcole=====>onItemClick");
+               		nomEcoleSelected = (String)arg0.getItemAtPosition(arg2).toString();
+               		updateUIFields();
+               		//Toast.makeText(getApplicationContext(),(CharSequence)arg0.getItemAtPosition(arg2), Toast.LENGTH_LONG).show();
+               	}
+       			@Override
+       			public void onNothingSelected(AdapterView<?> arg0) {
+       				// TODO Auto-generated method stub
+       			//	String[] tmp = getResources().getStringArray(R.array.type_directeur_array);
+       			//	communeSelected = tmp[0];
+       				 
+       			}
+               });
+
         
       
         // Commune 
@@ -812,8 +773,9 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 					potc = this;
 					PsugoSendClientDataHelper psch = new PsugoSendClientDataHelper(potc);
 					AsyncTask<PsugoSendDataParm, String, String> servCall_send = psch.execute(psdp);
+					//* Test
 					//resp = servCall_send.get();
-
+					//*
 					//System.out.println("response from xfer=" +resp);
 				} catch (Exception e) {
 					//System.out.println("Exception ... JW...failed UPLOAD service call");
@@ -828,6 +790,13 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 					this.displayMessage(msg);
 			}
 
+			// Test refresh List
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		       		android.R.layout.simple_dropdown_item_1line, listNomImst);
+
+			adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+			
+			// Test refresh List
 			break;
 		case R.id.actionAddDirects:
 			// here we can save Institution data so we can do an update

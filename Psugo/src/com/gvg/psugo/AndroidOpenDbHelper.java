@@ -12,6 +12,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String DB_NAME = "psugo_lite_db2";
 	public static final String DB_FILE_PATH = "/storage/sdcard1";
 	public static final int DB_VERSION = 26;
+	//private static final String ENVRUN = "SDCARD0";
 
 	// Table DDL
 	
@@ -115,9 +116,11 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public AndroidOpenDbHelper(Context context) {
 		
 		//super(context, DB_NAME, null, DB_VERSION);
-	    //super(context, Environment.getExternalStorageDirectory() + File.separator +  DB_NAME, null, DB_VERSION);
 
-		super(context, DB_FILE_PATH + File.separator +  DB_NAME, null, DB_VERSION);
+				
+
+		super(context, Environment.getExternalStorageDirectory() + File.separator +  DB_NAME, null, DB_VERSION);	
+		//super(context, DB_FILE_PATH + File.separator +  DB_NAME, null, DB_VERSION);
 	    
 		
 	}

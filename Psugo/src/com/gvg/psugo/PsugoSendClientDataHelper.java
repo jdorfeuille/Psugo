@@ -132,7 +132,10 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		//System.out.println("Done Debug Institution");
 	}
     
-    
+    private void outLogMessage(String msg) {
+    	log.info(msg);
+    	
+    }
     
     
     
@@ -157,19 +160,19 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		int instSize = myDbInst.length;
 		//instSentList = new ArrayList<Integer>();
 		logMessage = "envoyerInstitution Nombre Institutions au depart:" + instSize;
-//		Log.i(DEBUG_TAG, logMessage); 
+		this.outLogMessage(logMessage);
 		for (int i = 0; i < instSize; i++) {
 			//if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0) {
 				//System.out.println("Debug EnvoyerInstitution" + myDbInst[i].photo.size());
 			//}
 			// ne pas transmettre si pas de photos... ou bien si l'utilisateur n'a pas mis a jour
 			logMessage = "Verification de Photos pour Institution :" +myDbInst[i].id;
-	//		Log.i(DEBUG_TAG, logMessage); 
+			this.outLogMessage(logMessage);
 			if ( myDbInst[i].photo != null  && myDbInst[i].photo.size() > 0 && (!myDbInst[i].photo.isEmpty() )){
 				//debugInstitution("envoyerInstitution", myDbInst[i]);
 				//instSentList.add(myDbInst[i].id);
 				logMessage = "Photo Existantes pour institution :" +myDbInst[i].id;
-		//		Log.i(DEBUG_TAG, logMessage); 
+				this.outLogMessage(logMessage);
 
 				SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
 				envelope.setOutputSoapObject(request);
@@ -195,11 +198,11 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 				ret = Integer.parseInt( envelope.getResponse().toString());
 				if (ret == 1 ) {
 					logMessage = "Procahaine Etape Envoie de Directeurs :" +myDbInst[i].id;
-					//Log.i(DEBUG_TAG, logMessage); 
+					this.outLogMessage(logMessage);
 						int retCodeDir = this.envoyerDirecteurs(myDbInst[i].id);
 						if (retCodeDir == 1 ) {
 							logMessage = "Procahaine Etape Envoie de Classes :" +myDbInst[i].id;
-							//Log.i(DEBUG_TAG, logMessage); 
+							this.outLogMessage(logMessage);
 							int retCodeClasse = this.envoyerClasses(myDbInst[i].id);
 							if (retCodeClasse != 1 ) break;
 						}
@@ -271,21 +274,21 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		Directeur dirAdmin = psudb.selectDirecteur(theInstId, TYPE_DIR_ADMIN);
 		if (dirAdmin != null ) {
 				logMessage = "Envoie Directeur Admin :" ;
-				//Log.i(DEBUG_TAG, logMessage); 
+				this.outLogMessage(logMessage);
 				retCode = sendDirecteur(dirAdmin);
 				if (retCode != 1 ){
 					logMessage = "Envoie Directeur Admin en Echec !!!";
-					//Log.i(DEBUG_TAG, logMessage);
+					this.outLogMessage(logMessage);
 				}
 		}
 		Directeur dirPedag = psudb.selectDirecteur(theInstId, TYPE_DIR_PEDAG);
 		if (dirPedag != null ) {
 			logMessage = "Envoie Directeur Pedagogique :" ;
-			//Log.i(DEBUG_TAG, logMessage); 
+			this.outLogMessage(logMessage);
 			retCode = sendDirecteur(dirPedag);
 			if (retCode != 1) {
 				logMessage = "Envoie Directeur Pedagogique en Echec !!!";
-				//Log.i(DEBUG_TAG, logMessage);
+				this.outLogMessage(logMessage);
 			}
 		}
 
@@ -317,14 +320,14 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 		Classe[] myClasses = psudb.selectClasse(theInstId);
 		int classeSize = myClasses.length;
 		logMessage = "Prochaine Etapes tentative denvoyer Nbre de Classes :"+ classeSize ;
-		//Log.i(DEBUG_TAG, logMessage); 
+		this.outLogMessage(logMessage);
 		for (int i = 0; i < classeSize; i++) {
 			logMessage = "Verification pour Envoie :"+ myClasses[i].nomClasse ;
-			//Log.i(DEBUG_TAG, logMessage); 
+			this.outLogMessage(logMessage); 
 			if (!myClasses[i].nomClasse.isEmpty()
 					&& myClasses[i].photoClasse != null) {
 				logMessage = "Cette Classe va etre envoyer :"+ myClasses[i].nomClasse ;
-				//Log.i(DEBUG_TAG, logMessage); 
+				this.outLogMessage(logMessage); 
 				SoapObject request = new SoapObject(NAME_SPACE_URN, METHOD_NAME);
 				envelope.setOutputSoapObject(request);
 				envelope.encodingStyle = SoapEnvelope.ENC;
@@ -348,7 +351,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 				ret = Integer.parseInt(envelope.getResponse().toString());
 				if (ret != 1) {
 					logMessage = "Envoie de Classe en Echec :"+ myClasses[i].nomClasse ;
-					//Log.i(DEBUG_TAG, logMessage); 
+					this.outLogMessage(logMessage);
 					break;
 				}
 			}
@@ -358,7 +361,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 
 	}
 	@Override
-	protected String doInBackground(PsugoSendDataParm... params) {
+	protected String doInBackground(PsugoSendDataParm... params)  {
 		// TODO Auto-generated method stub
 
 		theBaseContext = params[0].theContext;
@@ -382,9 +385,15 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 
 		} catch (Exception e) {
 			finalResponse = "0";
+			retCode =1; //Herve's ... 
 			logMessage = "Exception !!!!!" + e.getMessage();
+			this.outLogMessage(logMessage);
+			//PsugoException pse = new PsugoException(logMessage);
+
+			//	throw pse;
+
 			//Log.i(DEBUG_TAG, logMessage); 
-			e.printStackTrace();
+			//e.printStackTrace();
 			
 
 		}
