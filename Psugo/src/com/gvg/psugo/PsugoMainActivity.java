@@ -432,8 +432,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
         actionAddClasses =  (Button)findViewById(R.id.actionAddClasses);
         actionAddClasses.setOnClickListener(this);
         
-        actionSave =  (Button)findViewById(R.id.actionSave);
-        actionSave.setOnClickListener(this);
+     //   actionSave =  (Button)findViewById(R.id.actionSave);
+      //  actionSave.setOnClickListener(this);
         
         //Test Button to remove
        // actOk = (Button)findViewById(R.id.Ok);
@@ -787,10 +787,10 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 				finish();
 			}
 			break;
-		case R.id.actionSave:
+//		case R.id.actionSave:
 			//text = "'Done' clicked!";
-			this.saveCurrentData();
-			break;
+//			this.saveCurrentData();
+//			break;
 		case R.id.actionSchoolPic:
 			//CharSequence text = "Activating the camera for a picture";
 			//takePhoto();

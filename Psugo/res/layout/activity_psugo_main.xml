@@ -184,14 +184,7 @@
                 android:layout_alignRight="@+id/actionAddClasses"
                 android:drawableLeft="@drawable/notes" />
 
-            <Button
-                android:id="@+id/actionSave"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/actionUploadData"
-                android:text="@string/Ok" />
+
 
             <Button
                 android:id="@+id/actionDone"
@@ -199,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/actionSave"
+                android:layout_toRightOf="@+id/actionUploadData"
                 android:text="@string/actionDone" />
 
     </RelativeLayout>
