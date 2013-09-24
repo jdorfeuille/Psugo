@@ -46,6 +46,8 @@
         </activity>
         <activity android:name="com.gvg.psugo.Liste_Classes_Prof" >
         </activity>
+        <activity android:name="com.gvg.psugo.Institution_Comment" >
+        </activity>
         <activity android:name="com.gvg.psugo.Liste_Directeurs" >
         </activity>
     </application>

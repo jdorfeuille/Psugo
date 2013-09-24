@@ -13,25 +13,25 @@
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:text="@string/directTitle"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_below="@+id/nomDir"
             android:layout_toLeftOf="@+id/actionDirectPics"
             android:text="@string/typeDirecteur"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
             android:id="@+id/cinDir"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/phoneDir"
             android:ems="10"
@@ -41,7 +41,7 @@
         <EditText
             android:id="@+id/phoneDir"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/emailDir"
             android:ems="10"
@@ -54,7 +54,7 @@
         <EditText
             android:id="@+id/emailDir"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/genreDirList"
             android:ems="10"
@@ -64,16 +64,16 @@
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/typeDirecteurList"
             android:text="@string/genre"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/genreDirList"
             android:layout_width="wrap_content"
-             android:layout_height="55dp"
+             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView3"
             android:entries="@array/genre_humain_array"
@@ -83,16 +83,16 @@
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+          	android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/nomDir"
             android:text="@string/typeDirecteur"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/typeDirecteurList"
             android:layout_width="wrap_content"
-             android:layout_height="55dp"
+             android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView4"
             android:entries="@array/type_directeur_array"
@@ -138,7 +138,7 @@
         <EditText
             android:id="@+id/nomDir"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView1"
             android:layout_marginTop="45dp"
@@ -152,7 +152,7 @@
         <Spinner
             android:id="@+id/dirList"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView1"
             android:focusable="true"

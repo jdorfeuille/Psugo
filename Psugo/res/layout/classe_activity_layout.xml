@@ -8,12 +8,12 @@
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="692dp" >
+        android:layout_height="592dp" >
 
         <TextView
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:text="@string/classeTitle"
@@ -22,7 +22,7 @@
         <EditText
             android:id="@+id/nbrEleve"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/nomClasse"
             android:ems="10"
@@ -49,7 +49,7 @@
         <EditText
             android:id="@+id/phoneProf"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/emailProf"
             android:ems="10"
@@ -59,7 +59,7 @@
         <EditText
             android:id="@+id/emailProf"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/cinProf"
             android:ems="10"
@@ -69,7 +69,7 @@
         <EditText
             android:id="@+id/nomProfClasse"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView2"
             android:ems="10"
@@ -79,7 +79,7 @@
         <Spinner
             android:id="@+id/genreProfList"
             android:layout_width="wrap_content"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView3"
             android:entries="@array/genre_humain_array"
@@ -89,7 +89,7 @@
         <EditText
             android:id="@+id/cinProf"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/genreProfList"
             android:ems="10"
@@ -99,7 +99,7 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/photoClasse"
             android:text="@string/profTitle"
@@ -108,7 +108,7 @@
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/nomProfClasse"
             android:text="@string/genre"
@@ -135,6 +135,7 @@
 
         <Button
             android:id="@+id/previewClasses"
+            style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -145,7 +146,7 @@
         <Spinner
             android:id="@+id/classList"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/textView1"
             android:hint="@string/classList"
             android:prompt="@string/classList" />
@@ -153,7 +154,7 @@
         <EditText
             android:id="@+id/nomClasse"
             android:layout_width="match_parent"           
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/classList"
             android:ems="10"

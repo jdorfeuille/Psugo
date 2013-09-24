@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+//import com.gvg.psugoservice.PsugoService;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -105,52 +107,59 @@ public class Psugo_Login_Activity extends Activity implements OnClickListener {
 		case R.id.btnLogin:
 			theUserName = txtUserName.getText().toString();
 			thePassword = txtPassword.getText().toString();
-			Bundle b = null;
-			b = new Bundle();
-			b.putString("theUserName", theUserName);
-			b.putString("thePassword", thePassword);
-			PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
-			if (pscn.isNetworkAvailable() ) {
-				try { 
-					PsugoServiceClientHelper psch = new PsugoServiceClientHelper(getBaseContext());
-					AsyncTask<String, String, TempData> servCall_Login =
-					psch.execute(new String[] { "Login", theUserName, thePassword });
-					//servCall_Login.get();
-					resp = servCall_Login.get();
-					if ( resp.userIsValid) {
-						psudb.insertUser(theUserName, thePassword); // make sure to keep the user and pwd..
-						Intent request = new Intent(this, PsugoMainActivity.class);
-					   // b.putBoolean("isNetworkAvailable", true);
-						request.putExtras(b);
-						startActivityForResult(request, PSUGO_LOGIN);
-					}
-					else Toast.makeText(Psugo_Login_Activity.this,
-							  "Invalid Login", Toast.LENGTH_LONG).show(); 
-				 }
-				catch (Exception e) {
-						 System.out.println("Erreur Login en echec... ");
-						 //Erreur grave... 
-						 }
+			if (theUserName.isEmpty() || thePassword.isEmpty()) {
+				 Toast.makeText(Psugo_Login_Activity.this,
+						  "Code Utilisateur ou Mot de Passe Invalide", Toast.LENGTH_LONG).show(); 
 			}
-			
-			else {		
-					// Local User Validation 
-					
-					if	 (psudb.validateLogin(theUserName, thePassword) )
-					{		 
-						String msg="";
-						msg=getResources().getString(R.string.MsgNoNetworkLocalWrk);
-						this.displayMessage(msg);
-						Intent request = new Intent(this, PsugoMainActivity.class);
-						//b.putBoolean("isNetworkAvailable", false);
-						request.putExtras(b);
-						startActivityForResult(request, PSUGO_LOGIN);
-					} 
-					else Toast.makeText(Psugo_Login_Activity.this,
-							  "Invalid Login", Toast.LENGTH_LONG).show(); 
-					
+			else {
+				Bundle b = null;
+				b = new Bundle();
+				b.putString("theUserName", theUserName);
+				b.putString("thePassword", thePassword);
+				PsugoUtils pscn = new PsugoUtils(this.getBaseContext());
+				if (pscn.isNetworkAvailable() ) {
+					try { 
+						PsugoServiceClientHelper psch = new PsugoServiceClientHelper(getBaseContext());
+						AsyncTask<String, String, TempData> servCall_Login =
+						psch.execute(new String[] { "Login", theUserName, thePassword });
+						//servCall_Login.get();
+						resp = servCall_Login.get();
+						if ( resp.userIsValid) {
+							//startService(new Intent(this, PsugoService.class));
+							psudb.insertUser(theUserName, thePassword); // make sure to keep the user and pwd..
+							Intent request = new Intent(this, PsugoMainActivity.class);
+						   // b.putBoolean("isNetworkAvailable", true);
+							request.putExtras(b);
+							startActivityForResult(request, PSUGO_LOGIN);
+						}
+						else Toast.makeText(Psugo_Login_Activity.this,
+								  "Invalid Login", Toast.LENGTH_LONG).show(); 
+					 }
+					catch (Exception e) {
+							 System.out.println("Erreur Login en echec... ");
+							 //Erreur grave... 
+							 }
+				}
+				
+				else {		
+						// Local User Validation 
+						
+						if	 (psudb.validateLogin(theUserName, thePassword) )
+						{		 
+							String msg="";
+							msg=getResources().getString(R.string.MsgNoNetworkLocalWrk);
+							this.displayMessage(msg);
+							Intent request = new Intent(this, PsugoMainActivity.class);
+							//b.putBoolean("isNetworkAvailable", false);
+							request.putExtras(b);
+							startActivityForResult(request, PSUGO_LOGIN);
+						} 
+						else Toast.makeText(Psugo_Login_Activity.this,
+								  "Invalid Login", Toast.LENGTH_LONG).show(); 
+						
+				}
+				psudb.close();
 			}
-			psudb.close();
 			break;
 		// setResult(RESULT_OK,returnIntent);
 		case R.id.btnCancel:

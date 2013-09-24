@@ -46,6 +46,7 @@ import android.content.DialogInterface;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import android.view.MotionEvent;
@@ -76,8 +77,9 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 	Button xferInfosBtn;
 	Button doneBtn;
 	Button actOk;
-	Button actionAddDirects;
+	Button actionAddDirects, actionSave;
 	Button actionAddClasses;
+	Button actionCin_Commentaires;
 	
 	//Spinner
 	Spinner ecoleTrouveeList;
@@ -108,6 +110,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 	//Activities
 	private static final int ADD_DIRECTEURS = 10;
 	private static final int ADD_PICS = 100;
+	private static final int ADD_COMMENTS = 500;
 	private static final int ADD_CLASSES = 200;
 	private static final int PSUGO_LOGIN = 999;
 	private static final int PSUGO_INST_NULL = -9999;
@@ -122,6 +125,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 	String provider;
 	String theUserName ;
 	String thePassword;
+	String cin_commentaires;
 	//boolean isNetworkAvailable;
 	//
 	// Temporary data 
@@ -133,6 +137,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 	String[] listCommune    = {""};
 	int idxEcoleSelected;
 	int instId = PSUGO_INST_NULL; 
+	boolean isXferRunning = false;
 	//Boolean doneDisplay = false;
 	PsugoOnTaskCompleted potc;
 	//ArrayList<Photo> photoList = new ArrayList<Photo>();
@@ -225,6 +230,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
        			}
                	
        			public void updateUIFields() {
+       				//here no change necessary
        				int idx = PsugoMainActivity.this.getIdxString(nomEcoleSelected,
        						listNomImst);
        				if (idx > -1) {
@@ -236,6 +242,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
        					updateSectCommuneFields(tempData.instArray[idx].commune);
        					deptEcole.setText(tempData.instArray[idx].departement);
        					infoBancaire.setText(tempData.instArray[idx].infoBancaire);
+       					cin_commentaires=tempData.instArray[idx].cin;
        					
        					arrondissement
        							.setText(tempData.instArray[idx].arrondissement);
@@ -373,6 +380,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
         phoneEcole = (EditText)findViewById(R.id.phoneEcole);
         adrDetEcole=(EditText)findViewById(R.id.adrDetaillee);
         infoBancaire = (EditText)findViewById(R.id.infoBancaire);
+        
        
         // Pictures
        // imageView = (ImageView) findViewById(R.id.imgPrev);
@@ -412,6 +420,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
         // Buttons 
         actionSchoolPic = (Button)findViewById(R.id.actionSchoolPic);
         actionSchoolPic.setOnClickListener(this);
+        actionCin_Commentaires = (Button)findViewById(R.id.cin);
+        actionCin_Commentaires.setOnClickListener(this);
         xferInfosBtn = (Button)findViewById(R.id.actionUploadData);
         xferInfosBtn.setOnClickListener(this);
         doneBtn = (Button)findViewById(R.id.actionDone);
@@ -421,6 +431,9 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
         //jwd
         actionAddClasses =  (Button)findViewById(R.id.actionAddClasses);
         actionAddClasses.setOnClickListener(this);
+        
+        actionSave =  (Button)findViewById(R.id.actionSave);
+        actionSave.setOnClickListener(this);
         
         //Test Button to remove
        // actOk = (Button)findViewById(R.id.Ok);
@@ -486,6 +499,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 
 
     private String[] getListNomInst() {
+    	// here we have to concatenate name = name + id
     	int instArrayLen = tempData.instArray.length;
     	String[] instArray = new String[instArrayLen];
     	for(int i=0;i<instArrayLen;i++) {
@@ -594,7 +608,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 		int idx = -1;
 		// clean up institution
 		for (int i = 0; i < myDbInst.length; i++) {
-			String schoolName = myDbInst[i].nomInstitution;
+			String schoolName = myDbInst[i].nomInstitution; //here we have to concatenate instID + name
 			idx = getIdxString(schoolName, listNomImst);
 			if (idx == -1) {
 				psudb.deleteInstitution(myDbInst[i].id); //removing existing institution no longer sent
@@ -624,11 +638,15 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 				tempData.instArray[i].adresseDetail = myDbInst[idx].adresseDetail;
 				tempData.instArray[i].telephone =  myDbInst[idx].telephone;
 				tempData.instArray[i].infoBancaire =   myDbInst[idx].infoBancaire;
-				tempData.instArray[i].instTrouvee = myDbInst[i].instTrouvee;
-				ecoleTrouveSelected = myDbInst[i].instTrouvee;
+				tempData.instArray[i].cin = myDbInst[idx].cin;
+				cin_commentaires =  myDbInst[idx].cin;
+				tempData.instArray[i].instTrouvee = myDbInst[idx].instTrouvee;
+				ecoleTrouveSelected = myDbInst[idx].instTrouvee;
 			} else {
 				psudb.insertInstitution(tempInst.id, tempInst.nomInstitution,tempInst.departement,
-						tempInst.arrondissement,tempInst.commune, tempInst.sectionRurale, tempInst.infoBancaire);
+						tempInst.arrondissement,tempInst.commune, tempInst.sectionRurale, 
+						tempInst.adresse, tempInst.adresseDetail, tempInst.telephone,
+						tempInst.infoBancaire, tempInst.cin, tempInst.instTrouvee);
 
 			}
 		}
@@ -697,6 +715,12 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
       			//showMessage(text);
       		}
         	  break;
+          case ADD_COMMENTS:
+        	  if(resultCode == RESULT_OK){
+        		  cin_commentaires = data.getStringExtra("newComment");
+        		  this.saveCurrentData();
+      		}
+        	  break;
           case PSUGO_LOGIN:
         	  if(resultCode == RESULT_OK){
         		//CharSequence text = "Returned from LOGIN";
@@ -727,11 +751,21 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 				 myUpdatedInst.commune, myUpdatedInst.sectionRurale,
 				 myUpdatedInst.adresse, myUpdatedInst.adresseDetail,
 				 myUpdatedInst.telephone, myUpdatedInst.instTrouvee,
-				 myUpdatedInst.infoBancaire);
+				 myUpdatedInst.infoBancaire, myUpdatedInst.cin);
 		 
 		 psudb.close();
 		 
 
+		 
+    }
+    
+    public String getDimensions() {
+    	
+    	DisplayMetrics displaymetrics = new DisplayMetrics();
+    	getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+    	int height = displaymetrics.heightPixels;
+    	int width = displaymetrics.widthPixels;
+    	return String.valueOf(height) + " par " + String.valueOf(width);
     }
 	@Override
 	public void onClick(View v) {
@@ -745,7 +779,17 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 		case R.id.actionDone:
 			//text = "'Done' clicked!";
 			this.saveCurrentData();
-			finish();
+			if (isXferRunning) {
+				this.displayMessage("Vous ne Pouvez quittez pour le moment: Transfert en cours"); // to put in strings
+			}
+			else {
+			
+				finish();
+			}
+			break;
+		case R.id.actionSave:
+			//text = "'Done' clicked!";
+			this.saveCurrentData();
 			break;
 		case R.id.actionSchoolPic:
 			//CharSequence text = "Activating the camera for a picture";
@@ -767,6 +811,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 			break;
 		case R.id.actionUploadData:
 			this.saveCurrentData();
+			isXferRunning = true;
 			
 			if (pscn.isNetworkAvailable()) {
 				PsugoSendDataParm psdp = new PsugoSendDataParm(this.getBaseContext(), theUserName, thePassword);
@@ -805,6 +850,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 			break;
 		case R.id.actionAddDirects:
 			// here we can save Institution data so we can do an update
+			//this.displayMessage(this.getDimensions()); // to remove 
+			
 			if ( instId != PSUGO_INST_NULL) {
 				this.saveCurrentData();
 				Intent request =new Intent(this, Directeur_Activity.class);
@@ -838,6 +885,21 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 				this.displayMessage(msg);
 			}
 			break;
+		case R.id.cin:   //ADD COMMENTS
+			if ( instId != PSUGO_INST_NULL) {
+				Intent intent = new Intent(this, Institution_Comment.class);
+				b = null;
+				b = new Bundle();
+				b.putInt("instId", instId);
+				b.putString("commentaires", cin_commentaires);
+				intent.putExtras(b);
+				startActivityForResult(intent, ADD_COMMENTS);
+			}
+			else {
+				msg =getResources().getString(R.string.MsgNoInstSelected);
+				this.displayMessage(msg);
+			}
+			break;
 		default:
 			//text = "Dunno what was pushed!"; actionAddClasses
 	}
@@ -858,6 +920,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 		System.out.println("MyInstitution.telephone = " + myInstitution.telephone);
 		System.out.println("MyInstitution.instTrouvee = " + myInstitution.instTrouvee);
 		System.out.println("MyInstitution.infoBancaire = " + myInstitution.infoBancaire);
+		System.out.println("MyInstitution.cin_commentaires = " + myInstitution.cin);
 		System.out.println("Done Debug");
 	}
 
@@ -879,6 +942,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 
 		
 		myInstitution.infoBancaire = infoBancaire.getText().toString();
+		myInstitution.cin = cin_commentaires; //From Institution_Commenta ctivity
 		// debug printing the object
 		
 				
@@ -890,6 +954,8 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 		tempData.instArray[idx].commune = myInstitution.commune;
 		tempData.instArray[idx].departement =myInstitution.departement;
 		tempData.instArray[idx].infoBancaire =myInstitution.infoBancaire;
+		tempData.instArray[idx].cin =myInstitution.cin;
+		cin_commentaires = myInstitution.cin;
 		tempData.instArray[idx].arrondissement = myInstitution.arrondissement;
 		tempData.instArray[idx].instTrouvee = myInstitution.instTrouvee;
 	
@@ -946,6 +1012,7 @@ public class PsugoMainActivity extends Activity implements OnClickListener, Psug
 				String	msg = getResources().getString(R.string.MsgXferFail);
 				this.displayMessage(msg);
 			}
+			this.isXferRunning = false;
 
 			
 		

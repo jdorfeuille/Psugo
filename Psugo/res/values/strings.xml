@@ -18,7 +18,7 @@
     <string name="cin">CIN</string>
     <string name="actionSchoolPic">Photos Institutions</string>
     <string name="actionUploadData">Xfer</string>
-    <string name="actionDone">Terminer</string>
+    <string name="actionDone">Fin</string>
     <string name="actionAddDirecteurs">Directeurs</string>
     <string name="actionAddClasses">Classes</string>
     <string name="actionAddProf">Professeurs</string>
@@ -87,5 +87,7 @@
     </string-array>
 
     <string name="Ok">Save</string>
+    <string name="cinComment">Commentaires</string>
+
 
 </resources>

@@ -10,7 +10,7 @@
     <RelativeLayout
         android:id="@+id/mainRelative"
         android:layout_width="wrap_content"
-        android:layout_height="759dp"
+        android:layout_height="590dp"
         android:contentDescription="@string/imagePreview"
         tools:context=".PsugoMainActivity" >
 
@@ -19,25 +19,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hello_world"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-        <!-- check if this is the right type for CIN -->
-        <!-- check if this is the right type for CIN -->
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
             android:id="@+id/dept"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignLeft="@+id/nomEcole"
             android:layout_below="@+id/nomEcole"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:ems="10"
             android:hint="@string/departement" />
 
         <EditText
             android:id="@+id/arrondissement"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+             android:layout_height="35dp"
             android:layout_alignLeft="@+id/adrEcole"
+            android:layout_marginTop="10dp"
             android:layout_below="@+id/dept"
             android:ems="10"
             android:hint="@string/arrondissement" />
@@ -45,13 +44,13 @@
         <Spinner
             android:id="@+id/nomEcole"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:focusable="true"
             android:completionThreshold="1"
 			android:dropDownHeight="200dp"
             android:layout_alignLeft="@+id/textView1"
             android:layout_below="@+id/textView1"
-            android:layout_marginTop="17dp"
+            android:layout_marginTop="5dp"
             android:ems="10"
             android:hint="@string/nomEcole"  />
 
@@ -84,20 +83,11 @@
             android:layout_toRightOf="@+id/actionAddClasses"
             android:text="@string/actionUploadData" />
 
-        <Button
-            android:id="@+id/actionDone"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/actionUploadData"
-            android:text="@string/actionDone" />
-
         <Spinner
             android:id="@+id/instCommune"
             android:layout_width="match_parent"
             android:layout_alignParentLeft="true"
-            android:layout_height="55dp"
+            android:layout_height="40dp"
             android:layout_below="@+id/arrondissement"
             android:ems="10"
             android:hint="@string/commune"
@@ -108,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/instCommune"
-            android:layout_height="55dp"
+            android:layout_height="40dp"
             android:ems="10"
             android:hint="@string/sectCommunale"
             android:inputType="text|textCapWords" />
@@ -116,7 +106,7 @@
         <EditText
             android:id="@+id/adrEcole"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/sectCommunale"
             android:ems="10"
@@ -126,7 +116,7 @@
         <EditText
             android:id="@+id/adrDetaillee"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+             android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/adrEcole"
             android:ems="10"
@@ -135,7 +125,7 @@
         <EditText
             android:id="@+id/phoneEcole"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+             android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/adrDetaillee"
             android:ems="10"
@@ -145,22 +135,22 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+             android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/phoneEcole"
-            android:layout_marginTop="57dp"
+            android:layout_marginTop="37dp"
             android:text="@string/ecoleTrouvee"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
             android:id="@+id/ecoleTrouveeList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="0dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/textView2"
             android:entries="@array/ecole_trouvee_array"
-            android:prompt="@string/ecoleTrouvee"
-            android:textSize="14pt" />
+            android:prompt="@string/ecoleTrouvee"/>
 
         <Button
             android:id="@+id/actionSchoolPic"
@@ -169,20 +159,48 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/ecoleTrouveeList"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="10dp"
             android:drawableLeft="@drawable/camera"
          />
 
         <EditText
             android:id="@+id/infoBancaire"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+             android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/phoneEcole"
-            android:layout_marginTop="13dp"
+            android:layout_marginTop="8dp"
             android:ems="10"
             android:hint="@string/infoBancaire"
             android:inputType="number" />
+
+            <Button
+                android:id="@+id/cin"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/actionSchoolPic"
+                android:layout_alignBottom="@+id/actionSchoolPic"
+                android:layout_alignRight="@+id/actionAddClasses"
+                android:drawableLeft="@drawable/notes" />
+
+            <Button
+                android:id="@+id/actionSave"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/actionUploadData"
+                android:text="@string/Ok" />
+
+            <Button
+                android:id="@+id/actionDone"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toRightOf="@+id/actionSave"
+                android:text="@string/actionDone" />
 
     </RelativeLayout>
 

@@ -19,7 +19,7 @@ public class Institution implements KvmSerializable {
 	public String adresse;
 	public String adresseDetail;
 	public String telephone;
-	public String cin; // Not Used should be removed Check with Herve for Web Service
+	public String cin; // use as comment field
 	public String instTrouvee;
 	public PhotoCollection photo;
 	public String infoBancaire;
@@ -52,7 +52,7 @@ public class Institution implements KvmSerializable {
 
 	public Institution(int id, String nomInstitution, String departement, String arrondissement, String commune,
 						String sectionRurale, String adresse, String adresseDetail, String telephone, String trouvee, 
-						String infoBancaire) {
+						String infoBancaire,String commentaires) {
 		this.id = id;
 		this.nomInstitution = nomInstitution;
 		this.departement = departement;
@@ -64,6 +64,7 @@ public class Institution implements KvmSerializable {
 		this.telephone = telephone;
 		this.instTrouvee = trouvee;
 		this.infoBancaire = infoBancaire;
+		this.cin = commentaires;
 	}
 	@Override
 	public Object getProperty(int arg0) {

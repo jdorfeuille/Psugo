@@ -74,7 +74,9 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
     	final String URL = "http://" + PSUGO_SERVEUR + "/PsugoSoapServer/server.php";
 		final String SOAP_ACTION_URN = "urn:" + PSUGO_SERVEUR + "#ListerInstitution";
 		final String NAME_SPACE_URN ="urn:" + PSUGO_SERVEUR+":PsugoSoapServer:server.wsdl";
-    	
+    	String instTrouveFromServer="";
+    	final String INST_TROUVE_OUI = "Oui";
+    	final String INST_TROUVE_NON = "Non";
     	//-------
     	//final String URL = "http://wally.v3w.net/PsugoSoapServer/server.php";
     	//final String SOAP_ACTION_URN = "urn:wally.v3w.net#ListerInstitution";
@@ -118,12 +120,16 @@ public class PsugoServiceClientHelper extends AsyncTask<String, String, TempData
         	//System.out.println("adresse = " + inst.adresse);
         	inst.adresseDetail= pii.getPropertyAsString("adresse_detail");
         	inst.infoBancaire = pii.getPropertyAsString("infoBancaire");
+        	inst.cin = pii.getPropertyAsString("cin");
         	//inst.infoBancaire = ""; //for test only
         	//System.out.println("adresseDetail = " + inst.adresseDetail);
         	
         	inst.telephone =pii.getPropertyAsString("telephone");
-
-        	//inst.telephone = "";
+        	instTrouveFromServer = pii.getPropertyAsString("instTrouvee");
+        	if (instTrouveFromServer.equalsIgnoreCase("O")){
+        		inst.instTrouvee = INST_TROUVE_OUI;
+        	}
+        	else inst.instTrouvee = INST_TROUVE_NON;
         	//inst.instTrouvee = ""; // Not Returned by Server
         	inst.photo = null;
         	res[i] = inst;

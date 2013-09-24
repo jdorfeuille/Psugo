@@ -35,7 +35,7 @@ public class PsugoSendClientDataHelper extends AsyncTask<PsugoSendDataParm, Stri
 	final static String TYPE_DIR_ADMIN = "Administratif";
 	final static String TYPE_DIR_PEDAG = "Pedagogique";
 	private static String PSUGO_SERVEUR = "psugo.primature.ht"; 
-	//private static String PSUGO_SERVEUR = "wally.v3w.net";  
+	///private static String PSUGO_SERVEUR = "wally.v3w.net";  
 	private static final String DEBUG_TAG= "PsugoSendClientDataHelper";
 //	private final Logger log = Logger.getLogger(PsugoSendClientDataHelper.class);
 	private PatternLayout layout = new PatternLayout("%d{ISO8601} [%t] %-5p %c %x - %m%n");

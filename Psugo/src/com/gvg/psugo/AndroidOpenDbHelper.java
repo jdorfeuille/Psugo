@@ -11,7 +11,7 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	// Database attributes
 	public static final String DB_NAME = "psugo_lite_db2";
 	public static final String DB_FILE_PATH = "/storage/sdcard1";
-	public static final int DB_VERSION = 26;
+	public static final int DB_VERSION = 27;  
 	//private static final String ENVRUN = "SDCARD0";
 
 	// Table DDL
@@ -28,8 +28,9 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_INST_ADRESSE = "inst_adresse_column";
 	public static final String COLUMN_NAME_INST_ADRESSE_DETAIL = "inst_adresse_detail_column";
 	public static final String COLUMN_NAME_INST_PHONE = "inst_telephone_column";
-	public static final String COLUMN_NAME_INST_TROUVEE= "inst_trouvee_column"; //????
+	public static final String COLUMN_NAME_INST_TROUVEE= "inst_trouvee_column"; 
 	public static final String COLUMN_NAME_INFO_BANCAIRE= "info_bancaire"; 
+	public static final String COLUMN_NAME_INST_COMMENT = "inst_comment"; 
 	
 	
 	//INST_PHOTO
@@ -111,7 +112,16 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public static final String COLUMN_NAME_LOGIN_ID = "login_id_column";           
 	public static final String COLUMN_NAME_LOGIN_USER = "login_user_column";
 	public static final String COLUMN_NAME_LOGIN_PASSWORD = "login_password_column";
+
+
 	
+/*	static {
+		 final File path = new File( TMP, "DB_NAME" );
+   	  	 if(!path.exists()){
+   	  		 DB_PATH = Environment.getExternalStorageDirectory() + File.separator +  DB_NAME;
+   	  	 }
+   	  	 else DB_PATH = DB_FILE_PATH + File.separator +  DB_NAME;
+	}*/
 
 	public AndroidOpenDbHelper(Context context) {
 		
@@ -119,7 +129,21 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 
 		//super(context, Environment.getExternalStorageDirectory() + File.separator +  DB_NAME, null, DB_VERSION);	
 		super(context, DB_FILE_PATH + File.separator +  DB_NAME, null, DB_VERSION);
+		//super(context, getPath(), null, DB_VERSION);
+
 	    
+		
+	}
+	
+	public static String getPath(){
+		 String tmp = DB_FILE_PATH + File.separator ;
+		 File path = new File( tmp, "DB_NAME" ); 
+		 String dbPath="";
+		 if(!path.exists()){
+			 dbPath = Environment.getExternalStorageDirectory() + File.separator +  DB_NAME;
+   	  	 }
+   	  	 else dbPath = DB_FILE_PATH + File.separator +  DB_NAME;
+		 return dbPath;
 		
 	}
 
@@ -144,7 +168,8 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 																+ COLUMN_NAME_INST_ADRESSE_DETAIL + " text not null, "
 																+ COLUMN_NAME_INST_PHONE + " text not null, "
 																+ COLUMN_NAME_INST_TROUVEE + " text not null, "
-																+ COLUMN_NAME_INFO_BANCAIRE + " text not null);";
+																+ COLUMN_NAME_INFO_BANCAIRE + " text not null,"
+																+ COLUMN_NAME_INST_COMMENT + " text not null);";
 		
 		// Execute a single SQL statement that is NOT a SELECT or any other SQL statement that returns data.
 		db.execSQL(sqlQueryToCreateInstitutionTable);
@@ -269,16 +294,23 @@ public class AndroidOpenDbHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if(oldVersion != newVersion){
 			// Upgrade the database
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_INSTITUTION);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_INSTITUTION_PH);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_DIRECTEUR);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_DIRECTEUR_PH);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CLASSE);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CLASSE_PH);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PROF);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PROF_PH);
-		    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_COMSECTR);
-		    onCreate(db);
+			if ( oldVersion == 26) {
+				String sqlQueryToAlterInstitutionTable = "alter table  " + TABLE_NAME_INSTITUTION + " ADD "
+						+ COLUMN_NAME_INST_COMMENT + " text;";
+				db.execSQL(sqlQueryToAlterInstitutionTable);
+			}
+			else {
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_INSTITUTION);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_INSTITUTION_PH);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_DIRECTEUR);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_DIRECTEUR_PH);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CLASSE);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_CLASSE_PH);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PROF);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_PROF_PH);
+			    db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME_COMSECTR);
+			    onCreate(db);
+			}
 		}		
 	}
 }
